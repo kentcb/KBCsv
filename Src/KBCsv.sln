@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv", "Kent.Boogaart.KBCsv\Kent.Boogaart.KBCsv.csproj", "{15BE0D57-FEBE-40EE-870E-4B891F25A807}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.UnitTest", "Kent.Boogaart.KBCsv.UnitTest\Kent.Boogaart.KBCsv.UnitTest.csproj", "{49A50581-272E-40A8-92E4-89D4BA8F0A0E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{15BE0D57-FEBE-40EE-870E-4B891F25A807}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15BE0D57-FEBE-40EE-870E-4B891F25A807}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15BE0D57-FEBE-40EE-870E-4B891F25A807}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15BE0D57-FEBE-40EE-870E-4B891F25A807}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

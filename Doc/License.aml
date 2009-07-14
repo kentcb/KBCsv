@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<topic id="e54af76a-486e-420f-b3aa-6da716b53821" revisionNumber="1">
+	<developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+		<introduction>
+			<para>
+				KBCsv is distributed under the Microsoft Public License (Ms-PL), the full details of which can be found
+				<externalLink>
+					<linkText>here</linkText>
+					<linkUri>http://www.opensource.org/licenses/ms-pl.html</linkUri>
+					<linkTarget>_blank</linkTarget>
+				</externalLink>.
+			</para>
+		</introduction>
+	</developerConceptualDocument>
+</topic>

@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<exceptionHelper>
+	<exceptionGroup type="Kent.Boogaart.KBCsv.CsvReader">
+		<exception key="disposed" type="System.ObjectDisposedException">
+		</exception>
+		<exception key="ReadHeaderRecord.passed-first-record" type="System.ArgumentException">
+			The first record has already been passed - cannot read header record.
+		</exception>
+		<exception key="ReadHeaderRecord.header-record-already-exists" type="System.InvalidOperationException">
+			A header record already exists.
+		</exception>
+		<exception key="HeaderRecord.set.first-record-already-read" type="System.InvalidOperationException">
+			The first record has already been passed - cannot set header record.
+		</exception>
+		<exception key="HeaderRecord.set.header-record-already-set" type="System.InvalidOperationException">
+			A header record already exists.
+		</exception>
+		<exception key="ReadDataRecords.maximumRecords-less-than-zero" type="System.ArgumentException">
+			The maximumRecords parameter cannot be less than zero.
+		</exception>
+		<exception key="SkipRecords.number-less-than-zero" type="System.ArgumentException">
+			The number parameter cannot be less than zero.
+		</exception>
+		<exception key="Fill.maximumRecords-less-than-zero" type="System.ArgumentException">
+			The maximumRecords parameter cannot be less than zero.
+		</exception>
+		<exception key="Fill.no-header-record-set" type="System.InvalidOperationException">
+			No header record has been set for this CsvReader.
+		</exception>
+		<exception key="Fill.too-many-columns-in-record" type="System.InvalidOperationException">
+			A record has {0} columns in it, but the header only defines {1}.
+		</exception>
+		<exception key="CsvReaderEnumerator.Reset" type="System.ArgumentException">
+			Resetting this enumerator is not supported.
+		</exception>
+	</exceptionGroup>
+
+	<exceptionGroup type="Kent.Boogaart.KBCsv.CsvWriter">
+		<exception key="value-separator-same-as-value-delimiter" type="System.ArgumentException">
+			The value separator and value delimiter must be different.
+		</exception>
+		<exception key="value-separator-or-value-delimiter-space" type="System.ArgumentException">
+			Space is not a valid value separator or delimiter.
+		</exception>
+		<exception key="disposed" type="System.ObjectDisposedException">
+		</exception>
+		<exception key="value-separator-same-as-value-delimiter" type="System.ArgumentException">
+			The value separator and value delimiter must be different.
+		</exception>
+		<exception key="value-separator-or-value-delimiter-space" type="System.ArgumentException">
+			Space is not a valid value separator or delimiter.
+		</exception>
+		<exception key="CsvWriter.options-more-than-one-line-break-style-specified" type="System.ArgumentException">
+			Only one of CsvWriterOptions.CRLFLineBreaks, CsvWriterOptions.LFLineBreaks or CsvWriterOptions.CRLineBreaks can be specified.
+		</exception>
+		<exception key="WriteHeaderRecord.passed-first-record" type="System.InvalidOperationException">
+			The first record has already been passed - cannot write header record.
+		</exception>
+		<exception key="WriteAll.dataSet-no-table" type="System.InvalidOperationException">
+			The specified DataSet does not contain a table to write.
+		</exception>
+	</exceptionGroup>
+
+	<exceptionGroup type="Kent.Boogaart.KBCsv.CsvParser">
+		<exception key="value-separator-same-as-value-delimiter" type="System.ArgumentException">
+			The value separator and value delimiter must be different.
+		</exception>
+		<exception key="value-separator-or-value-delimiter-space" type="System.ArgumentException">
+			Space is not a valid value separator or delimiter.
+		</exception>
+	</exceptionGroup>
+</exceptionHelper>
