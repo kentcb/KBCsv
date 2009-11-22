@@ -149,7 +149,6 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		{
 			_data = new DataRecord(new HeaderRecord(new string[] {"Name", "Age", "Gender"}), new string[] {"Kent", "25", "M"}, true);
 			var ex = Assert.Throws<NotSupportedException>(() => _data.Values[0] = "NEW VALUE");
-			Assert.Equal("Collection is read-only.", ex.Message);
 		}
 
 		[Fact]

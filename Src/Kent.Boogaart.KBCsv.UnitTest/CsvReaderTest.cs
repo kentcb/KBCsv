@@ -15,6 +15,8 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 	public sealed class CsvReaderTest : IDisposable
 	{
 		private CsvReader _csvReader;
+		// the new line characters used in the resource file (not platform independent)
+		private const string NewLine = "\r\n";
 
 		public void Dispose()
 		{
@@ -27,7 +29,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestPreserveLeadingWhiteSpace()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1,   value2,  value3  {0}value1,   value2,  value3  {0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1,   value2,  value3  {0}value1,   value2,  value3  {0}", NewLine));
 			Assert.False(_csvReader.PreserveLeadingWhiteSpace);
 			DataRecord record = _csvReader.ReadDataRecord();
 			Assert.Equal("value1", record[0]);
@@ -44,7 +46,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestTrailingLeadingWhiteSpace()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1 ,   value2,  value3  {0}value1 ,   value2,  value3  {0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1 ,   value2,  value3  {0}value1 ,   value2,  value3  {0}", NewLine));
 			Assert.False(_csvReader.PreserveTrailingWhiteSpace);
 			DataRecord record = _csvReader.ReadDataRecord();
 			Assert.Equal("value1", record[0]);
@@ -61,7 +63,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestPreserveAllWhiteSpace()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1 ,   value2,  value3  {0}value1 ,   value2,  value3  {0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1 ,   value2,  value3  {0}value1 ,   value2,  value3  {0}", NewLine));
 			Assert.False(_csvReader.PreserveLeadingWhiteSpace);
 			Assert.False(_csvReader.PreserveTrailingWhiteSpace);
 			DataRecord record = _csvReader.ReadDataRecord();
@@ -81,7 +83,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestValueSeparator()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1-value2-value3{0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1-value2-value3{0}", NewLine));
 			Assert.Equal(CsvParser.DefaultValueSeparator, _csvReader.ValueSeparator);
 			DataRecord record = _csvReader.ReadDataRecord();
 			Assert.Equal("value1", record[0]);
@@ -98,7 +100,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestValueDelimiter()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("\" value1 \",\"value2\",value3{0}: value1 :,:value2:,value3{0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("\" value1 \",\"value2\",value3{0}: value1 :,:value2:,value3{0}", NewLine));
 			Assert.Equal(CsvParser.DefaultValueDelimiter, _csvReader.ValueDelimiter);
 			DataRecord record = _csvReader.ReadDataRecord();
 			Assert.Equal(" value1 ", record[0]);
@@ -150,7 +152,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestRecordNumber()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}", NewLine));
 			Assert.Equal(0, _csvReader.RecordNumber);
 			_csvReader.ReadDataRecord();
 			Assert.Equal(1, _csvReader.RecordNumber);
@@ -176,7 +178,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestDataRecords()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}value1,value2,value3{0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}value1,value2,value3{0}", NewLine));
 
 			foreach (DataRecord record in _csvReader.DataRecords)
 			{
@@ -192,7 +194,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestDataRecordsAsStrings()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}value1,value2,value3{0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}value1,value2,value3{0}", NewLine));
 
 			foreach (string[] record in _csvReader.DataRecordsAsStrings)
 			{
@@ -214,7 +216,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestFromCsvString()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("value1,value2,value3{0}value1,value2,value3{0}", NewLine));
 			Assert.Equal(2, _csvReader.ReadDataRecords().Count);
 		}
 
@@ -291,7 +293,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestReadHeaderTwice()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", NewLine));
 			_csvReader.ReadHeaderRecord();
 			Assert.Throws<InvalidOperationException>(() => _csvReader.ReadHeaderRecord());
 		}
@@ -299,7 +301,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestReadHeaderAfterRecord()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", NewLine));
 			_csvReader.ReadDataRecord();
 			Assert.Throws<InvalidOperationException>(() => _csvReader.ReadHeaderRecord());
 		}
@@ -384,7 +386,6 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 			Assert.NotNull(record);
 			Assert.Equal(3, record.Values.Count);
 			var ex = Assert.Throws<NotSupportedException>(() => record[0] = "foobar");
-			Assert.Equal("Collection is read-only.", ex.Message);
 		}
 
 		[Fact]
@@ -410,7 +411,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 			record = _csvReader.ReadDataRecord();
 			Assert.Equal("Pearl Jam", record["Band"]);
 			Assert.Equal("March, 2002", record["Date"]);
-			Assert.Equal(string.Format("Entertainment Centre{0}Adelaide", Environment.NewLine), record["Venue, City"]);
+			Assert.Equal(string.Format("Entertainment Centre{0}Adelaide", NewLine), record["Venue, City"]);
 			Assert.Equal(string.Empty, record[3]);
 
 			record = _csvReader.ReadDataRecord();
@@ -750,27 +751,20 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 			Assert.Equal("A record has 4 columns in it, but the header only defines 3.", ex.Message);
 		}
 
-
-
-
-		
-		/*
-
-		[Fact]
-		[ExpectedException(typeof(ObjectDisposedException))]
-		public void TestReadAfterClose()
-		{
-			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", Environment.NewLine));
-			_csvReader.ReadDataRecord();
-			_csvReader.Close();
-			_csvReader.ReadDataRecord();
-		}
-
+		//[Fact]
+		//[ExpectedException(typeof(ObjectDisposedException))]
+		//public void TestReadAfterClose()
+		//{
+		//    _csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", NewLine));
+		//    _csvReader.ReadDataRecord();
+		//    _csvReader.Close();
+		//    _csvReader.ReadDataRecord();
+		//}
 
 		[Fact]
 		public void TestSetHeader()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", NewLine));
 			_csvReader.HeaderRecord = new HeaderRecord(new string[] {"Name","Age"});
 			DataRecord record = _csvReader.ReadDataRecord();
 			Assert.Equal("Tempany", record["Name"]);
@@ -782,92 +776,33 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		}
 
 		[Fact]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void TestSetHeaderNull()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", Environment.NewLine));
-			_csvReader.HeaderRecord = null;
+			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", NewLine));
+			Assert.Throws<ArgumentNullException>(() => _csvReader.HeaderRecord = null);
 		}
 
 		[Fact]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void TestSetHeaderTwice()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", Environment.NewLine));
-			_csvReader.HeaderRecord = new HeaderRecord(new string[] {"Name","Age"});
-			_csvReader.HeaderRecord = new HeaderRecord(new string[] {"Name","Age"});
+			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", NewLine));
+			_csvReader.HeaderRecord = new HeaderRecord(new string[] { "Name", "Age" });
+			Assert.Throws<InvalidOperationException>(() => _csvReader.HeaderRecord = new HeaderRecord(new string[] { "Name", "Age" }));
 		}
 
 		[Fact]
-		[ExpectedException(typeof(InvalidOperationException))]
 		public void TestSetHeaderAfterRecord()
 		{
-			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", Environment.NewLine));
+			_csvReader = CsvReader.FromCsvString(string.Format("Tempany,0{0}Kent,25", NewLine));
 			_csvReader.ReadDataRecord();
-			_csvReader.HeaderRecord = new HeaderRecord(new string[] {"Name","Age"});
+			Assert.Throws<InvalidOperationException>(() => _csvReader.HeaderRecord = new HeaderRecord(new string[] { "Name", "Age" }));
 		}
 
-
-
 		[Fact]
-		[ExpectedException(typeof(ArgumentException))]
 		public void TestSameSeparatorAndDelimiter()
 		{
-			Init("csv.escaped-data", '-', '-');
+			Assert.Throws<ArgumentException>(() => Init("csv.escaped-data", '-', '-'));
 		}
-
-		[Fact]
-		public void TestWhitespacePreserveNone()
-		{
-			_csvReader = CsvReader.FromCsvString("  Kent  ,  Belinda  , \" Tempany   \"  ,  ,  a  ,  b", CsvReaderOptions.None);
-			DataRecord record = _csvReader.ReadDataRecord();
-			Assert.Equal("Kent", record[0]);
-			Assert.Equal("Belinda", record[1]);
-			Assert.Equal(" Tempany   ", record[2]);
-			Assert.Equal("", record[3]);
-			Assert.Equal("a", record[4]);
-			Assert.Equal("b", record[5]);
-		}
-
-		[Fact]
-		public void TestWhitespacePreserveLeading()
-		{
-			_csvReader = CsvReader.FromCsvString("  Kent  ,  Belinda  , \" Tempany   \"  ,  ,  a  ,  b", CsvReaderOptions.PreserveLeadingWhiteSpace);
-			DataRecord record = _csvReader.ReadDataRecord();
-			Assert.Equal("  Kent", record[0]);
-			Assert.Equal("  Belinda", record[1]);
-			Assert.Equal("  Tempany   ", record[2]);
-			Assert.Equal("", record[3]);
-			Assert.Equal("  a", record[4]);
-			Assert.Equal("  b", record[5]);
-		}
-
-		[Fact]
-		public void TestWhitespacePreserveTrailing()
-		{
-			_csvReader = CsvReader.FromCsvString("  Kent  ,  Belinda  , \" Tempany   \"  ,  ,  a  ,  b", CsvReaderOptions.PreserveTrailingWhiteSpace);
-			DataRecord record = _csvReader.ReadDataRecord();
-			Assert.Equal("Kent  ", record[0]);
-			Assert.Equal("Belinda  ", record[1]);
-			Assert.Equal(" Tempany     ", record[2]);
-			Assert.Equal("", record[3]);
-			Assert.Equal("a  ", record[4]);
-			Assert.Equal("b", record[5]);
-		}
-
-		[Fact]
-		public void TestWhitespacePreserveAll()
-		{
-			_csvReader = CsvReader.FromCsvString("  Kent  ,  Belinda  , \" Tempany   \"  ,  ,  a  ,  b", CsvReaderOptions.PreserveLeadingWhiteSpace | CsvReaderOptions.PreserveTrailingWhiteSpace);
-			DataRecord record = _csvReader.ReadDataRecord();
-			Assert.Equal("  Kent  ", record[0]);
-			Assert.Equal("  Belinda  ", record[1]);
-			Assert.Equal("  Tempany     ", record[2]);
-			Assert.Equal("  ", record[3]);
-			Assert.Equal("  a  ", record[4]);
-			Assert.Equal("  b", record[5]);
-		}
-		*/
 
 		private void Init(string key)
 		{

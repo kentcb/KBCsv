@@ -233,6 +233,8 @@ namespace Kent.Boogaart.KBCsv
 	/// </example>
 	public class CsvReader : IDisposable
 	{
+		private static readonly ExceptionHelper _exceptionHelper = new ExceptionHelper(typeof(CsvReader));
+
 		/// <summary>
 		/// The license in use.
 		/// </summary>
@@ -366,8 +368,8 @@ namespace Kent.Boogaart.KBCsv
 			{
 				EnsureNotDisposed();
 				value.AssertNotNull("value");
-				ExceptionHelper.ThrowIf(_headerRecord != null, "HeaderRecord.set.header-record-already-set");
-				ExceptionHelper.ThrowIf(_parser.PassedFirstRecord, "HeaderRecord.set.first-record-already-read");
+				_exceptionHelper.ResolveAndThrowIf(_headerRecord != null, "HeaderRecord.set.header-record-already-set");
+				_exceptionHelper.ResolveAndThrowIf(_parser.PassedFirstRecord, "HeaderRecord.set.first-record-already-read");
 
 				_parser.PassedFirstRecord = true;
 				_headerRecord = value;
@@ -508,7 +510,7 @@ namespace Kent.Boogaart.KBCsv
 		/// The full path to the file containing CSV data.
 		/// </param>
 		/// <param name="encoding">
-		/// The encoding for the data in <paramref name="stream"/>.
+		/// The encoding for the data in the file at <paramref name="path"/>.
 		/// </param>
 		public CsvReader(string path, Encoding encoding) : this(new StreamReader(path, encoding))
 		{
@@ -596,7 +598,7 @@ namespace Kent.Boogaart.KBCsv
 		/// </returns>
 		public HeaderRecord ReadHeaderRecord()
 		{
-			ExceptionHelper.ThrowIf(_parser.PassedFirstRecord, "HeaderRecord.set.first-record-already-read");
+			_exceptionHelper.ResolveAndThrowIf(_parser.PassedFirstRecord, "HeaderRecord.set.first-record-already-read");
 
 			HeaderRecord headerRecord = HeaderRecord.FromParser(_parser);
 
@@ -700,7 +702,7 @@ namespace Kent.Boogaart.KBCsv
 		public ICollection<DataRecord> ReadDataRecords(int maximumRecords)
 		{
 			EnsureNotDisposed();
-			ExceptionHelper.ThrowIf(maximumRecords < 0, "ReadDataRecords.maximumRecords-less-than-zero");
+			_exceptionHelper.ResolveAndThrowIf(maximumRecords < 0, "ReadDataRecords.maximumRecords-less-than-zero");
 
 			List<DataRecord> retVal = new List<DataRecord>();
 			int numRead = 0;
@@ -767,7 +769,7 @@ namespace Kent.Boogaart.KBCsv
 		public ICollection<string[]> ReadDataRecordsAsStrings(int maximumRecords)
 		{
 			EnsureNotDisposed();
-			ExceptionHelper.ThrowIf(maximumRecords < 0, "ReadDataRecords.maximumRecords-less-than-zero");
+			_exceptionHelper.ResolveAndThrowIf(maximumRecords < 0, "ReadDataRecords.maximumRecords-less-than-zero");
 
 			List<string[]> retVal = new List<string[]>();
 			int numRead = 0;
@@ -857,7 +859,7 @@ namespace Kent.Boogaart.KBCsv
 		public int SkipRecords(int number)
 		{
 			EnsureNotDisposed();
-			ExceptionHelper.ThrowIf(number < 0, "SkipRecords.number-less-than-zero");
+			_exceptionHelper.ResolveAndThrowIf(number < 0, "SkipRecords.number-less-than-zero");
 
 			int retVal = 0;
 
@@ -892,7 +894,7 @@ namespace Kent.Boogaart.KBCsv
 		public int SkipRecords(int number, bool incrementRecordNumber)
 		{
 			EnsureNotDisposed();
-			ExceptionHelper.ThrowIf(number < 0, "SkipRecords.number-less-than-zero");
+			_exceptionHelper.ResolveAndThrowIf(number < 0, "SkipRecords.number-less-than-zero");
 
 			int retVal = 0;
 
@@ -1027,8 +1029,8 @@ namespace Kent.Boogaart.KBCsv
 			EnsureNotDisposed();
 			dataSet.AssertNotNull("dataSet");
 			tableName.AssertNotNull("tableName");
-			ExceptionHelper.ThrowIf(useMaximum && (maximumRecords < 0), "Fill.maximumRecords-less-than-zero", "maximumRecords");
-			ExceptionHelper.ThrowIf(_headerRecord == null, "Fill.no-header-record-set");
+			_exceptionHelper.ResolveAndThrowIf(useMaximum && (maximumRecords < 0), "Fill.maximumRecords-less-than-zero", "maximumRecords");
+			_exceptionHelper.ResolveAndThrowIf(_headerRecord == null, "Fill.no-header-record-set");
 
 			DataTable table = dataSet.Tables.Add(tableName);
 
@@ -1046,7 +1048,7 @@ namespace Kent.Boogaart.KBCsv
 
 				if (record != null)
 				{
-					ExceptionHelper.ThrowIf(record.Length > _headerRecord.Values.Count, "Fill.too-many-columns-in-record", record.Length, _headerRecord.Values.Count);
+					_exceptionHelper.ResolveAndThrowIf(record.Length > _headerRecord.Values.Count, "Fill.too-many-columns-in-record", record.Length, _headerRecord.Values.Count);
 
 					string[] recordAsStrings = new string[record.Length];
 					record.CopyTo(recordAsStrings, 0);
@@ -1067,7 +1069,7 @@ namespace Kent.Boogaart.KBCsv
 		/// </summary>
 		private void EnsureNotDisposed()
 		{
-			ExceptionHelper.ThrowIf(_disposed, "disposed");
+			_exceptionHelper.ResolveAndThrowIf(_disposed, "disposed");
 		}
 	}
 }

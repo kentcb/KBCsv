@@ -115,6 +115,8 @@ namespace Kent.Boogaart.KBCsv
 	/// </example>
 	public class CsvWriter : IDisposable
 	{
+		private static readonly ExceptionHelper _exceptionHelper = new ExceptionHelper(typeof(CsvWriter));
+
 		/// <summary>
 		/// The license in use.
 		/// </summary>
@@ -235,8 +237,8 @@ namespace Kent.Boogaart.KBCsv
 			set
 			{
 				EnsureNotDisposed();
-				ExceptionHelper.ThrowIf(value == _valueDelimiter, "value-separator-same-as-value-delimiter");
-				ExceptionHelper.ThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
+				_exceptionHelper.ResolveAndThrowIf(value == _valueDelimiter, "value-separator-same-as-value-delimiter");
+				_exceptionHelper.ResolveAndThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
 
 				_valueSeparator = value;
 			}
@@ -265,8 +267,8 @@ namespace Kent.Boogaart.KBCsv
 			set
 			{
 				EnsureNotDisposed();
-				ExceptionHelper.ThrowIf(value == _valueSeparator, "value-separator-same-as-value-delimiter");
-				ExceptionHelper.ThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
+				_exceptionHelper.ResolveAndThrowIf(value == _valueSeparator, "value-separator-same-as-value-delimiter");
+				_exceptionHelper.ResolveAndThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
 				
 				_valueDelimiter = value;
 			}
@@ -510,7 +512,7 @@ namespace Kent.Boogaart.KBCsv
 		public void WriteHeaderRecord(HeaderRecord headerRecord)
 		{
 			headerRecord.AssertNotNull("headerRecord");
-			ExceptionHelper.ThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
+			_exceptionHelper.ResolveAndThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
 
 			_headerRecord = headerRecord;
 			WriteRecord(headerRecord.Values);
@@ -563,7 +565,7 @@ namespace Kent.Boogaart.KBCsv
 		{
 			EnsureNotDisposed();
 			headerRecord.AssertNotNull("headerRecord");
-			ExceptionHelper.ThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
+			_exceptionHelper.ResolveAndThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
 
 			_headerRecord = new HeaderRecord(headerRecord, true);
 			WriteRecord(headerRecord);
@@ -774,7 +776,7 @@ namespace Kent.Boogaart.KBCsv
 		{
 			EnsureNotDisposed();
 			dataSet.AssertNotNull("dataSet");
-			ExceptionHelper.ThrowIf(dataSet.Tables.Count == 0, "WriteAll.dataSet-no-table");
+			_exceptionHelper.ResolveAndThrowIf(dataSet.Tables.Count == 0, "WriteAll.dataSet-no-table");
 
 			WriteAll(dataSet.Tables[0], writeHeaderRecord);
 		}
@@ -909,7 +911,7 @@ namespace Kent.Boogaart.KBCsv
 		/// </summary>
 		private void EnsureNotDisposed()
 		{
-			ExceptionHelper.ThrowIf(_disposed, "disposed");
+			_exceptionHelper.ResolveAndThrowIf(_disposed, "disposed");
 		}
 	}
 }

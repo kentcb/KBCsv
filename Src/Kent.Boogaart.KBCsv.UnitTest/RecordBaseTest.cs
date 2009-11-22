@@ -57,15 +57,13 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		[Fact]
 		public void TestIndexerNegativeIndex()
 		{
-			var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _record[-1] = "test");
-			Assert.Equal("Index was out of range. Must be non-negative and less than the size of the collection.\r\nParameter name: index", ex.Message);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _record[-1] = "test");
 		}
 
 		[Fact]
 		public void TestIndexerInvalidIndex()
 		{
-			var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _record[12] = "test");
-			Assert.Equal("Index was out of range. Must be non-negative and less than the size of the collection.\r\nParameter name: index", ex.Message);
+			Assert.Throws<ArgumentOutOfRangeException>(() => _record[12] = "test");
 		}
 
 		[Fact]

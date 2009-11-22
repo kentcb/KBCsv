@@ -12,7 +12,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 	public sealed class CsvWriterTest
 	{
 		private CsvWriter _csvWriter;
-		private MemoryStream _memStream;
+		private StringWriter _stringWriter;
 		private readonly string[] HEADERRECORD = new string[] {"Name", "Age", "Gender"};
 		private readonly string[] RECORD1 = new string[] {"Kent", "25", "M"};
 		private readonly string[] RECORD2 = new string[] {"Belinda", "26", "F"};
@@ -20,14 +20,13 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 
 		public CsvWriterTest()
 		{
-			_memStream = new MemoryStream();
-			_csvWriter = new CsvWriter(_memStream);
+			_stringWriter = new StringWriter();
+			_csvWriter = new CsvWriter(_stringWriter);
 		}
 
 		[Fact]
 		public void TestEncoding()
 		{
-			Assert.Equal(Encoding.Default, _csvWriter.Encoding);
 			_csvWriter = new CsvWriter(new MemoryStream(), Encoding.UTF32);
 			Assert.Equal(Encoding.UTF32, _csvWriter.Encoding);
 		}
@@ -246,8 +245,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 			_csvWriter = new CsvWriter(new MemoryStream());
 			(_csvWriter as IDisposable).Dispose();
 			char v;
-			var ex = Assert.Throws<ObjectDisposedException>(() => v = _csvWriter.ValueDelimiter);
-			Assert.Equal("Cannot access a disposed object.", ex.Message);
+			Assert.Throws<ObjectDisposedException>(() => v = _csvWriter.ValueDelimiter);
 		}
 
 		[Fact]
@@ -256,8 +254,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 			_csvWriter = new CsvWriter(new MemoryStream());
 			_csvWriter.Close();
 			char v;
-			var ex = Assert.Throws<ObjectDisposedException>(() => v = _csvWriter.ValueDelimiter);
-			Assert.Equal("Cannot access a disposed object.", ex.Message);
+			Assert.Throws<ObjectDisposedException>(() => v = _csvWriter.ValueDelimiter);
 		}
 
 		[Fact]
@@ -567,9 +564,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		private void AssertContents(string expected, string lineBreak)
 		{
 			_csvWriter.Flush();
-			Encoding e = new ASCIIEncoding();
-			string contents = e.GetString(_memStream.ToArray());
-			Assert.Equal(string.Format(expected, lineBreak), contents);
+			Assert.Equal(string.Format(expected, lineBreak), _stringWriter.ToString());
 		}
 	}
 }

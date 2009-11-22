@@ -14,6 +14,8 @@ namespace Kent.Boogaart.KBCsv
 	/// </remarks>
 	internal sealed class CsvParser : IDisposable
 	{
+		private static readonly ExceptionHelper _exceptionHelper = new ExceptionHelper(typeof(CsvParser));
+
 		/// <summary>
 		/// The source of the CSV data.
 		/// </summary>
@@ -180,8 +182,8 @@ namespace Kent.Boogaart.KBCsv
 			}
 			set
 			{
-				ExceptionHelper.ThrowIf(value == _valueDelimiter, "value-separator-same-as-value-delimiter");
-				ExceptionHelper.ThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
+				_exceptionHelper.ResolveAndThrowIf(value == _valueDelimiter, "value-separator-same-as-value-delimiter");
+				_exceptionHelper.ResolveAndThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
 
 				_valueSeparator = value;
 				UpdateSpecialCharacterMask();
@@ -199,8 +201,8 @@ namespace Kent.Boogaart.KBCsv
 			}
 			set
 			{
-				ExceptionHelper.ThrowIf(value == _valueSeparator, "value-separator-same-as-value-delimiter");
-				ExceptionHelper.ThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
+				_exceptionHelper.ResolveAndThrowIf(value == _valueSeparator, "value-separator-same-as-value-delimiter");
+				_exceptionHelper.ResolveAndThrowIf(value == SPACE, "value-separator-or-value-delimiter-space");
 
 				_valueDelimiter = value;
 				UpdateSpecialCharacterMask();
@@ -692,7 +694,7 @@ namespace Kent.Boogaart.KBCsv
 		/// Appends the specified characters from <see cref="_buffer"/> onto the end of the current value.
 		/// </summary>
 		/// <param name="startIndex">
-		/// The starting index in <paramref name="chars"/>.
+		/// The index at which to begin copying.
 		/// </param>
 		/// <param name="endIndex">
 		/// The index at which to cease copying. The character at this index is not copied.
