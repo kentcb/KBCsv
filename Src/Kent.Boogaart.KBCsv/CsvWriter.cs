@@ -118,11 +118,6 @@ namespace Kent.Boogaart.KBCsv
 		private static readonly ExceptionHelper _exceptionHelper = new ExceptionHelper(typeof(CsvWriter));
 
 		/// <summary>
-		/// The license in use.
-		/// </summary>
-		private readonly License _license;
-
-		/// <summary>
 		/// The <see cref="TextWriter"/> used to output CSV data.
 		/// </summary>
 		private TextWriter _writer;
@@ -435,8 +430,6 @@ namespace Kent.Boogaart.KBCsv
 		/// </param>
 		public CsvWriter(TextWriter writer)
 		{
-			_license = LicenseManager.Validate(typeof(CsvReader), this);
-
 			writer.AssertNotNull("writer");
 
 			_writer = writer;
@@ -474,11 +467,6 @@ namespace Kent.Boogaart.KBCsv
 		/// </remarks>
 		public void Close()
 		{
-			if (_license != null)
-			{
-				_license.Dispose();
-			}
-
 			if (_writer != null)
 			{
 				_writer.Close();

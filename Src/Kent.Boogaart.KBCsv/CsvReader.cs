@@ -236,11 +236,6 @@ namespace Kent.Boogaart.KBCsv
 		private static readonly ExceptionHelper _exceptionHelper = new ExceptionHelper(typeof(CsvReader));
 
 		/// <summary>
-		/// The license in use.
-		/// </summary>
-		private readonly License _license;
-
-		/// <summary>
 		/// The instance of <see cref="CsvParser"/> being used to parse the CSV data.
 		/// </summary>
 		private readonly CsvParser _parser;
@@ -524,7 +519,6 @@ namespace Kent.Boogaart.KBCsv
 		/// </param>
 		public CsvReader(TextReader reader)
 		{
-			_license = LicenseManager.Validate(typeof(CsvReader), this);
 			_parser = new CsvParser(reader);
 		}
 
@@ -557,11 +551,6 @@ namespace Kent.Boogaart.KBCsv
 		/// </remarks>
 		public void Close()
 		{
-			if (_license != null)
-			{
-				_license.Dispose();
-			}
-
 			if (_parser != null)
 			{
 				_parser.Close();
