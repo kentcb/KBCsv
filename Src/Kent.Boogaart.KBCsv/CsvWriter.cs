@@ -827,7 +827,7 @@ namespace Kent.Boogaart.KBCsv
 			_valueBufferEndIndex = 0;
 			bool delimit = _alwaysDelimit;
 
-			if (val.Length > 0)
+			if (!string.IsNullOrEmpty(val))
 			{
 				//delimit to preserve white-space at the beginning or end of the value
 				if ((val[0] == SPACE) || (val[val.Length - 1] == SPACE))

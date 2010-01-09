@@ -323,6 +323,14 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 		}
 
 		[Fact]
+		public void TestWriteDataRecordStringsNullEntry()
+		{
+			DataRecord record = new DataRecord(null, new string[] { "Kent", null, "M" });
+			_csvWriter.WriteDataRecord(record);
+			AssertContents("Kent,,M{0}");
+		}
+
+		[Fact]
 		public void TestWriteDataRecordStrings()
 		{
 			_csvWriter.WriteDataRecord(RECORD1);
