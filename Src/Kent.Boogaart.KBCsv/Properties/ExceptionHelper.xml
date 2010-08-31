@@ -70,4 +70,10 @@
 			Space is not a valid value separator or delimiter.
 		</exception>
 	</exceptionGroup>
+
+    <exceptionGroup type="Kent.Boogaart.KBCsv.DataRecord">
+        <exception key="no-header-record" type="System.InvalidOperationException">
+            No header record is associated with this DataRecord.
+        </exception>
+    </exceptionGroup>
 </exceptionHelper>

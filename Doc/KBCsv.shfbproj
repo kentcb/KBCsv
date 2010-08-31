@@ -18,7 +18,8 @@
     <HtmlHelpName>KBCsv</HtmlHelpName>
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\Release\Kent.Boogaart.KBCsv.dll" />
-<DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\Release\Kent.Boogaart.KBCsv.xml" /></DocumentationSources>
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\Release\Kent.Boogaart.KBCsv.xml" />
+    </DocumentationSources>
     <FrameworkVersion>2.0.50727</FrameworkVersion>
     <HelpTitle>KBCsv</HelpTitle>
     <RootNamespaceContainer>True</RootNamespaceContainer>
@@ -26,8 +27,9 @@
     <MissingTags>Summary, Parameter, Returns, Namespace, TypeParameter</MissingTags>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
-<NamespaceSummaryItem name="Kent.Boogaart.Truss" isDocumented="False">Contains fundamental, commonly-used types in the Truss binding library.</NamespaceSummaryItem>
-<NamespaceSummaryItem name="Kent.Boogaart.Truss.Primitive" isDocumented="False">Contains supporting types that are not normally used when using Truss as a library, but rather when extending Truss.</NamespaceSummaryItem></NamespaceSummaries>
+      <NamespaceSummaryItem name="Kent.Boogaart.Truss" isDocumented="False">Contains fundamental, commonly-used types in the Truss binding library.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Kent.Boogaart.Truss.Primitive" isDocumented="False">Contains supporting types that are not normally used when using Truss as a library, but rather when extending Truss.</NamespaceSummaryItem>
+    </NamespaceSummaries>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <Preliminary>False</Preliminary>
     <SdkLinkTarget>Blank</SdkLinkTarget>
@@ -42,6 +44,7 @@
     <ContentLayout Include="Content Layout.content" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Parser.aml" />
     <None Include="License.aml" />
     <None Include="Overview.aml" />
   </ItemGroup>

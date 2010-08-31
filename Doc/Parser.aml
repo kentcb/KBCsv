@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<topic id="e241d246-0639-4827-9504-e161fcf5ff9f" revisionNumber="1">
+  <developerConceptualDocument xmlns="http://ddue.schemas.microsoft.com/authoring/2003/5" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <introduction>
+      <para>
+      	This section describes the rules that the KBCsv parser conforms to. Whilst there is no official CSV specification, there are a couple of
+      	de-facto standards documented. These standards can be found here:
+      </para>
+	  <list class="bullet">
+	    <listItem>
+	    	<externalLink>
+				<linkText>http://www.rfc-editor.org/rfc/rfc4180.txt</linkText>
+				<linkUri>http://www.rfc-editor.org/rfc/rfc4180.txt</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>
+		</listItem>
+	    <listItem>
+	    	<externalLink>
+				<linkText>http://www.creativyst.com/Doc/Articles/CSV/CSV01.htm</linkText>
+				<linkUri>http://www.creativyst.com/Doc/Articles/CSV/CSV01.htm</linkUri>
+				<linkTarget>_blank</linkTarget>
+			</externalLink>
+		</listItem>
+	  </list>
+	  <para>
+	  	These standards were used to formulate the rules that KBCsv would comply with. Unit tests asserting these rules exist within the KBCsv source
+	  	code.
+	  </para>
+    </introduction>
+
+    <section address="Rules">
+    	<title>Rules</title>
+    	<content>
+    		The rules implemented by the KBCsv parser are:
+    		
+			<table>
+			  <tableHeader>
+			    <row>
+			      <entry>Rule ID</entry>
+			      <entry>Description</entry>
+			      <entry>Examples</entry>
+			    </row>
+			  </tableHeader>
+			  <row>
+			    <entry>RS</entry>
+			    <entry>Records are separated by CR (Macintosh), LF (Linux) or CR/LF (Windows).</entry>
+			    <entry>
+			    	<markup>
+<pre>
+Kent,25,M&lt;CR&gt;
+Belinda,26,F&lt;CR&gt;
+</pre>
+					</markup>
+					OR
+			    	<markup>
+<pre>
+Kent,25,M&lt;LF&gt;
+Belinda,26,F&lt;LF&gt;
+</pre>
+					</markup>
+					OR
+			    	<markup>
+<pre>
+Kent,25,M&lt;CR/LF&gt;
+Belinda,26,F&lt;CR/LF&gt;
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			  <row>
+			    <entry>RL</entry>
+			    <entry>The last record in the CSV data may or may not end with a line break (as per rule RS).</entry>
+			    <entry>
+			    	<markup>
+<pre>
+Kent,25,M&lt;LF&gt;
+Belinda,26,F&lt;LF&gt;
+&lt;EOF&gt;
+</pre>
+					</markup>
+					OR
+			    	<markup>
+<pre>
+Kent,25,M&lt;LF&gt;
+Belinda,26,F&lt;EOF&gt;
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			  <row>
+			    <entry>VS</entry>
+			    <entry>
+			    	<para>
+				    	Records may contain any number of values separated by a comma (,). Each record may or may not contain the same number of values.
+			    	</para>
+			    	<para>
+			    		The value separator character must be customisable. The parser may place reasonable restrictions on valid separator characters for
+			    		efficiency and simplicity reasons.
+			    	</para>
+			    </entry>
+			    <entry>
+			    	<markup>
+<pre>
+Kent,25,M&lt;LF&gt;
+Belinda,26,F&lt;LF&gt;
+</pre>
+					</markup>
+					OR
+			    	<markup>
+<pre>
+Kent,25,M&lt;LF&gt;
+Belinda,26,F,Another field&lt;LF&gt;
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			  <row>
+			    <entry>VD</entry>
+			    <entry>
+			    	<para>
+				    	Values may or may not be delimited by double quotes ("). Any value may contain zero to infinity delimited parts. When a delimited area of a value ends, the value does not necessarily also end.
+			    	</para>
+			    	<para>
+			    		The value delimiter character must be customisable. The parser may place reasonable restrictions on valid delimiter characters for efficiency and simplicity reasons.
+			    	</para>
+			    </entry>
+			    <entry>
+			    	<markup>
+<pre>
+"Kent Boogaart",25,M&lt;LF&gt;
+"Belinda" "Boogaart",26,F&lt;LF&gt;
+</pre>
+					</markup>
+					OR
+			    	<markup>
+<pre>
+"Kent" "Boogaart",25,M&lt;LF&gt;
+"Belinda" "Boogaart",26,F&lt;LF&gt;
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			  <row>
+			    <entry>VCW</entry>
+			    <entry>
+			    	<para>
+				    	Values that contain leading or trailing white-space must be delimited as described in rule VD. By default, the parser will discard leading and trailing white-space that isn’t delimited.
+			    	</para>
+			    	<para>
+			    		White-space is defined as either the space character or the tab character (assuming the chosen separator character isn’t itself the tab character).
+			    	</para>
+			    	<para>
+			    		The parser must define options that allow leading and / or trailing white-space to be retained regardless of whether values are delimited.
+			    	</para>
+			    	<para>
+			    		If a value consists only of white-space, that white-space is considered to be both leading and trailing white-space. That is, the white-space will be discarded unless the parser is explicitly instructed to retain both leading and trailing white-space.
+			    	</para>
+			    </entry>
+			    <entry>
+			    	<markup>
+<pre>
+"  Kent  ",25,M&lt;LF&gt;
+"Belinda  ",26,F&lt;LF&gt;
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			  <row>
+			    <entry>VCD</entry>
+			    <entry>
+			    	<para>
+				    	Values that include the value delimiter character (by default, a double quote) must be delimited as described in rule VD. The delimiter characters must be escaped by repeating them.
+			    	</para>
+			    </entry>
+			    <entry>
+			    	<markup>
+<pre>
+"Kent ""booga"" Boogaart"&lt;LF&gt;
+"Belinda ""B"""&lt;LF&gt;
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			  <row>
+			    <entry>VCS</entry>
+			    <entry>
+			    	<para>
+				    	Values that include the value separator character (by default, a comma) must be delimited as described in rule VD.
+			    	</para>
+			    </entry>
+			    <entry>
+			    	<markup>
+<pre>
+MUSE,"October, 2004"&lt;LF&gt;
+Pearl Jam,"February, 2003"
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			  <row>
+			    <entry>VCB</entry>
+			    <entry>
+			    	<para>
+				    	Values that include any line break character (as defined by rule RS) must be delimited as described in rule VD.
+			    	</para>
+			    </entry>
+			    <entry>
+			    	<markup>
+<pre>
+Kent,A description of Kent&lt;LF&gt;
+Belinda,"A description&lt;LF&gt;
+of Belinda over two lines"&lt;LF&gt;
+</pre>
+					</markup>
+					OR
+			    	<markup>
+<pre>
+Kent,A description of Kent&lt;LF&gt;
+Belinda,"A description&lt;CR&gt;
+of Belinda over two lines"&lt;LF&gt;
+</pre>
+					</markup>
+					OR
+			    	<markup>
+<pre>
+Kent,A description of Kent&lt;LF&gt;
+Belinda,"A description&lt;CR/LF&gt;
+of Belinda over two lines"&lt;LF&gt;
+</pre>
+					</markup>
+			    </entry>
+			  </row>
+			</table>
+    	</content>
+    </section>
+  </developerConceptualDocument>
+</topic>
