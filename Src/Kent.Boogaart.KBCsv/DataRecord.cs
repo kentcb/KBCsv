@@ -17,7 +17,9 @@ namespace Kent.Boogaart.KBCsv
     /// property.
     /// </para>
     /// </remarks>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public sealed class DataRecord : RecordBase
     {
         private static readonly ExceptionHelper _exceptionHelper = new ExceptionHelper(typeof(DataRecord));

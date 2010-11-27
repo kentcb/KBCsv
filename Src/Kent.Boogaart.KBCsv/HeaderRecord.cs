@@ -11,7 +11,9 @@ namespace Kent.Boogaart.KBCsv
     /// <remarks>
     /// An instance of this class represents the header record in a CSV data source. Such a record defines only the column names for the CSV data.
     /// </remarks>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public sealed class HeaderRecord : RecordBase
     {
         /// <summary>

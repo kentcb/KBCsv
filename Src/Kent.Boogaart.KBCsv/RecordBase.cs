@@ -13,7 +13,9 @@ namespace Kent.Boogaart.KBCsv
     /// <remarks>
     /// The CSV record types <see cref="HeaderRecord"/> and <see cref="DataRecord"/> obtain common functionality by inheriting from this class.
     /// </remarks>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public abstract class RecordBase
     {
         /// <summary>

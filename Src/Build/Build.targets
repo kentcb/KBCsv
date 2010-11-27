@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Project ToolsVersion="4.0" DefaultTargets="All" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <!--
+        RTW is always a release build
+        -->
+        <Configuration>Release</Configuration>
+    </PropertyGroup>
+
+    <Import Project="Build.properties"/>
+
+    <Import Project="$(LibDir)\MSBuild Community Tasks\MSBuild.Community.Tasks.Targets" />
+    <UsingTask AssemblyFile="$(LibDir)\xUnit\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
+
+    <Target Name="All" DependsOnTargets="Clean;Build;Test;GenerateDocumentation;CreateArchives"/>
+
+    <Target Name="Clean">
+        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Clean" BuildInParallel="True"/>
+        <MSBuild Projects="$(SrcDir)\KBCsvSL.sln" Properties="Configuration=$(Configuration)" Targets="Clean" BuildInParallel="True"/>
+        <RemoveDir Directories="$(GenDir)\Tests" />
+        <RemoveDir Directories="$(GenDir)\Documentation" />
+    </Target>
+
+    <Target Name="Build">
+        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Build" BuildInParallel="True"/>
+        <MSBuild Projects="$(SrcDir)\KBCsvSL.sln" Properties="Configuration=$(Configuration)" Targets="Build" BuildInParallel="True"/>
+    </Target>
+
+    <Target Name="Test">
+        <MakeDir Directories="$(GenDir)\Tests" />
+        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.UnitTest\$(OutputPath)\Kent.Boogaart.KBCsv.UnitTest.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.UnitTest.xml" />
+    </Target>
+
+    <Target Name="GenerateDocumentation">
+        <MakeDir Directories="$(GenDir)\Documentation" />
+
+        <!--
+        Build documentation. This relies on the following components being installed:
+         - Latest Sandcastle (http://sandcastle.codeplex.com/)
+         - Latest Sandcastle Help File Builder (http://shfb.codeplex.com/)
+         - Any relevant updates to styles from Sandcastle Styles (http://sandcastlestyles.codeplex.com/)
+        -->
+        <MSBuild Projects="$(DocDir)\KBCsv.shfbproj"/>
+        <OnError ExecuteTargets="GenerateDocumentationFailed"/>
+    </Target>
+
+    <Target Name="GenerateDocumentationFailed">
+        <Error Text="Building documentation failed. Please ensure you have the following components installed: Latest Sandcastle (http://sandcastle.codeplex.com/), latest Sandcastle Help File Builder (http://shfb.codeplex.com/), any relevant updates to styles from Sandcastle Styles (http://sandcastlestyles.codeplex.com/). You may also need to log out and back in."/>
+    </Target>
+
+    <Target Name="CreateArchives">
+        <GetAssemblyIdentity AssemblyFiles="$(SrcDir)\Kent.Boogaart.KBCsv\$(OutputPath)\Kent.Boogaart.KBCsv.dll">
+            <Output TaskParameter="Assemblies" ItemName="AssemblyIdentity" />
+        </GetAssemblyIdentity>
+        <CreateProperty Value="@(AssemblyIdentity -> '%(Version)')">
+            <Output TaskParameter="Value" PropertyName="Version" />
+        </CreateProperty>
+
+        <MakeDir Directories="$(GenDir)" Condition="!Exists('$(GenDir)')" />
+        <RemoveDir Directories="$(GenDir)\Temp" />
+        <MakeDir Directories="$(GenDir)\Temp" Condition="!Exists('$(GenDir)\Temp')" />
+
+        <!-- zip source -->
+        <CreateItem Include="..\..\**\*.*" Exclude="..\..\**\*.suo;..\..\**\*.csproj.user;..\..\**\*.gpState;..\..\**\bin\**;..\..\**\obj\**;..\..\**\.svn\**;..\..\Gen\**">
+            <Output ItemName="Source" TaskParameter="Include" />
+        </CreateItem>
+        <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-src.zip" WorkingDirectory="..\..\" ZipLevel="9" Files="@(Source)" />
+
+        <!-- zip binaries -->
+        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.UnitTest\$(OutputPath)\*.*" Exclude="$(SrcDir)\Kent.Boogaart.KBCsv.UnitTest\$(OutputPath)\Coverage.log">
+            <Output ItemName="Files" TaskParameter="Include" />
+        </CreateItem>
+        <Copy SourceFiles="@(Files)" DestinationFolder="$(GenDir)\Temp" />
+        <CreateItem Include="$(GenDir)\Temp\*.*">
+            <Output ItemName="Binaries" TaskParameter="Include" />
+        </CreateItem>
+        <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-bin.zip" WorkingDirectory="$(GenDir)\Temp\" ZipLevel="9" Files="@(Binaries)" />
+        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv\$(OutputPath)\SL\*.*">
+            <Output ItemName="SLFiles" TaskParameter="Include" />
+        </CreateItem>
+        <Copy SourceFiles="@(SLFiles)" DestinationFolder="$(GenDir)\Temp\SL" />
+        <CreateItem Include="$(GenDir)\Temp\SL\*.*">
+            <Output ItemName="SLBinaries" TaskParameter="Include" />
+        </CreateItem>
+        <Zip ZipFileName="$(GenDir)\KBCsv-SL-$(Version)-bin.zip" WorkingDirectory="$(GenDir)\Temp\SL\" ZipLevel="9" Files="@(SLBinaries)" />
+
+        <!-- zip documentation -->
+        <CreateItem Include="$(GenDir)\Documentation\KBCsv.chm">
+            <Output ItemName="DocFiles" TaskParameter="Include" />
+        </CreateItem>
+        <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-doc.zip" WorkingDirectory="$(GenDir)\Documentation\" ZipLevel="9" Files="@(DocFiles)" />
+    </Target>
+</Project>
