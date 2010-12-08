@@ -16,15 +16,20 @@
     <Target Name="All" DependsOnTargets="Clean;Build;Test;GenerateDocumentation;CreateArchives"/>
 
     <Target Name="Clean">
-        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Clean" BuildInParallel="True"/>
         <MSBuild Projects="$(SrcDir)\KBCsvSL.sln" Properties="Configuration=$(Configuration)" Targets="Clean" BuildInParallel="True"/>
+        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Clean" BuildInParallel="True"/>
         <RemoveDir Directories="$(GenDir)\Tests" />
         <RemoveDir Directories="$(GenDir)\Documentation" />
     </Target>
 
     <Target Name="Build">
-        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Build" BuildInParallel="True"/>
+        <!--
+        order is very important here, for reasons I haven't investigated fully. If the Silverlight solution is built second, it is not
+        a valid Silverlight binary. It seems that building the standard solution results in some properties being set that then affect
+        the Silverlight build.
+        -->
         <MSBuild Projects="$(SrcDir)\KBCsvSL.sln" Properties="Configuration=$(Configuration)" Targets="Build" BuildInParallel="True"/>
+        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Build" BuildInParallel="True"/>
     </Target>
 
     <Target Name="Test">

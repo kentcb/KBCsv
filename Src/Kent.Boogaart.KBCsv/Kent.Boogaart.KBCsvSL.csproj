@@ -60,9 +60,7 @@
   <ItemGroup>
     <Compile Include="CsvParser.cs" />
     <Compile Include="CsvReader.cs" />
-    <Compile Include="CsvReaderOptions.cs" />
     <Compile Include="CsvWriter.cs" />
-    <Compile Include="CsvWriterOptions.cs" />
     <Compile Include="DataRecord.cs" />
     <Compile Include="HeaderRecord.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
