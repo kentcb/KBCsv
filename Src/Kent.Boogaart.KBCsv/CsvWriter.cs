@@ -516,7 +516,7 @@ namespace Kent.Boogaart.KBCsv
             _exceptionHelper.ResolveAndThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
 
             _headerRecord = headerRecord;
-            WriteRecord(headerRecord.Values);
+            WriteRecord(headerRecord.Values, false);
         }
 
         /// <summary>
@@ -569,7 +569,7 @@ namespace Kent.Boogaart.KBCsv
             _exceptionHelper.ResolveAndThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
 
             _headerRecord = new HeaderRecord(headerRecord, true);
-            WriteRecord(headerRecord);
+            WriteRecord(headerRecord, false);
         }
 
         /// <summary>
@@ -587,7 +587,7 @@ namespace Kent.Boogaart.KBCsv
             EnsureNotDisposed();
             dataRecord.AssertNotNull("dataRecord");
 
-            WriteRecord(dataRecord.Values);
+            WriteRecord(dataRecord.Values, true);
         }
 
 
@@ -639,8 +639,7 @@ namespace Kent.Boogaart.KBCsv
             EnsureNotDisposed();
             dataRecord.AssertNotNull("dataRecord");
 
-            WriteRecord(dataRecord);
-            ++_recordNumber;
+            WriteRecord(dataRecord, true);
         }
 
         /// <summary>
@@ -660,7 +659,7 @@ namespace Kent.Boogaart.KBCsv
 
             foreach (DataRecord dataRecord in dataRecords)
             {
-                WriteRecord(dataRecord.Values);
+                WriteRecord(dataRecord.Values, true);
             }
         }
 
@@ -681,7 +680,7 @@ namespace Kent.Boogaart.KBCsv
 
             foreach (string[] dataRecord in dataRecords)
             {
-                WriteRecord(dataRecord);
+                WriteRecord(dataRecord, true);
             }
         }
 
@@ -795,7 +794,10 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="record">
         /// The record to be written.
         /// </param>
-        private void WriteRecord(IEnumerable<string> record)
+        /// <param name="incrementRecordNumber">
+        /// <see langword="true"/> if the record number should be incremented, otherwise <see langword="false"/>.
+        /// </param>
+        private void WriteRecord(IEnumerable<string> record, bool incrementRecordNumber)
         {
             bool firstValue = true;
 
@@ -816,6 +818,11 @@ namespace Kent.Boogaart.KBCsv
             //uses the underlying TextWriter.NewLine property
             _writer.WriteLine();
             _passedFirstRecord = true;
+
+            if (incrementRecordNumber)
+            {
+                ++_recordNumber;
+            }
         }
 
         /// <summary>
