@@ -264,10 +264,12 @@ namespace Kent.Boogaart.KBCsv
         /// </summary>
         private bool _disposed;
 
+#if !SILVERLIGHT
         /// <summary>
         /// The default table name used during a <see cref="Fill"/> operation.
         /// </summary>
         public static readonly string DefaultTableName = "Table";
+#endif
 
         /// <summary>
         /// Gets or sets a value indicating whether leading whitespace is to be preserved during parsing.

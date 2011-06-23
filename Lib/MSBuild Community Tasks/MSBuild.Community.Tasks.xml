@@ -322,12 +322,23 @@
             if the locale on the computer isn't supported. Example is setting this to "en-US".
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.UltimateResourceFallbackLocation">
+            <summary>
+            Gets or sets the ultimate resource fallback location.
+            </summary>
+            <value>The ultimate resource fallback location.</value>
+        </member>
         <member name="P:MSBuild.Community.Tasks.AssemblyInfo.InternalsVisibleTo">
             <summary>
             Makes it possible to make certain assemblies able to use constructs marked as internal.
             Example might be setting this value to "UnitTests" assembly. The typical use case might 
             be constructors in classes which shouldn't be available to other assemblies, but the unit
             tests should be able to use them.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.AssemblyInfo.AllowPartiallyTrustedCallers">
+            <summary>
+            Gets or sets whether to allow strong-named assemblies to be called by partially trusted code.
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.AssemblyInfo.OutputFile">
@@ -1865,6 +1876,12 @@
             </summary>
             <value>The regular expressions.</value>
         </member>
+        <member name="P:MSBuild.Community.Tasks.RegexCompiler.RegularExpressionsFile">
+            <summary>
+            Gets or sets the file defining the regular expressions.
+            </summary>
+            <value>The regular expressions file.</value>
+        </member>
         <member name="P:MSBuild.Community.Tasks.RegexCompiler.IsPublic">
             <summary>
             Gets or sets a value indicating whether the default value is public for regular expression instances.
@@ -2981,6 +2998,434 @@
             otherwise, <see langword="false"/> if playing the sound using a new thread.
             </value>
         </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.FileBase">
+            <summary>
+            A base class that has a file.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.FileBase.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.SourceServer.FileBase"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.FileBase.#ctor(System.IO.FileInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.SourceServer.FileBase"/> class.
+            </summary>
+            <param name="fileInfo">The file info.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.FileBase.ToString">
+            <summary>
+            Returns a <see cref="T:System.String"/> that represents this instance.
+            </summary>
+            <returns>
+            A <see cref="T:System.String"/> that represents this instance.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.FileBase.op_Implicit(MSBuild.Community.Tasks.SourceServer.FileBase)~System.String">
+            <summary>
+            Performs an implicit conversion from <see cref="T:MSBuild.Community.Tasks.SourceServer.FileBase"/> to <see cref="T:System.String"/>.
+            </summary>
+            <param name="file">The output file.</param>
+            <returns>The result of the conversion.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.FileBase.File">
+            <summary>
+            Gets or sets the file.
+            </summary>
+            <value>The file.</value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.PdbStrCommands">
+            <summary>
+            Commands for the <see cref="T:MSBuild.Community.Tasks.SourceServer.PdbStr"/> tasks.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.SourceServer.PdbStrCommands.read">
+            <summary>
+            Read stream from pdb symbol file.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.SourceServer.PdbStrCommands.write">
+            <summary>
+            Write stream to pdb symbol file.
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.PdbStr">
+            <summary>
+            A task for the pdbstr from source server.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.PdbStr.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass directly to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.PdbStr.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.PdbStr.PdbFile">
+            <summary>
+            Gets or sets the PDB file.
+            </summary>
+            <value>The PDB file.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.PdbStr.StreamFile">
+            <summary>
+            Gets or sets the stream file.
+            </summary>
+            <value>The stream file.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.PdbStr.StreamName">
+            <summary>
+            Gets or sets the name of the stream.
+            </summary>
+            <value>The name of the stream.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.PdbStr.Command">
+            <summary>
+            Gets or sets the command.
+            </summary>
+            <value>The command.</value>
+            <enum cref="T:MSBuild.Community.Tasks.SourceServer.PdbStrCommands"/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.PdbStr.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>
+            The name of the executable file to run.
+            </returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.SourceFile">
+            <summary>
+            A class representing a source file.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceFile.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.SourceServer.SourceFile"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceFile.#ctor(System.IO.FileInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.SourceServer.SourceFile"/> class.
+            </summary>
+            <param name="fileInfo">The file info.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceFile.ToSourceString(System.String)">
+            <summary>
+            Creates the source string.
+            </summary>
+            <param name="format">The format.</param>
+            <returns></returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SourceFile.Properties">
+            <summary>
+            Gets or sets the properties.
+            </summary>
+            <value>The properties.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SourceFile.IsResolved">
+            <summary>
+            Gets or sets a value indicating whether this instance is resolved.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is resolved; otherwise, <c>false</c>.
+            </value>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.SourceIndexBase">
+            <summary>
+            A base class for source indexing a pdb symbol file.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.Successful">
+            <remarks />
+        </member>
+        <member name="F:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.Failed">
+            <remarks />
+        </member>
+        <member name="F:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.Skipped">
+            <remarks />
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.Execute">
+            <summary>
+            When overridden in a derived class, executes the task.
+            </summary>
+            <returns>
+            true if the task successfully executed; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.IndexSymbolFile(Microsoft.Build.Framework.ITaskItem)">
+            <summary>
+            Indexes the symbol file.
+            </summary>
+            <param name="item">The symbol file task item.</param>
+            <returns><c>true</c> if index successfully; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.CreateSymbolFile(Microsoft.Build.Framework.ITaskItem)">
+            <summary>
+            Creates an instance of <see cref="T:MSBuild.Community.Tasks.SourceServer.SymbolFile"/> from the symbol file task item and add the source file list to it.
+            </summary>
+            <param name="item">The symbol file task item.</param>
+            <returns>An instance of <see cref="T:MSBuild.Community.Tasks.SourceServer.SymbolFile"/> or <c>null</c> if there was an error.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.AddSourceProperties(MSBuild.Community.Tasks.SourceServer.SymbolFile)">
+            <summary>
+            Adds the source properties to the symbol file.
+            </summary>
+            <param name="symbolFile">The symbol file to add the source properties to.</param>
+            <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.CreateSourceIndexFile(MSBuild.Community.Tasks.SourceServer.SymbolFile,System.String)">
+            <summary>
+            Creates the source index file.
+            </summary>
+            <param name="symbolFile">The symbol file to create the index file from.</param>
+            <param name="sourceIndexFile">The source index file.</param>
+            <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.WriteSourceIndex(MSBuild.Community.Tasks.SourceServer.SymbolFile,System.String)">
+            <summary>
+            Writes the source index file to the symbol file.
+            </summary>
+            <param name="symbolFile">The symbol file.</param>
+            <param name="sourceIndexFile">The source index file.</param>
+            <returns><c>true</c> if successful; otherwise <c>false</c>.</returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.CopyBuildEngine(Microsoft.Build.Framework.ITask)">
+            <summary>
+            Copies the build engine to the task.
+            </summary>
+            <param name="task">The task.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.SymbolFiles">
+            <summary>
+            Gets or sets the symbol files to have to source index added.
+            </summary>
+            <value>The symbol files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.SourceServerSdkPath">
+            <summary>
+            Gets or sets the source server SDK path.
+            </summary>
+            <value>The source server SDK path.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.SourceServerName">
+            <summary>
+            Gets or sets the name of the source server.
+            </summary>
+            <value>The name of the source server.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.SourceCommandFormat">
+            <summary>
+            Gets or sets the source command format. The SRCSRVCMD environment variable.
+            </summary>
+            <value>The source command format.</value>
+            <remarks>
+            Describes how to build the command to extract the file from source control.
+            This includes the name of the executable file and its command-line parameters.
+            See srcsrv.doc for full documentation on SRCSRVCMD.
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SourceIndexBase.SourceTargetFormat">
+            <summary>
+            Gets or sets the source target format. The SRCSRVTRG environment variable.
+            </summary>
+            <value>The source target format.</value>
+            <remarks>
+            Describes how to build the target path for the extracted file. 
+            See srcsrv.doc for full documentation on SRCSRVTRG.
+            </remarks>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.SrcTool">
+            <summary>
+            A task for the srctool from source server.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SrcTool.GenerateCommandLineCommands">
+            <summary>
+            Returns a string value containing the command line arguments to pass directly to the executable file.
+            </summary>
+            <returns>
+            A string value containing the command line arguments to pass directly to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SrcTool.LogEventsFromTextOutput(System.String,Microsoft.Build.Framework.MessageImportance)">
+            <summary>
+            Parses a single line of text to identify any errors or warnings in canonical format.
+            </summary>
+            <param name="singleLine">A single line of text for the method to parse.</param>
+            <param name="messageImportance">A value of <see cref="T:Microsoft.Build.Framework.MessageImportance"/> that indicates the importance level with which to log the message.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SrcTool.HandleTaskExecutionErrors">
+            <summary>
+            Handles execution errors raised by the executable file.
+            </summary>
+            <returns>
+            true if the method runs successfully; otherwise, false.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SrcTool.GenerateFullPathToTool">
+            <summary>
+            Returns the fully qualified path to the executable file.
+            </summary>
+            <returns>
+            The fully qualified path to the executable file.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SrcTool.LogToolCommand(System.String)">
+            <summary>
+            Logs the starting point of the run to all registered loggers.
+            </summary>
+            <param name="message">A descriptive message to provide loggers, usually the command line and switches.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.PdbFile">
+            <summary>
+            Gets or sets the PDB file.
+            </summary>
+            <value>The PDB file.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.SourceOnly">
+            <summary>
+            Gets or sets a value indicating whether to dumps raw source data from the PDB. The -r switch.
+            </summary>
+            <value><c>true</c> if source only; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.Filter">
+            <summary>
+            Gets or sets the filter to only source files that match this regular expression. The -l switch.
+            </summary>
+            <value>The filter regular expression.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.Extract">
+            <summary>
+            Gets or sets a value indicating whether to extracts the files, instead of simply listing them. The -x switch.
+            </summary>
+            <value><c>true</c> if extract; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.ExtractDirectory">
+            <summary>
+            Gets or sets the directory to extract to. The -d switch.
+            </summary>
+            <value>The extract directory.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.CountOnly">
+            <summary>
+            Gets or sets a value indicating whether to get the count of indexed files. The -c switch.
+            </summary>
+            <value><c>true</c> if count only; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.SourceCount">
+            <summary>
+            Gets or sets the number of source files.
+            </summary>
+            <value>The number of source files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.SourceFiles">
+            <summary>
+            Gets the source files. Populated when <see cref="P:MSBuild.Community.Tasks.SourceServer.SrcTool.SourceOnly"/> is <c>true</c>.
+            </summary>
+            <value>The source files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.ExtractedFiles">
+            <summary>
+            Gets the extracted files. Populated when <see cref="P:MSBuild.Community.Tasks.SourceServer.SrcTool.Extract"/> is <c>true</c>.
+            </summary>
+            <value>The extracted files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.ToolName">
+            <summary>
+            Gets the name of the executable file to run.
+            </summary>
+            <value></value>
+            <returns>
+            The name of the executable file to run.
+            </returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SrcTool.StandardOutputLoggingImportance">
+            <summary>
+            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+            </summary>
+            <value></value>
+            <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.SvnSourceIndex">
+            <summary>
+            A subversion source index task.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SvnSourceIndex.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.SourceServer.SvnSourceIndex"/> class.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SvnSourceIndex.AddSourceProperties(MSBuild.Community.Tasks.SourceServer.SymbolFile)">
+            <summary>
+            Adds the source properties to the symbol file.
+            </summary>
+            <param name="symbolFile">The symbol file to add the source properties to.</param>
+            <returns>
+            	<c>true</c> if successful; otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SvnSourceIndex.CreateSourceIndexFile(MSBuild.Community.Tasks.SourceServer.SymbolFile,System.String)">
+            <summary>
+            Creates the source index file.
+            </summary>
+            <param name="symbolFile">The symbol file to create the index file from.</param>
+            <param name="sourceIndexFile">The source index file.</param>
+            <returns>
+            	<c>true</c> if successful; otherwise <c>false</c>.
+            </returns>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.SourceServer.SymbolFile">
+            <summary>
+            A class representing a symbol file.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SymbolFile.#ctor(System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.SourceServer.SymbolFile"/> class.
+            </summary>
+            <param name="fileName">Name of the file.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SymbolFile.#ctor(System.IO.FileInfo)">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.SourceServer.SymbolFile"/> class.
+            </summary>
+            <param name="fileInfo">The file info.</param>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.SourceServer.SymbolFile.AddSourceFiles(System.Collections.Generic.IEnumerable{System.String})">
+            <summary>
+            Adds the source files.
+            </summary>
+            <param name="files">The files.</param>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SymbolFile.SourceFiles">
+            <summary>
+            Gets the source files.
+            </summary>
+            <value>The source files.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.SourceServer.SymbolFile.IsIndexed">
+            <summary>
+            Gets or sets a value indicating whether this instance is indexed.
+            </summary>
+            <value>
+            	<c>true</c> if this instance is indexed; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="T:MSBuild.Community.Tasks.SqlServer.SqlPubCommands">
             <summary>
             The SqlPubWiz commands
@@ -3266,11 +3711,6 @@
             Subversion client base class
             </summary>
         </member>
-        <member name="F:MSBuild.Community.Tasks.Subversion.SvnClient._outputBuffer">
-            <summary>
-            Contains output of SVN command-line client.
-            </summary>
-        </member>
         <member name="M:MSBuild.Community.Tasks.Subversion.SvnClient.GenerateSvnCommand">
             <summary>
             Generates the SVN command.
@@ -3391,11 +3831,45 @@
             </summary>
             <value>The local path.</value>
         </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.TargetFile">
+            <summary>
+            Gets or sets the target file.
+            </summary>
+            <value>The target file.</value>
+            <remarks>
+            Tells Subversion to get the list of files that you wish to operate on from
+            the filename that you provide instead of listing all the files on the command line.
+             </remarks>
+        </member>
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Targets">
             <summary>
             Gets or sets the targets.
             </summary>
             <value>The targets.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.NonInteractive">
+            <summary>
+            Gets or sets a value indicating the command is non interactive].
+            </summary>
+            <value><c>true</c> if non interactive; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.NoAuthCache">
+            <summary>
+            Gets or sets a value indicating no auth cache.
+            </summary>
+            <value><c>true</c> if no auth cache; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.TrustServerCert">
+            <summary>
+            Gets or sets a value indicating whether to trust the server cert.
+            </summary>
+            <value><c>true</c> to trust the server cert; otherwise, <c>false</c>.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Xml">
+            <summary>
+            Gets or sets a value indicating the output is XML.
+            </summary>
+            <value><c>true</c> to output in XML; otherwise, <c>false</c>.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Revision">
             <summary>
@@ -3403,16 +3877,15 @@
             </summary>
             <value>The revision.</value>
         </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.Output">
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.StandardOutput">
             <summary>
             Gets the output of SVN command-line client.
             </summary>
         </member>
-        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.CommandSwitches">
+        <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.StandardError">
             <summary>
-            Gets or sets the command switchs.
+            Gets the error output of SVN command-line client.
             </summary>
-            <value>The command switchs.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnClient.StandardOutputLoggingImportance">
             <summary>
@@ -3455,6 +3928,103 @@
         <member name="P:MSBuild.Community.Tasks.Subversion.SvnCopy.DestinationPath">
             <summary>
             The path to which the SourcePath should be copied
+            </summary>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.Info">
+            <remarks/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.Info.#ctor">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Info.Entries">
+            <remarks/>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.Entry">
+            <remarks/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.Entry.#ctor">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Entry.Url">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Entry.Repository">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Entry.WorkingCopy">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Entry.Commit">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Entry.Kind">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Entry.Path">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Entry.Revision">
+            <remarks/>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.EntryCollection">
+            <remarks/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.EntryCollection.#ctor">
+            <remarks/>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.EntryCollection.GetKeyForItem(MSBuild.Community.Tasks.Subversion.Entry)">
+            <remarks/>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.Repository">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Repository.Root">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.Repository.Uuid">
+            <remarks/>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.WorkingCopy">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.WorkingCopy.Schedule">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.WorkingCopy.Depth">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.WorkingCopy.TextUpdated">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.WorkingCopy.TextUpdatedSpecified">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.WorkingCopy.Checksum">
+            <remarks/>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.LastCommit">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.LastCommit.Author">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.LastCommit.Date">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.LastCommit.DateSpecified">
+            <remarks/>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Subversion.LastCommit.Revision">
+            <remarks/>
+        </member>
+        <member name="T:MSBuild.Community.Tasks.Subversion.SvnStatus">
+            <summary>
+             Subversion status command.
+            </summary>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Subversion.SvnStatus.#ctor">
+            <summary>
+             Creates an instance of SvnStatus.
             </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.SymbolServer.SymStoreCommands">
@@ -4384,45 +4954,47 @@
             </summary>
         </member>
         <member name="T:MSBuild.Community.Tasks.ILMerge">
-             <summary>
-             A wrapper for the ILMerge tool.
-             </summary>
-             <remarks>
-             <para>
-             The ILMerge tool itself must be installed separately.
-             It is available <a href="http://research.microsoft.com/~mbarnett/ILMerge.aspx">here</a>.
-             </para>
-             <para>
-             The command line options "/wildcards" and "/lib" of ILMerge are not supported,
-             because MSBuild is in charge of expanding wildcards for item groups.
-             </para>
-             </remarks>
-             <example>
-             This example merges two assemblies A.dll and B.dll into one:
-             <code><![CDATA[
-             <PropertyGroup>
-                 <outputFile>$(testDir)\ilmergetest.dll</outputFile>
-                 <keyFile>$(testDir)\keypair.snk</keyFile>
-                 <excludeFile>$(testDir)\ExcludeTypes.txt</excludeFile>
-                 <logFile>$(testDir)\ilmergetest.log</logFile>
-             </PropertyGroup>
-            
-             <ItemGroup>
-                 <inputAssemblies Include="$(testDir)\A.dll" />
-                 <inputAssemblies Include="$(testDir)\B.dll" />
-            
-                 <allowDuplicates Include="ClassAB" />
-             </ItemGroup>
-            
-             <Target Name="merge" >
-                <ILMerge InputAssemblies="@(inputAssemblies)" 
-                    AllowDuplicateTypes="@(allowDuplicates)"
-                    ExcludeFile="$(excludeFile)"
-                    OutputFile="$(outputFile)" LogFile="$(logFile)"
-                    DebugInfo="true" XmlDocumentation="true" 
-                    KeyFile="$(keyFile)" DelaySign="true" />
-             </Target>]]></code>
-             </example>
+            <summary>
+            A wrapper for the ILMerge tool.
+            </summary>
+            <remarks>
+            <para>
+            The ILMerge tool itself must be installed separately.
+            It is available <a href="http://research.microsoft.com/~mbarnett/ILMerge.aspx">here</a>.
+            </para>
+            <para>
+            The command line options "/wildcards" and "/lib" of ILMerge are not supported,
+            because MSBuild is in charge of expanding wildcards for item groups.
+            </para>
+            </remarks>
+            <example>
+            This example merges two assemblies A.dll and B.dll into one:
+            <code><![CDATA[
+            <PropertyGroup>
+                <outputFile>$(testDir)\ilmergetest.dll</outputFile>
+                <keyFile>$(testDir)\keypair.snk</keyFile>
+                <excludeFile>$(testDir)\ExcludeTypes.txt</excludeFile>
+                <logFile>$(testDir)\ilmergetest.log</logFile>
+            </PropertyGroup>
+            <ItemGroup>
+                <inputAssemblies Include="$(testDir)\A.dll" />
+                <inputAssemblies Include="$(testDir)\B.dll" />
+                <allowDuplicates Include="ClassAB" />
+            </ItemGroup>
+            <Target Name="merge" >
+               <ILMerge InputAssemblies="@(inputAssemblies)" 
+                   AllowDuplicateTypes="@(allowDuplicates)"
+                   ExcludeFile="$(excludeFile)"
+                   OutputFile="$(outputFile)" LogFile="$(logFile)"
+                   DebugInfo="true" XmlDocumentation="true" 
+                   KeyFile="$(keyFile)" DelaySign="true" />
+            </Target>]]></code>
+            </example>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.ILMerge.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:MSBuild.Community.Tasks.ILMerge"/> class.
+            </summary>
         </member>
         <member name="M:MSBuild.Community.Tasks.ILMerge.GenerateFullPathToTool">
             <summary>
@@ -4436,11 +5008,11 @@
         </member>
         <member name="M:MSBuild.Community.Tasks.ILMerge.GenerateCommandLineCommands">
             <summary>
-            Returns a string value containing the command line arguments
+            Generates a string value containing the command line arguments
             to pass directly to the executable file.
             </summary>
             <returns>
-            Returns a string value containing the command line arguments 
+            Returns a string value containing the command line arguments
             to pass directly to the executable file.
             </returns>
         </member>
@@ -4458,7 +5030,7 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.AllowZeroPeKind">
             <summary>
-            Gets or sets the flag to treat an assembly 
+            Gets or sets a value indicating whether to treat an assembly 
             with a zero PeKind flag 
             (this is the value of the field listed as .corflags in the Manifest)
             as if it was ILonly.
@@ -4487,8 +5059,8 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.Closed">
             <summary>
-            Gets or sets the flag to indicate
-            whether to augment the list of input assemblies
+            Gets or sets a value indicating whether 
+            to augment the list of input assemblies
             to its "transitive closure".
             </summary>
             <remarks>
@@ -4505,8 +5077,8 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.CopyAttributes">
             <summary>
-            Gets or sets the flag to indicate
-            whether to copy the assembly level attributes
+            Gets or sets a value indicating whether 
+            to copy the assembly level attributes
             of each input assembly over into the target assembly.
             </summary>
             <remarks>
@@ -4521,8 +5093,8 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.DebugInfo">
             <summary>
-            Gets or sets the flag to indicate
-            whether to preserve any .pdb files
+            Gets or sets a value indicating whether 
+            to preserve any .pdb files
             that are found for the input assemblies
             into a .pdb file for the target assembly.
             </summary>
@@ -4533,8 +5105,8 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.DelaySign">
             <summary>
-            Gets or sets the flag to indicate
-            whether the target assembly will be delay signed.
+            Gets or sets a value indicating whether 
+            the target assembly will be delay signed.
             </summary>
             <remarks>
             <para>This property can be set only in conjunction with <see cref="P:MSBuild.Community.Tasks.ILMerge.KeyFile"/>.</para>
@@ -4573,6 +5145,21 @@
             Gets or sets the input assemblies to merge.
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.Internalize">
+            <summary>
+            Gets or sets a value indicating whether whether types in assemblies other than the primary assembly have their visibility modified.
+            </summary>
+            <value><c>true</c> if internalize; otherwise, <c>false</c>.</value>
+            <remarks>
+            <para>This controls whether types in assemblies other than the primary assembly have 
+            their visibility modified. When it is true, then all non-exempt types that are visible 
+            outside of their assembly have their visibility modified so that they are not visible 
+            from outside of the merged assembly. A type is exempt if its full name matches a line 
+            from the ExcludeFile (Section 2.9) using the .NET regular expression engine.</para>
+            <para>Corresponds to command line option "/internalize".</para>
+            <para>The default value is <c>false</c>.</para>
+            </remarks>
+        </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.KeyFile">
             <summary>
             Gets or sets the .snk file
@@ -4608,8 +5195,8 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.PublicKeyTokens">
             <summary>
-            Gets or sets the flag to indicate
-            whether external assembly references in the manifest
+            Gets or sets a value indicating whether 
+            external assembly references in the manifest
             of the target assembly will use public keys (<c>false</c>)
             or public key tokens (<c>true</c>).
             </summary>
@@ -4617,6 +5204,12 @@
             <para>Corresponds to command line option "/publickeytokens".</para>
             <para>The default value is <c>false</c>.</para>
             </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.SearchDirectories">
+            <summary>
+            Gets or sets the directories to be used to search for input assemblies.
+            </summary>
+            <value>The search directories.</value>
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.TargetPlatformVersion">
             <summary>
@@ -4661,8 +5254,8 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.ILMerge.XmlDocumentation">
             <summary>
-            Gets or sets the flag to indicate
-            whether to merge XML documentation files
+            Gets or sets a value indicating whether 
+            to merge XML documentation files
             into one for the target assembly.
             </summary>
             <remarks>
@@ -4674,6 +5267,22 @@
             <summary>
             Gets the name of the executable file to run.
             </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.StandardOutputLoggingImportance">
+            <summary>
+            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.
+            </summary>
+            <value></value>
+            <returns>The <see cref="T:Microsoft.Build.Framework.MessageImportance"></see> with which to log errors.</returns>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.ILMerge.StandardErrorLoggingImportance">
+            <summary>
+            Gets the <see cref="T:Microsoft.Build.Framework.MessageImportance"/> with which to log errors.
+            </summary>
+            <value></value>
+            <returns>
+            The <see cref="T:Microsoft.Build.Framework.MessageImportance"/> with which to log errors.
+            </returns>
         </member>
         <member name="T:MSBuild.Community.Tasks.Install.InstallAssembly">
              <summary>
@@ -5844,7 +6453,7 @@
       </p>
       <p>
         Parameter <see cref="P:MSBuild.Community.Tasks.Xslt.RootAttributes"/> defaults to
-        one attribute with a name specified by <see cref="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE"/>,
+        one attribute with a name specified by <see cref="F:MSBuild.Community.Tasks.Xslt.CreatedAttributeName"/>,
         and a local time stamp as value.
         To suppress the default value, an empty parameter
         <code>RootAttributes=""</code>
@@ -5860,6 +6469,13 @@
         can be given any number of metadata,
         which will be handed to the xsl transformation
         as parameters.
+      </p>
+      <p>
+        If only one input file is given with <see cref="T:Microsoft.Build.Framework.ITaskItem"/> <see cref="P:MSBuild.Community.Tasks.Xslt.Inputs"/>,
+        metadata will also be handed to the xsl transformation.
+        However, the <see cref="P:MSBuild.Community.Tasks.Xslt.Xsl"/> metadata is preferred in case of equal names.
+        To overcome this limitation, for each input item metadatum, an additional parameter
+        prefixed with <see cref="F:MSBuild.Community.Tasks.Xslt.InputMetadataArgumentPrefix"/> is created.
       </p>
       <p>
         The output is written to the file
@@ -5905,12 +6521,18 @@
       </code>
     </example>
         </member>
-        <member name="F:MSBuild.Community.Tasks.Xslt.CREATED_ATTRIBUTE">
+        <member name="F:MSBuild.Community.Tasks.Xslt.CreatedAttributeName">
             <summary>
             The name of the default attribute
             of the <see cref="P:MSBuild.Community.Tasks.Xslt.RootTag"/>.
             The value is <c>"created"</c>,
             and the attribute will contain a local time stamp.
+            </summary>
+        </member>
+        <member name="F:MSBuild.Community.Tasks.Xslt.InputMetadataArgumentPrefix">
+            <summary>
+            The prefix of XSLT parameters created from single XML input metadata.
+            <para>The value is <c>"input_"</c>.</para>
             </summary>
         </member>
         <member name="M:MSBuild.Community.Tasks.Xslt.Execute">
@@ -5920,6 +6542,17 @@
             <returns>
             Returns <c>true</c> if the task successfully executed; otherwise, <c>false</c>.
             </returns>
+        </member>
+        <member name="M:MSBuild.Community.Tasks.Xslt.AddParameter(System.String,System.String,System.Xml.Xsl.XsltArgumentList)">
+            <summary>
+            Adds a new xsl parameter with to the specified argument list.
+            </summary>
+            <param name="name">The name of the parameter.</param>
+            <param name="value">The value of the parameter.</param>
+            <param name="parameters">The parameter list.</param>
+            <returns>Whether the parameter was added.</returns>
+            <remarks>Does not add the parameter
+            when a parameter with the same name is already part of the <paramref name="parameters"/>.</remarks>
         </member>
         <member name="P:MSBuild.Community.Tasks.Xslt.Inputs">
             <summary>
@@ -6107,6 +6740,11 @@
             should be run in the current directory.
             </returns>
         </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.SearchGac">
+            <summary>
+            Tells FxCop to search the GAC for assembly references. This parameter was added in FxCop 1.35
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.FxCop.ApplyOutXsl">
             <summary>
             Applies the XSL transformation specified in /outXsl to the 
@@ -6144,6 +6782,11 @@
             Specifies the name of an analysis report or project file to import. 
             Any messages in the imported file that are marked as excluded are not 
             included in the analysis results.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.FxCop.CustomDictionary">
+            <summary>
+            Specifies the custom dictionary.
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.FxCop.RuleLibraries">
@@ -7814,6 +8457,16 @@
             Allows tests to be run in a new thread, allowing you to take advantage of ApartmentState and ThreadPriority settings in the config file.
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.NUnit.Force32Bit">
+            <summary>
+            Determines whether the tests are run in a 32bit process on a 64bit OS.
+            </summary>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.NUnit.Framework">
+            <summary>
+            Determines the framework to run aganist.
+            </summary>
+        </member>
         <member name="P:MSBuild.Community.Tasks.NUnit.ToolName">
             <summary>
             Gets the name of the executable file to run.
@@ -8360,17 +9013,17 @@
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingParameter">
             <summary>
-              Looks up a localized string similar to Adding Parameter \&quot;{0}\&quot;: \&quot;{1}\&quot;..
+              Looks up a localized string similar to Adding Parameter &quot;{0}&quot;: &quot;{1}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltAddingRootAttribute">
             <summary>
-              Looks up a localized string similar to Adding root attribute {0}=\&quot;{1}\&quot;..
+              Looks up a localized string similar to Adding root attribute {0}=&quot;{1}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltCreatingRootTag">
             <summary>
-              Looks up a localized string similar to Creating root tag \&quot;{0}\&quot;..
+              Looks up a localized string similar to Creating root tag &quot;{0}&quot;..
             </summary>
         </member>
         <member name="P:MSBuild.Community.Tasks.Properties.Resources.XsltNoInputFiles">
@@ -9072,6 +9725,12 @@
             The command to execute
             </summary>
         </member>
+        <member name="P:MSBuild.Community.Tasks.SqlExecute.CommandTimeout">
+            <summary>
+            Command Timeout
+            </summary>
+            <remarks>Defaults to 30 seconds. Set to 0 for an infinite timeout period.</remarks>
+        </member>
         <member name="P:MSBuild.Community.Tasks.SqlExecute.SelectMode">
             <summary>
             The SQL Selection Mode.  Set to NonQuery, Scalar, or ScalarXml.  Default is NonQuery.
@@ -9768,6 +10427,21 @@
             <remarks>
             The working directory is the base of the zip file.  
             All files will be made relative from the working directory.
+            </remarks>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Zip.Password">
+            <summary>
+            Gets or sets the password.
+            </summary>
+            <value>The password.</value>
+        </member>
+        <member name="P:MSBuild.Community.Tasks.Zip.Encryption">
+            <summary>
+            Gets or sets the encryption algorithm.
+            </summary>
+            <value>The encryption algorithm.</value>
+            <remarks>
+            Possible values are None, PkzipWeak, WinZipAes128 and WinZipAes256
             </remarks>
         </member>
     </members>

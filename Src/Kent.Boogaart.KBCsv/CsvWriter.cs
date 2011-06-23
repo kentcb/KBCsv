@@ -29,8 +29,7 @@ namespace Kent.Boogaart.KBCsv
     /// </para>
     /// <para>
     /// Data records can be written with the <see cref="WriteDataRecord"/> or <see cref="WriteDataRecords"/> methods. These methods are overloaded to
-    /// accept either instances of <see cref="DataRecord"/> or an array of <c>string</c>s. In addition, the <see cref="WriteAll"/> overloads can
-    /// be used to write data from a <see cref="DataTable"/> or <see cref="DataSet"/> instance to the <c>CsvWriter</c>.
+    /// accept either instances of <see cref="DataRecord"/> or an array of <c>string</c>s.
     /// </para>
     /// </remarks>
     /// <threadsafety>
@@ -75,7 +74,7 @@ namespace Kent.Boogaart.KBCsv
     /// </example>
     /// <example>
     /// <para>
-    /// The following example writes the contents of a <see cref="DataTable"/> to a <see cref="MemoryStream"/>. CSV values are separated by tabs and
+    /// The following example writes the contents of a <c>DataTable</c> to a <see cref="MemoryStream"/>. CSV values are separated by tabs and
     /// delimited by the pipe characters (<c>|</c>). Linux-style line breaks are written by the <c>CsvWriter</c>, regardless of the hosting platform:
     /// </para>
     /// <para>

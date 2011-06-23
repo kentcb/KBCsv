@@ -47,6 +47,11 @@
     <xs:complexType>
       <xs:complexContent mixed="false">
         <xs:extension base="msb:TaskType">
+          <xs:attribute name="AllowPartiallyTrustedCallers" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets whether to allow strong-named assemblies to be called by partially trusted code.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="AssemblyCompany" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the assembly company.</xs:documentation>
@@ -164,6 +169,11 @@
           <xs:attribute name="SkipVerification" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the assembly delay sign value.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="UltimateResourceFallbackLocation" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the ultimate resource fallback location.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="UnmanagedCode" type="msb:non_empty_string">
@@ -597,6 +607,11 @@
             be applied to the analysis output before it is displayed in the console.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="CustomDictionary" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Specifies the custom dictionary.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="DependencyDirectories" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Specifies additional directories to search for assembly dependencies. 
@@ -664,6 +679,11 @@
           <xs:attribute name="SaveResults" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Saves the results of the analysis in the project file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SearchGac" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Tells FxCop to search the GAC for assembly references. This parameter was added in FxCop 1.35</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="TargetAssemblies" type="xs:string">
@@ -1955,7 +1975,7 @@
           </xs:attribute>
           <xs:attribute name="AllowZeroPeKind" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the flag to treat an assembly 
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to treat an assembly 
             with a zero PeKind flag 
             (this is the value of the field listed as .corflags in the Manifest)
             as if it was ILonly.</xs:documentation>
@@ -1971,30 +1991,30 @@
           </xs:attribute>
           <xs:attribute name="Closed" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the flag to indicate
-            whether to augment the list of input assemblies
+              <xs:documentation>[Optional] Gets or sets a value indicating whether 
+            to augment the list of input assemblies
             to its "transitive closure".</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="CopyAttributes" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the flag to indicate
-            whether to copy the assembly level attributes
+              <xs:documentation>[Optional] Gets or sets a value indicating whether 
+            to copy the assembly level attributes
             of each input assembly over into the target assembly.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="DebugInfo" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the flag to indicate
-            whether to preserve any .pdb files
+              <xs:documentation>[Optional] Gets or sets a value indicating whether 
+            to preserve any .pdb files
             that are found for the input assemblies
             into a .pdb file for the target assembly.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="DelaySign" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the flag to indicate
-            whether the target assembly will be delay signed.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether 
+            the target assembly will be delay signed.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="ExcludeFile" type="xs:string">
@@ -2008,6 +2028,11 @@
           <xs:attribute name="InputAssemblies" type="msb:non_empty_string" use="required">
             <xs:annotation>
               <xs:documentation>Gets or sets the input assemblies to merge.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Internalize" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether whether types in assemblies other than the primary assembly have their visibility modified.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="KeyFile" type="xs:string">
@@ -2029,10 +2054,15 @@
           </xs:attribute>
           <xs:attribute name="PublicKeyTokens" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the flag to indicate
-            whether external assembly references in the manifest
+              <xs:documentation>[Optional] Gets or sets a value indicating whether 
+            external assembly references in the manifest
             of the target assembly will use public keys (false)
             or public key tokens (true).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SearchDirectories" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the directories to be used to search for input assemblies.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="TargetKind" type="xs:string">
@@ -2061,8 +2091,8 @@
           </xs:attribute>
           <xs:attribute name="XmlDocumentation" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] Gets or sets the flag to indicate
-            whether to merge XML documentation files
+              <xs:documentation>[Optional] Gets or sets a value indicating whether 
+            to merge XML documentation files
             into one for the target assembly.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
@@ -2598,6 +2628,16 @@
               <xs:documentation>[Optional] Gets or sets the fixture.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="Force32Bit" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Determines whether the tests are run in a 32bit process on a 64bit OS.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Framework" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Determines the framework to run aganist.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="IncludeCategory" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the categories to include.</xs:documentation>
@@ -2789,9 +2829,14 @@
               <xs:documentation>[Optional] [Output] Gets or sets the output file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="RegularExpressions" type="msb:non_empty_string" use="required">
+          <xs:attribute name="RegularExpressions" type="xs:string">
             <xs:annotation>
-              <xs:documentation>Gets or sets the regular expressions.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets the regular expressions.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RegularExpressionsFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the file defining the regular expressions.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -4282,6 +4327,157 @@
       </xs:complexContent>
     </xs:complexType>
   </xs:element>
+  <xs:element name="PdbStr" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>A task for the pdbstr from source server.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Command" type="msb:PdbStrCommandsType">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the command.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="PdbFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the PDB file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StreamFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the stream file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StreamName" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the name of the stream.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:simpleType name="PdbStrCommandsType">
+    <xs:union memberTypes="msb:non_empty_string">
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="read">
+            <xs:annotation>
+              <xs:documentation>
+            Read stream from pdb symbol file.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="write">
+            <xs:annotation>
+              <xs:documentation>
+            Write stream to pdb symbol file.
+            </xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:union>
+  </xs:simpleType>
+  <xs:element name="SrcTool" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>A task for the srctool from source server.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="CountOnly" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to get the count of indexed files. The -c switch.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="Extract" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to extracts the files, instead of simply listing them. The -x switch.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExtractDirectory" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the directory to extract to. The -d switch.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExtractedFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the extracted files. Populated when  is true.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Filter" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the filter to only source files that match this regular expression. The -l switch.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="PdbFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the PDB file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceCount" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the number of source files.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceFiles" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the source files. Populated when  is true.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceOnly" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to dumps raw source data from the PDB. The -r switch.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SvnSourceIndex" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>A subversion source index task.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="SourceCommandFormat" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the source command format. The SRCSRVCMD environment variable.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceServerName" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the name of the source server.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceServerSdkPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the source server SDK path.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceTargetFormat" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the source target format. The SRCSRVTRG environment variable.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SymbolFiles" type="msb:non_empty_string" use="required">
+            <xs:annotation>
+              <xs:documentation>Gets or sets the symbol files to have to source index added.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SqlExecute" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Executes a SQL command.</xs:documentation>
@@ -4292,6 +4488,11 @@
           <xs:attribute name="Command" type="msb:non_empty_string" use="required">
             <xs:annotation>
               <xs:documentation>The command to execute</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="CommandTimeout" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Command Timeout</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="ConnectionString" type="msb:non_empty_string" use="required">
@@ -4516,9 +4717,14 @@
               <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Output" type="xs:string">
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Password" type="xs:string">
@@ -4536,6 +4742,21 @@
               <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
@@ -4543,6 +4764,11 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Username" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
@@ -4551,6 +4777,11 @@
           <xs:attribute name="Verbose" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -4595,9 +4826,14 @@
               <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Output" type="xs:string">
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Password" type="xs:string">
@@ -4615,6 +4851,21 @@
               <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
@@ -4622,6 +4873,11 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Username" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
@@ -4630,6 +4886,11 @@
           <xs:attribute name="Verbose" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -4674,9 +4935,14 @@
               <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Output" type="xs:string">
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Password" type="xs:string">
@@ -4694,6 +4960,21 @@
               <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
@@ -4701,6 +4982,11 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Username" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
@@ -4709,6 +4995,11 @@
           <xs:attribute name="Verbose" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -4758,9 +5049,14 @@
               <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Output" type="xs:string">
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Password" type="xs:string">
@@ -4783,6 +5079,21 @@
               <xs:documentation>[Optional] The path of the source file or folder that should be copied</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
@@ -4790,6 +5101,11 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Username" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
@@ -4798,6 +5114,11 @@
           <xs:attribute name="Verbose" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -4842,9 +5163,14 @@
               <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Output" type="xs:string">
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Password" type="xs:string">
@@ -4862,6 +5188,21 @@
               <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
@@ -4869,6 +5210,11 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Username" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
@@ -4877,6 +5223,11 @@
           <xs:attribute name="Verbose" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -4936,14 +5287,19 @@
               <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="NodeKind" type="msb:NodeKindType">
             <xs:annotation>
               <xs:documentation>[Optional] [Output] The Subversion node kind.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Output" type="xs:string">
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Password" type="xs:string">
@@ -4976,6 +5332,21 @@
               <xs:documentation>[Optional] [Output] The Subversion schedule type.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
@@ -4983,6 +5354,11 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Username" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
@@ -4991,6 +5367,11 @@
           <xs:attribute name="Verbose" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -5048,6 +5429,116 @@
       </xs:simpleType>
     </xs:union>
   </xs:simpleType>
+  <xs:element name="SvnStatus" substitutionGroup="msb:Task">
+    <xs:annotation>
+      <xs:documentation>Subversion status command.</xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:complexContent mixed="false">
+        <xs:extension base="msb:TaskType">
+          <xs:attribute name="Arguments" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the arguments.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Command" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the command.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Entries" />
+          <xs:attribute name="ExitCode" />
+          <xs:attribute name="Force" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the force.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="LocalPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the local path.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Message" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the message.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="MessageFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the password.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RepositoryPath" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the repository path.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Revision" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Targets" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Timeout" />
+          <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Verbose" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:complexContent>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="SvnUpdate" substitutionGroup="msb:Task">
     <xs:annotation>
       <xs:documentation>Subversion Update command</xs:documentation>
@@ -5086,9 +5577,14 @@
               <xs:documentation>[Optional] Gets or sets the message file.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
-          <xs:attribute name="Output" type="xs:string">
+          <xs:attribute name="NoAuthCache" type="msb:non_empty_string">
             <xs:annotation>
-              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+              <xs:documentation>[Optional] Gets or sets a value indicating no auth cache.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="NonInteractive" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the command is non interactive].</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="Password" type="xs:string">
@@ -5106,6 +5602,21 @@
               <xs:documentation>[Optional] [Output] Gets or sets the revision.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="StandardError" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the error output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="StandardOutput" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] [Output] Gets the output of SVN command-line client.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFile" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the target file.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Targets" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the targets.</xs:documentation>
@@ -5113,6 +5624,11 @@
           </xs:attribute>
           <xs:attribute name="Timeout" />
           <xs:attribute name="ToolPath" type="xs:string" />
+          <xs:attribute name="TrustServerCert" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating whether to trust the server cert.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Username" type="xs:string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the username.</xs:documentation>
@@ -5121,6 +5637,11 @@
           <xs:attribute name="Verbose" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets the verbose.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Xml" type="msb:non_empty_string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets a value indicating the output is XML.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
         </xs:extension>
@@ -5514,21 +6035,9 @@
     <xs:union memberTypes="msb:non_empty_string">
       <xs:simpleType>
         <xs:restriction base="xs:string">
-          <xs:enumeration value="Unspecified">
-            <xs:annotation>
-              <xs:documentation>The time represented is not specified as either local time or Coordinated Universal Time (UTC).1</xs:documentation>
-            </xs:annotation>
-          </xs:enumeration>
-          <xs:enumeration value="Utc">
-            <xs:annotation>
-              <xs:documentation>The time represented is UTC.1</xs:documentation>
-            </xs:annotation>
-          </xs:enumeration>
-          <xs:enumeration value="Local">
-            <xs:annotation>
-              <xs:documentation>The time represented is local time.1</xs:documentation>
-            </xs:annotation>
-          </xs:enumeration>
+          <xs:enumeration value="Unspecified" />
+          <xs:enumeration value="Utc" />
+          <xs:enumeration value="Local" />
         </xs:restriction>
       </xs:simpleType>
     </xs:union>
@@ -5960,6 +6469,11 @@
               <xs:documentation>[Optional] Gets or sets the comment.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
+          <xs:attribute name="Encryption" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the encryption algorithm.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
           <xs:attribute name="Files" type="msb:non_empty_string" use="required">
             <xs:annotation>
               <xs:documentation>Gets or sets the files to zip.</xs:documentation>
@@ -5968,6 +6482,11 @@
           <xs:attribute name="Flatten" type="msb:non_empty_string">
             <xs:annotation>
               <xs:documentation>[Optional] Gets or sets a value indicating whether this  is flatten.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>[Optional] Gets or sets the password.</xs:documentation>
             </xs:annotation>
           </xs:attribute>
           <xs:attribute name="WorkingDirectory" type="xs:string">
