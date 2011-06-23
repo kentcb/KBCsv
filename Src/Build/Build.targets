@@ -156,7 +156,7 @@
     this target does not execute automatically - it must be done explicitly
     -->
     <Target Name="PublishNuGetPackages">
-        <GetAssemblyIdentity AssemblyFiles="$(SrcDir)\KBCsv\bin\FX40 $(Configuration)\Kent.Boogaart.KBCsv.dll">
+        <GetAssemblyIdentity AssemblyFiles="$(SrcDir)\Kent.Boogaart.KBCsv\bin\FX40 $(Configuration)\Kent.Boogaart.KBCsv.dll">
             <Output TaskParameter="Assemblies" ItemName="AssemblyIdentity" />
         </GetAssemblyIdentity>
         <CreateProperty Condition="$(Version) == ''" Value="@(AssemblyIdentity -> '%(Version)')">
