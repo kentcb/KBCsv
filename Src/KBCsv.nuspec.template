@@ -11,7 +11,7 @@
     <description>
         KBCsv is an efficient, easy to use .NET parsing and writing library for the CSV (comma-separated values) format. Online at http://kbcsv.codeplex.com/.
     </description>
-    <tags>.NET CSV mono library</tags>
+    <tags>.NET CSV comma separated value library mono Silverlight</tags>
     <dependencies>
         <dependency id="Kent.Boogaart.HelperTrinity" version="1.4.0.0" />
     </dependencies>
