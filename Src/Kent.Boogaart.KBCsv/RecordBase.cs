@@ -68,7 +68,7 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="values">
         /// The values for the CSV record.
         /// </param>
-        protected RecordBase(string[] values)
+        protected RecordBase(IEnumerable<string> values)
             : this(values, false)
         {
         }
@@ -82,7 +82,7 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="readOnly">
         /// If <see langword="true"/>, the value collection will be read-only.
         /// </param>
-        protected RecordBase(string[] values, bool readOnly)
+        protected RecordBase(IEnumerable<string> values, bool readOnly)
         {
             values.AssertNotNull("values");
 

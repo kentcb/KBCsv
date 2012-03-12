@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Kent.Boogaart.HelperTrinity;
 using Kent.Boogaart.HelperTrinity.Extensions;
 
@@ -105,7 +106,7 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="values">
         /// The values for this CSV record.
         /// </param>
-        public DataRecord(HeaderRecord headerRecord, string[] values)
+        public DataRecord(HeaderRecord headerRecord, IEnumerable<string> values)
             : this(headerRecord, values, false)
         {
         }
@@ -123,7 +124,7 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="readOnly">
         /// If <see langword="true"/>, the values in this data record are read-only.
         /// </param>
-        public DataRecord(HeaderRecord headerRecord, string[] values, bool readOnly)
+        public DataRecord(HeaderRecord headerRecord, IEnumerable<string> values, bool readOnly)
             : base(values, readOnly)
         {
             _headerRecord = headerRecord;

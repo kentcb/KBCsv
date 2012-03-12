@@ -76,7 +76,8 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="columns">
         /// The columns in the CSV header.
         /// </param>
-        public HeaderRecord(string[] columns) : this(columns, false)
+        public HeaderRecord(IEnumerable<string> columns)
+            : this(columns, false)
         {
         }
 
@@ -89,7 +90,8 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="readOnly">
         /// If <see langword="true"/>, the values in this header record are read-only.
         /// </param>
-        public HeaderRecord(string[] columns, bool readOnly) : base(columns, readOnly)
+        public HeaderRecord(IEnumerable<string> columns, bool readOnly)
+            : base(columns, readOnly)
         {
             _columnToIndexMap = new Dictionary<string, int>();
 

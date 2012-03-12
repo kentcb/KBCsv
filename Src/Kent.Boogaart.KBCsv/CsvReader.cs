@@ -924,151 +924,151 @@ namespace Kent.Boogaart.KBCsv
 
 #if !SILVERLIGHT
 
-		/// <summary>
-		/// Fills the specified <see cref="DataSet"/> with CSV data.
-		/// </summary>
-		/// <remarks>
-		/// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
-		/// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
-		/// </remarks>
-		/// <param name="dataSet">
-		/// The <c>DataSet</c> to be filled.
-		/// </param>
-		/// <returns>
-		/// The number of records read and stored in <paramref name="dataSet"/>.
-		/// </returns>
-		public int Fill(DataSet dataSet)
-		{
-			return Fill(dataSet, DefaultTableName, -1, false);
-		}
+        /// <summary>
+        /// Fills the specified <see cref="DataSet"/> with CSV data.
+        /// </summary>
+        /// <remarks>
+        /// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
+        /// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
+        /// </remarks>
+        /// <param name="dataSet">
+        /// The <c>DataSet</c> to be filled.
+        /// </param>
+        /// <returns>
+        /// The number of records read and stored in <paramref name="dataSet"/>.
+        /// </returns>
+        public int Fill(DataSet dataSet)
+        {
+            return Fill(dataSet, DefaultTableName, -1, false);
+        }
 
-		/// <summary>
-		/// Fills the specified <see cref="DataSet"/> with CSV data.
-		/// </summary>
-		/// <remarks>
-		/// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
-		/// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
-		/// </remarks>
-		/// <param name="dataSet">
-		/// The <c>DataSet</c> to be filled.
-		/// </param>
-		/// <param name="tableName">
-		/// The name for the table created in the <c>DataSet</c> that holds the CSV data.
-		/// </param>
-		/// <returns>
-		/// The number of records read and stored in <paramref name="dataSet"/>.
-		/// </returns>
-		public int Fill(DataSet dataSet, string tableName)
-		{
-			return Fill(dataSet, tableName, -1, false);
-		}
+        /// <summary>
+        /// Fills the specified <see cref="DataSet"/> with CSV data.
+        /// </summary>
+        /// <remarks>
+        /// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
+        /// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
+        /// </remarks>
+        /// <param name="dataSet">
+        /// The <c>DataSet</c> to be filled.
+        /// </param>
+        /// <param name="tableName">
+        /// The name for the table created in the <c>DataSet</c> that holds the CSV data.
+        /// </param>
+        /// <returns>
+        /// The number of records read and stored in <paramref name="dataSet"/>.
+        /// </returns>
+        public int Fill(DataSet dataSet, string tableName)
+        {
+            return Fill(dataSet, tableName, -1, false);
+        }
 
-		/// <summary>
-		/// Fills the specified <see cref="DataSet"/> with CSV data.
-		/// </summary>
-		/// <remarks>
-		/// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
-		/// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
-		/// </remarks>
-		/// <param name="dataSet">
-		/// The <c>DataSet</c> to be filled.
-		/// </param>
-		/// <param name="maximumRecords">
-		/// The maximum number of records to read.
-		/// </param>
-		/// <returns>
-		/// The number of records read and stored in <paramref name="dataSet"/>.
-		/// </returns>
-		public int Fill(DataSet dataSet, int maximumRecords)
-		{
-			return Fill(dataSet, DefaultTableName, maximumRecords, true);
-		}
+        /// <summary>
+        /// Fills the specified <see cref="DataSet"/> with CSV data.
+        /// </summary>
+        /// <remarks>
+        /// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
+        /// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
+        /// </remarks>
+        /// <param name="dataSet">
+        /// The <c>DataSet</c> to be filled.
+        /// </param>
+        /// <param name="maximumRecords">
+        /// The maximum number of records to read.
+        /// </param>
+        /// <returns>
+        /// The number of records read and stored in <paramref name="dataSet"/>.
+        /// </returns>
+        public int Fill(DataSet dataSet, int maximumRecords)
+        {
+            return Fill(dataSet, DefaultTableName, maximumRecords, true);
+        }
 
-		/// <summary>
-		/// Fills the specified <see cref="DataSet"/> with CSV data.
-		/// </summary>
-		/// <remarks>
-		/// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
-		/// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
-		/// </remarks>
-		/// <param name="dataSet">
-		/// The <c>DataSet</c> to be filled.
-		/// </param>
-		/// <param name="tableName">
-		/// The name for the table created in the <c>DataSet</c> that holds the CSV data.
-		/// </param>
-		/// <param name="maximumRecords">
-		/// The maximum number of records to read.
-		/// </param>
-		/// <returns>
-		/// The number of records read and stored in <paramref name="dataSet"/>.
-		/// </returns>
-		public int Fill(DataSet dataSet, string tableName, int maximumRecords)
-		{
-			return Fill(dataSet, tableName, maximumRecords, true);
-		}
+        /// <summary>
+        /// Fills the specified <see cref="DataSet"/> with CSV data.
+        /// </summary>
+        /// <remarks>
+        /// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
+        /// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
+        /// </remarks>
+        /// <param name="dataSet">
+        /// The <c>DataSet</c> to be filled.
+        /// </param>
+        /// <param name="tableName">
+        /// The name for the table created in the <c>DataSet</c> that holds the CSV data.
+        /// </param>
+        /// <param name="maximumRecords">
+        /// The maximum number of records to read.
+        /// </param>
+        /// <returns>
+        /// The number of records read and stored in <paramref name="dataSet"/>.
+        /// </returns>
+        public int Fill(DataSet dataSet, string tableName, int maximumRecords)
+        {
+            return Fill(dataSet, tableName, maximumRecords, true);
+        }
 
-		/// <summary>
-		/// Fills the specified <see cref="DataSet"/> with CSV data.
-		/// </summary>
-		/// <remarks>
-		/// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
-		/// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
-		/// </remarks>
-		/// <param name="dataSet">
-		/// The <c>DataSet</c> to be filled.
-		/// </param>
-		/// <param name="tableName">
-		/// The name for the table created in the <c>DataSet</c> that holds the CSV data.
-		/// </param>
-		/// <param name="maximumRecords">
-		/// The maximum number of records to read. Only relevant if <paramref name="useMaximum"/> is <see langword="true"/>.
-		/// </param>
-		/// <param name="useMaximum">
-		/// If <see langword="true"/>, <paramref name="maximumRecords"/> takes affect. Otherwise, no limit is imposed on the number of records read.
-		/// </param>
-		/// <returns>
-		/// The number of records read and stored in <paramref name="dataSet"/>.
-		/// </returns>
-		private int Fill(DataSet dataSet, string tableName, int maximumRecords, bool useMaximum)
-		{
-			EnsureNotDisposed();
-			dataSet.AssertNotNull("dataSet");
-			tableName.AssertNotNull("tableName");
-			_exceptionHelper.ResolveAndThrowIf(useMaximum && (maximumRecords < 0), "Fill.maximumRecords-less-than-zero", "maximumRecords");
-			_exceptionHelper.ResolveAndThrowIf(_headerRecord == null, "Fill.no-header-record-set");
+        /// <summary>
+        /// Fills the specified <see cref="DataSet"/> with CSV data.
+        /// </summary>
+        /// <remarks>
+        /// The header record for the <c>CsvReader</c> must be set prior to invoking this method. The data read must conform to the header record. That
+        /// is, if a record is found with more columns than specified by the header record, an exception will be thrown.
+        /// </remarks>
+        /// <param name="dataSet">
+        /// The <c>DataSet</c> to be filled.
+        /// </param>
+        /// <param name="tableName">
+        /// The name for the table created in the <c>DataSet</c> that holds the CSV data.
+        /// </param>
+        /// <param name="maximumRecords">
+        /// The maximum number of records to read. Only relevant if <paramref name="useMaximum"/> is <see langword="true"/>.
+        /// </param>
+        /// <param name="useMaximum">
+        /// If <see langword="true"/>, <paramref name="maximumRecords"/> takes affect. Otherwise, no limit is imposed on the number of records read.
+        /// </param>
+        /// <returns>
+        /// The number of records read and stored in <paramref name="dataSet"/>.
+        /// </returns>
+        private int Fill(DataSet dataSet, string tableName, int maximumRecords, bool useMaximum)
+        {
+            EnsureNotDisposed();
+            dataSet.AssertNotNull("dataSet");
+            tableName.AssertNotNull("tableName");
+            _exceptionHelper.ResolveAndThrowIf(useMaximum && (maximumRecords < 0), "Fill.maximumRecords-less-than-zero", "maximumRecords");
+            _exceptionHelper.ResolveAndThrowIf(_headerRecord == null, "Fill.no-header-record-set");
 
-			DataTable table = dataSet.Tables.Add(tableName);
+            DataTable table = dataSet.Tables.Add(tableName);
 
-			//set up the table columns based on the header record
-			foreach (string column in _headerRecord.Values)
-			{
-				table.Columns.Add(column);
-			}
+            //set up the table columns based on the header record
+            foreach (string column in _headerRecord.Values)
+            {
+                table.Columns.Add(column);
+            }
 
-			int num = 0;
+            int num = 0;
 
-			while (!useMaximum || (num < maximumRecords))
-			{
-				string[] record = ReadDataRecordAsStrings();
+            while (!useMaximum || (num < maximumRecords))
+            {
+                string[] record = ReadDataRecordAsStrings();
 
-				if (record != null)
-				{
-					_exceptionHelper.ResolveAndThrowIf(record.Length > _headerRecord.Values.Count, "Fill.too-many-columns-in-record", record.Length, _headerRecord.Values.Count);
+                if (record != null)
+                {
+                    _exceptionHelper.ResolveAndThrowIf(record.Length > _headerRecord.Values.Count, "Fill.too-many-columns-in-record", record.Length, _headerRecord.Values.Count);
 
-					string[] recordAsStrings = new string[record.Length];
-					record.CopyTo(recordAsStrings, 0);
-					table.Rows.Add(recordAsStrings);
-					++num;
-				}
-				else
-				{
-					break;
-				}
-			}
+                    string[] recordAsStrings = new string[record.Length];
+                    record.CopyTo(recordAsStrings, 0);
+                    table.Rows.Add(recordAsStrings);
+                    ++num;
+                }
+                else
+                {
+                    break;
+                }
+            }
 
-			return num;
-		}
+            return num;
+        }
 
 #endif
 

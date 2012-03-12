@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Kent.Boogaart.HelperTrinity;
 using Kent.Boogaart.HelperTrinity.Extensions;
@@ -500,73 +502,121 @@ namespace Kent.Boogaart.KBCsv
         }
 
         /// <summary>
-        /// Writes the specified header record.
+        /// Writes the specified record to this <c>CsvWriter</c>.
         /// </summary>
         /// <remarks>
-        /// This method writes the specified header record to the underlying <c>Stream</c>. Once successfully written, the header record is exposed via
-        /// the <see cref="HeaderRecord"/> property.
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
         /// </remarks>
         /// <param name="headerRecord">
-        /// The CSV header record to be written.
+        /// The record to be written.
         /// </param>
         public void WriteHeaderRecord(HeaderRecord headerRecord)
         {
             headerRecord.AssertNotNull("headerRecord");
             _exceptionHelper.ResolveAndThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
-
-            _headerRecord = headerRecord;
-            WriteRecord(headerRecord.Values, false);
+            WriteHeaderRecord(headerRecord.Values);
         }
 
         /// <summary>
-        /// Writes a header record with the specified columns.
+        /// Writes a data record with the specified values.
         /// </summary>
         /// <remarks>
-        /// Each item in <paramref name="headerRecord"/> is converted to a <c>string</c> via its <c>ToString</c> implementation. If any item is <see langword="null"/>,
-        /// it is substituted for an empty <c>string</c> (<see cref="string.Empty"/>).
+        /// Each item in <paramref name="headerRecord"/> is converted to a <c>string</c> via its <c>ToString</c> implementation. If any item is <see langword="null"/>, it is substituted
+        /// for an empty <c>string</c> (<see cref="string.Empty"/>).
         /// </remarks>
         /// <param name="headerRecord">
-        /// An array of header column names.
+        /// The record to be written.
         /// </param>
         public void WriteHeaderRecord(params object[] headerRecord)
         {
-            headerRecord.AssertNotNull("headerRecord");
-
-            string[] headerRecordAsStrings = new string[headerRecord.Length];
-
-            for (int i = 0; i < headerRecordAsStrings.Length; ++i)
-            {
-                object o = headerRecord[i];
-
-                if (o != null)
-                {
-                    headerRecordAsStrings[i] = o.ToString();
-                }
-                else
-                {
-                    headerRecordAsStrings[i] = string.Empty;
-                }
-            }
-
-            WriteHeaderRecord(headerRecordAsStrings);
+            WriteHeaderRecord(CultureInfo.CurrentCulture, headerRecord);
         }
 
         /// <summary>
-        /// Writes the specified header record.
+        /// Writes a data record with the specified values.
         /// </summary>
         /// <remarks>
-        /// This method writes the specified header record to the underlying <c>Stream</c>. Once successfully written, the header record is exposed via
-        /// the <see cref="HeaderRecord"/> property.
+        /// Each item in <paramref name="headerRecord"/> is converted to a <c>string</c> via its <c>ToString</c> implementation. If any item is <see langword="null"/>, it is substituted
+        /// for an empty <c>string</c> (<see cref="string.Empty"/>).
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any items in the data record that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="headerRecord">
+        /// The record to be written.
+        /// </param>
+        public void WriteHeaderRecord(IFormatProvider provider, params object[] headerRecord)
+        {
+            WriteHeaderRecord(provider, (IEnumerable<object>)headerRecord);
+        }
+
+        /// <summary>
+        /// Writes the specified record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
         /// </remarks>
         /// <param name="headerRecord">
-        /// The CSV header record to be written.
+        /// The record to be written.
+        /// </param>
+        public void WriteHeaderRecord(IEnumerable<object> headerRecord)
+        {
+            WriteHeaderRecord(CultureInfo.CurrentCulture, headerRecord);
+        }
+
+        /// <summary>
+        /// Writes the specified record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any items in the data record that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="headerRecord">
+        /// The record to be written.
+        /// </param>
+        public void WriteHeaderRecord(IFormatProvider provider, IEnumerable<object> headerRecord)
+        {
+            headerRecord.AssertNotNull("dataRecord");
+
+            var dataRecordAsStrings = headerRecord.Select(x => ConvertItemToString(provider, x));
+            WriteHeaderRecord(dataRecordAsStrings);
+        }
+
+        /// <summary>
+        /// Writes the specified record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
+        /// </remarks>
+        /// <param name="headerRecord">
+        /// The record to be written.
         /// </param>
         public void WriteHeaderRecord(string[] headerRecord)
+        {
+            WriteHeaderRecord((IEnumerable<string>)headerRecord);
+        }
+
+        /// <summary>
+        /// Writes the specified record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
+        /// </remarks>
+        /// <param name="headerRecord">
+        /// The record to be written.
+        /// </param>
+        public void WriteHeaderRecord(IEnumerable<string> headerRecord)
         {
             EnsureNotDisposed();
             headerRecord.AssertNotNull("headerRecord");
             _exceptionHelper.ResolveAndThrowIf(_passedFirstRecord, "WriteHeaderRecord.passed-first-record");
-
             _headerRecord = new HeaderRecord(headerRecord, true);
             WriteRecord(headerRecord, false);
         }
@@ -583,12 +633,9 @@ namespace Kent.Boogaart.KBCsv
         /// </param>
         public void WriteDataRecord(DataRecord dataRecord)
         {
-            EnsureNotDisposed();
             dataRecord.AssertNotNull("dataRecord");
-
-            WriteRecord(dataRecord.Values, true);
+            WriteDataRecord(dataRecord.Values);
         }
-
 
         /// <summary>
         /// Writes a data record with the specified values.
@@ -598,28 +645,64 @@ namespace Kent.Boogaart.KBCsv
         /// for an empty <c>string</c> (<see cref="string.Empty"/>).
         /// </remarks>
         /// <param name="dataRecord">
-        /// An array of data values.
+        /// The record to be written.
         /// </param>
         public void WriteDataRecord(params object[] dataRecord)
         {
+            WriteDataRecord(CultureInfo.CurrentCulture, dataRecord);
+        }
+
+        /// <summary>
+        /// Writes a data record with the specified values.
+        /// </summary>
+        /// <remarks>
+        /// Each item in <paramref name="dataRecord"/> is converted to a <c>string</c> via its <c>ToString</c> implementation. If any item is <see langword="null"/>, it is substituted
+        /// for an empty <c>string</c> (<see cref="string.Empty"/>).
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any items in the data record that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="dataRecord">
+        /// The record to be written.
+        /// </param>
+        public void WriteDataRecord(IFormatProvider provider, params object[] dataRecord)
+        {
+            WriteDataRecord(provider, (IEnumerable<object>)dataRecord);
+        }
+
+        /// <summary>
+        /// Writes the specified record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
+        /// </remarks>
+        /// <param name="dataRecord">
+        /// The record to be written.
+        /// </param>
+        public void WriteDataRecord(IEnumerable<object> dataRecord)
+        {
+            WriteDataRecord(CultureInfo.CurrentCulture, dataRecord);
+        }
+
+        /// <summary>
+        /// Writes the specified record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any items in the data record that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="dataRecord">
+        /// The record to be written.
+        /// </param>
+        public void WriteDataRecord(IFormatProvider provider, IEnumerable<object> dataRecord)
+        {
             dataRecord.AssertNotNull("dataRecord");
 
-            string[] dataRecordAsStrings = new string[dataRecord.Length];
-
-            for (int i = 0; i < dataRecordAsStrings.Length; ++i)
-            {
-                object o = dataRecord[i];
-
-                if (o != null)
-                {
-                    dataRecordAsStrings[i] = o.ToString();
-                }
-                else
-                {
-                    dataRecordAsStrings[i] = string.Empty;
-                }
-            }
-
+            var dataRecordAsStrings = dataRecord.Select(x => ConvertItemToString(provider, x));
             WriteDataRecord(dataRecordAsStrings);
         }
 
@@ -634,6 +717,21 @@ namespace Kent.Boogaart.KBCsv
         /// The record to be written.
         /// </param>
         public void WriteDataRecord(string[] dataRecord)
+        {
+            WriteDataRecord((IEnumerable<string>)dataRecord);
+        }
+
+        /// <summary>
+        /// Writes the specified record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method writes a single data record to this <c>CsvWriter</c>. The <see cref="RecordNumber"/> property is incremented upon successfully writing
+        /// the record.
+        /// </remarks>
+        /// <param name="dataRecord">
+        /// The record to be written.
+        /// </param>
+        public void WriteDataRecord(IEnumerable<string> dataRecord)
         {
             EnsureNotDisposed();
             dataRecord.AssertNotNull("dataRecord");
@@ -698,7 +796,26 @@ namespace Kent.Boogaart.KBCsv
         /// </param>
         public void WriteAll(DataTable table)
         {
-            WriteAll(table, true);
+            WriteAll(CultureInfo.CurrentCulture, table);
+        }
+
+        /// <summary>
+        /// Writes the data in <paramref name="table"/> as CSV data.
+        /// </summary>
+        /// <remarks>
+        /// This method writes all the data in <paramref name="table"/> to this <c>CsvWriter</c>, including a header record. If a header record has already
+        /// been written to this <c>CsvWriter</c> this method will throw an exception. That being the case, you should use <see cref="WriteAll(DataTable, bool)"/>
+        /// instead, specifying <see langword="false"/> for the second parameter.
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any values in the data table that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="table">
+        /// The <c>DataTable</c> whose data is to be written as CSV data.
+        /// </param>
+        public void WriteAll(IFormatProvider provider, DataTable table)
+        {
+            WriteAll(provider, table, true);
         }
 
         /// <summary>
@@ -715,6 +832,27 @@ namespace Kent.Boogaart.KBCsv
         /// If <see langword="true"/>, a CSV header will be written based on the column names for the table.
         /// </param>
         public void WriteAll(DataTable table, bool writeHeaderRecord)
+        {
+            WriteAll(CultureInfo.CurrentCulture, table, writeHeaderRecord);
+        }
+
+        /// <summary>
+        /// Writes the data in <paramref name="table"/> as CSV data.
+        /// </summary>
+        /// <remarks>
+        /// This method writes all the data in <paramref name="table"/> to this <c>CsvWriter</c>, optionally writing a header record based on the columns in the
+        /// table.
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any items in the data table that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="table">
+        /// The <c>DataTable</c> whose data is to be written as CSV data.
+        /// </param>
+        /// <param name="writeHeaderRecord">
+        /// If <see langword="true"/>, a CSV header will be written based on the column names for the table.
+        /// </param>
+        public void WriteAll(IFormatProvider provider, DataTable table, bool writeHeaderRecord)
         {
             EnsureNotDisposed();
             table.AssertNotNull("table");
@@ -737,7 +875,7 @@ namespace Kent.Boogaart.KBCsv
 
                 foreach (object item in row.ItemArray)
                 {
-                    dataRecord.Values.Add((item == null) ? string.Empty : item.ToString());
+                    dataRecord.Values.Add(ConvertItemToString(provider, item));
                 }
 
                 WriteDataRecord(dataRecord);
@@ -757,7 +895,26 @@ namespace Kent.Boogaart.KBCsv
         /// </param>
         public void WriteAll(DataSet dataSet)
         {
-            WriteAll(dataSet, true);
+            WriteAll(CultureInfo.CurrentCulture, dataSet);
+        }
+
+        /// <summary>
+        /// Writes the first <see cref="DataTable"/> in <paramref name="dataSet"/> as CSV data.
+        /// </summary>
+        /// <remarks>
+        /// This method writes all the data in the first table of <paramref name="dataSet"/> to this <c>CsvWriter</c>, including a header record.
+        /// If a header record has already been written to this <c>CsvWriter</c> this method will throw an exception. That being the case, you
+        /// should use <see cref="WriteAll(DataSet, bool)"/> instead, specifying <see langword="false"/> for the second parameter.
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any values in the data set that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="dataSet">
+        /// The <c>DataSet</c> whose first table is to be written as CSV data.
+        /// </param>
+        public void WriteAll(IFormatProvider provider, DataSet dataSet)
+        {
+            WriteAll(provider, dataSet, true);
         }
 
         /// <summary>
@@ -775,11 +932,32 @@ namespace Kent.Boogaart.KBCsv
         /// </param>
         public void WriteAll(DataSet dataSet, bool writeHeaderRecord)
         {
+            WriteAll(CultureInfo.CurrentCulture, dataSet, writeHeaderRecord);
+        }
+
+        /// <summary>
+        /// Writes the first <see cref="DataTable"/> in <paramref name="dataSet"/> as CSV data.
+        /// </summary>
+        /// <remarks>
+        /// This method writes all the data in the first table of <paramref name="dataSet"/> to this <c>CsvWriter</c>, optionally writing a header
+        /// record based on the columns in the table.
+        /// </remarks>
+        /// <param name="provider">
+        /// The format provider to use for any values in the data set that implement <see cref="IConvertible"/>.
+        /// </param>
+        /// <param name="dataSet">
+        /// The <c>DataSet</c> whose first table is to be written as CSV data.
+        /// </param>
+        /// <param name="writeHeaderRecord">
+        /// If <see langword="true"/>, a CSV header will be written based on the column names for the table.
+        /// </param>
+        public void WriteAll(IFormatProvider provider, DataSet dataSet, bool writeHeaderRecord)
+        {
             EnsureNotDisposed();
             dataSet.AssertNotNull("dataSet");
             _exceptionHelper.ResolveAndThrowIf(dataSet.Tables.Count == 0, "WriteAll.dataSet-no-table");
 
-            WriteAll(dataSet.Tables[0], writeHeaderRecord);
+            WriteAll(provider, dataSet.Tables[0], writeHeaderRecord);
         }
 
 #endif
@@ -923,6 +1101,26 @@ namespace Kent.Boogaart.KBCsv
         private void EnsureNotDisposed()
         {
             _exceptionHelper.ResolveAndThrowIf(_disposed, "disposed");
+        }
+
+        /// <summary>
+        /// Converts an item to a string given an <see cref="IFormatProvider"/>.
+        /// </summary>
+        private static string ConvertItemToString(IFormatProvider provider, object item)
+        {
+            if (item == null)
+            {
+                return string.Empty;
+            }
+
+            var convertible = item as IConvertible;
+
+            if (convertible == null)
+            {
+                return item.ToString();
+            }
+
+            return convertible.ToString(provider);
         }
     }
 }

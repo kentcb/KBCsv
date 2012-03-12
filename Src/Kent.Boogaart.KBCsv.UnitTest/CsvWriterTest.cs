@@ -1,6 +1,8 @@
 using System;
 using System.Data;
+using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Xunit;
 
@@ -35,10 +37,10 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         public void TestAlwaysDelimit()
         {
             Assert.False(_csvWriter.AlwaysDelimit);
-            _csvWriter.WriteDataRecord("value1", " value2", "value3 ");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", " value2", "value3 ");
             AssertContents("value1,\" value2\",\"value3 \"{0}");
             _csvWriter.AlwaysDelimit = true;
-            _csvWriter.WriteDataRecord("value1", " value2", "value3 ");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", " value2", "value3 ");
             AssertContents("value1,\" value2\",\"value3 \"{0}\"value1\",\" value2\",\"value3 \"{0}");
         }
 
@@ -60,11 +62,11 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         [Fact]
         public void TestValueSeparator()
         {
-            _csvWriter.WriteDataRecord("value1", "value2", "value3");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", "value2", "value3");
             AssertContents("value1,value2,value3{0}");
             _csvWriter.ValueSeparator = '-';
             Assert.Equal('-', _csvWriter.ValueSeparator);
-            _csvWriter.WriteDataRecord("value1", "value2", "value3");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", "value2", "value3");
             AssertContents("value1,value2,value3{0}value1-value2-value3{0}");
         }
 
@@ -86,11 +88,11 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         [Fact]
         public void TestValueDelimiter()
         {
-            _csvWriter.WriteDataRecord("value1", " value2 ", "value3");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", " value2 ", "value3");
             AssertContents("value1,\" value2 \",value3{0}");
             _csvWriter.ValueDelimiter = ':';
             Assert.Equal(':', _csvWriter.ValueDelimiter);
-            _csvWriter.WriteDataRecord("value1", " value2 ", "value3");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", " value2 ", "value3");
             AssertContents("value1,\" value2 \",value3{0}value1,: value2 :,value3{0}");
         }
 
@@ -98,10 +100,10 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         public void TestNewLine()
         {
             Assert.Equal(Environment.NewLine, _csvWriter.NewLine);
-            _csvWriter.WriteDataRecord("value1", "value2");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", "value2");
             AssertContents("value1,value2{0}");
             _csvWriter.NewLine = "--whatever--";
-            _csvWriter.WriteDataRecord("value1", "value2");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", "value2");
             AssertContents("value1,value2{0}value1,value2--whatever--");
         }
 
@@ -109,7 +111,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         public void TestHeaderRecord()
         {
             Assert.Null(_csvWriter.HeaderRecord);
-            _csvWriter.WriteHeaderRecord("column1", "column2");
+            _csvWriter.WriteHeaderRecord(CultureInfo.InvariantCulture, "column1", "column2");
             Assert.NotNull(_csvWriter.HeaderRecord);
             Assert.Equal("column1", _csvWriter.HeaderRecord.Values[0]);
             Assert.Equal("column2", _csvWriter.HeaderRecord.Values[1]);
@@ -120,14 +122,14 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         {
             Assert.Equal(0, _csvWriter.RecordNumber);
 
-            _csvWriter.WriteHeaderRecord("column1", "column2");
+            _csvWriter.WriteHeaderRecord(CultureInfo.InvariantCulture, "column1", "column2");
             // header record doesn't count
             Assert.Equal(0, _csvWriter.RecordNumber);
 
-            _csvWriter.WriteDataRecord("value1", "value2");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", "value2");
             Assert.Equal(1, _csvWriter.RecordNumber);
 
-            _csvWriter.WriteDataRecord("value3", "value4", "value5", "value6");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value3", "value4", "value5", "value6");
             Assert.Equal(2, _csvWriter.RecordNumber);
 
             _csvWriter.WriteDataRecord(new string[] { "value7", "value8" });
@@ -156,10 +158,10 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             table.Columns.Add("Second", typeof(string));
             table.Rows.Add((object[])new string[] { "value19", "value20" });
             table.Rows.Add((object[])new string[] { "value21", "value22" });
-            _csvWriter.WriteAll(dataSet, false);
+            _csvWriter.WriteAll(CultureInfo.InvariantCulture, dataSet, false);
             Assert.Equal(10, _csvWriter.RecordNumber);
 
-            _csvWriter.WriteAll(table, false);
+            _csvWriter.WriteAll(CultureInfo.InvariantCulture, table, false);
             Assert.Equal(12, _csvWriter.RecordNumber);
         }
 
@@ -169,7 +171,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             MemoryStream memStream = new MemoryStream();
             _csvWriter = new CsvWriter(memStream);
             Assert.False(memStream.Length > 0);
-            _csvWriter.WriteDataRecord("test");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "test");
             _csvWriter.Flush();
             Assert.True(memStream.Length > 0);
         }
@@ -181,7 +183,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             _csvWriter = new CsvWriter(memStream, Encoding.UTF32);
             Assert.Equal(Encoding.UTF32, _csvWriter.Encoding);
             Assert.False(memStream.Length > 0);
-            _csvWriter.WriteDataRecord("test");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "test");
             _csvWriter.Flush();
             Assert.True(memStream.Length > 0);
         }
@@ -192,7 +194,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             FileInfo file = new FileInfo(Path.GetTempFileName());
             _csvWriter = new CsvWriter(file.FullName);
             Assert.False(file.Length > 0);
-            _csvWriter.WriteDataRecord("test");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "test");
             _csvWriter.Flush();
             _csvWriter.Close();
             file.Refresh();
@@ -206,7 +208,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             _csvWriter = new CsvWriter(file.FullName, Encoding.UTF32);
             Assert.Equal(Encoding.UTF32, _csvWriter.Encoding);
             Assert.False(file.Length > 0);
-            _csvWriter.WriteDataRecord("test");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "test");
             _csvWriter.Flush();
             _csvWriter.Close();
             file.Refresh();
@@ -219,7 +221,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             FileInfo file = new FileInfo(Path.GetTempFileName());
             _csvWriter = new CsvWriter(file.FullName, false);
             Assert.False(file.Length > 0);
-            _csvWriter.WriteDataRecord("test");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "test");
             _csvWriter.Flush();
             _csvWriter.Close();
             file.Refresh();
@@ -228,7 +230,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 
             //now append
             _csvWriter = new CsvWriter(file.FullName, true);
-            _csvWriter.WriteDataRecord("second record");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "second record");
             _csvWriter.Flush();
             _csvWriter.Close();
             file.Refresh();
@@ -242,7 +244,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             _csvWriter = new CsvWriter(file.FullName, false, Encoding.UTF32);
             Assert.Equal(Encoding.UTF32, _csvWriter.Encoding);
             Assert.False(file.Length > 0);
-            _csvWriter.WriteDataRecord("test");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "test");
             _csvWriter.Flush();
             _csvWriter.Close();
             file.Refresh();
@@ -251,7 +253,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 
             //now append
             _csvWriter = new CsvWriter(file.FullName, true);
-            _csvWriter.WriteDataRecord("second record");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "second record");
             _csvWriter.Flush();
             _csvWriter.Close();
             file.Refresh();
@@ -270,7 +272,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             StringWriter stringWriter = new StringWriter();
             _csvWriter = new CsvWriter(stringWriter);
             Assert.False(stringWriter.ToString().Length > 0);
-            _csvWriter.WriteDataRecord("value1", "value2");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", "value2");
             Assert.True(stringWriter.ToString().Length > 0);
         }
 
@@ -298,10 +300,76 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             MemoryStream memStream = new MemoryStream();
             BufferedStream bufStream = new BufferedStream(memStream, 2048);
             _csvWriter = new CsvWriter(bufStream);
-            _csvWriter.WriteDataRecord("value1", "value2", "value3");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "value1", "value2", "value3");
             Assert.Equal(0, memStream.Length);
             _csvWriter.Flush();
             Assert.True(memStream.Length > 0);
+        }
+
+        [Fact]
+        public void can_write_header_records_from_a_variety_of_parameter_types()
+        {
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from a HeaderRecord instance
+                csvWriter.WriteHeaderRecord(new HeaderRecord(new string[] { "one", "two", "three" }));
+                AssertContents(csvWriter, stringWriter, "one,two,three{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from object params
+                csvWriter.WriteHeaderRecord("one", 2, 3.1d);
+                AssertContents(csvWriter, stringWriter, "one,2,3.1{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from object params with format provider
+                var culture = CultureInfo.GetCultureInfo("fr");
+                csvWriter.WriteHeaderRecord(culture, "one", 2, 3.1d);
+                AssertContents(csvWriter, stringWriter, @"one,2,""3,1""{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from an object enumeration
+                var enumeration = new object[] { "one", 2, 3.1d }.AsEnumerable();
+                csvWriter.WriteHeaderRecord(enumeration);
+                AssertContents(csvWriter, stringWriter, "one,2,3.1{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from an object enumeration with format provider
+                var enumeration = new object[] { "one", 2, 3.1d }.AsEnumerable();
+                var culture = CultureInfo.GetCultureInfo("fr");
+                csvWriter.WriteHeaderRecord(culture, enumeration);
+                AssertContents(csvWriter, stringWriter, @"one,2,""3,1""{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from a string enumeration
+                var enumeration = new string[] { "one", "two", "three" }.AsEnumerable();
+                csvWriter.WriteHeaderRecord(enumeration);
+                AssertContents(csvWriter, stringWriter, "one,two,three{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from a string array
+                var array = new string[] { "one", "two", "three" };
+                csvWriter.WriteHeaderRecord(array);
+                AssertContents(csvWriter, stringWriter, "one,two,three{0}");
+            }
         }
 
         [Fact]
@@ -328,14 +396,34 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         [Fact]
         public void TestWriteHeaderRecordParamsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteHeaderRecord((object[])null));
+            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteHeaderRecord(CultureInfo.InvariantCulture, (object[])null));
         }
 
         [Fact]
         public void TestWriteHeaderRecordParams()
         {
-            _csvWriter.WriteHeaderRecord("Name", 25, null, "Age");
+            _csvWriter.WriteHeaderRecord(CultureInfo.InvariantCulture, "Name", 25, null, "Age");
             AssertContents("Name,25,,Age{0}");
+        }
+
+        [Fact]
+        public void TestWriteHeaderRecordParamsFrenchFormatProvider()
+        {
+            var items = new object[] { new DateTime(1979, 10, 26, 14, 31, 15), 3.81d };
+            var provider = CultureInfo.GetCultureInfo("fr");
+
+            _csvWriter.WriteHeaderRecord(provider, items);
+            AssertContents(@"26/10/1979 14:31:15,""3,81""{0}");
+        }
+
+        [Fact]
+        public void TestWriteHeaderRecordParamsUSFormatProvider()
+        {
+            var items = new object[] { new DateTime(1979, 10, 26, 14, 31, 15), 3.81d };
+            var provider = CultureInfo.GetCultureInfo("en-US");
+
+            _csvWriter.WriteHeaderRecord(provider, items);
+            AssertContents(@"10/26/1979 2:31:15 PM,3.81{0}");
         }
 
         [Fact]
@@ -349,6 +437,72 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         {
             _csvWriter.WriteHeaderRecord(new HeaderRecord(new string[] { "column1", "column2" }));
             AssertContents("column1,column2{0}");
+        }
+
+        [Fact]
+        public void can_write_data_records_from_a_variety_of_parameter_types()
+        {
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from a DataRecord instance
+                csvWriter.WriteDataRecord(new DataRecord(null, new string[] { "one", "two", "three" }));
+                AssertContents(csvWriter, stringWriter, "one,two,three{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from object params
+                csvWriter.WriteDataRecord("one", 2, 3.1d);
+                AssertContents(csvWriter, stringWriter, "one,2,3.1{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from object params with format provider
+                var culture = CultureInfo.GetCultureInfo("fr");
+                csvWriter.WriteDataRecord(culture, "one", 2, 3.1d);
+                AssertContents(csvWriter, stringWriter, @"one,2,""3,1""{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from an object enumeration
+                var enumeration = new object[] { "one", 2, 3.1d }.AsEnumerable();
+                csvWriter.WriteDataRecord(enumeration);
+                AssertContents(csvWriter, stringWriter, "one,2,3.1{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from an object enumeration with format provider
+                var enumeration = new object[] { "one", 2, 3.1d }.AsEnumerable();
+                var culture = CultureInfo.GetCultureInfo("fr");
+                csvWriter.WriteDataRecord(culture, enumeration);
+                AssertContents(csvWriter, stringWriter, @"one,2,""3,1""{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from a string enumeration
+                var enumeration = new string[] { "one", "two", "three" }.AsEnumerable();
+                csvWriter.WriteDataRecord(enumeration);
+                AssertContents(csvWriter, stringWriter, "one,two,three{0}");
+            }
+
+            using (var stringWriter = new StringWriter())
+            using (var csvWriter = new CsvWriter(stringWriter))
+            {
+                // from a string array
+                var array = new string[] { "one", "two", "three" };
+                csvWriter.WriteDataRecord(array);
+                AssertContents(csvWriter, stringWriter, "one,two,three{0}");
+            }
         }
 
         [Fact]
@@ -379,16 +533,29 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         [Fact]
         public void TestWriteDataRecordParamsNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteDataRecord((object[])null));
+            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, (object[])null));
         }
 
         [Fact]
         public void TestWriteDataRecordParams()
         {
-            _csvWriter.WriteDataRecord("Kent", 25, null, "M");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "Kent", 25, null, "M");
             AssertContents("Kent,25,,M{0}");
-            _csvWriter.WriteDataRecord("Belinda", 26, "test", "F");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "Belinda", 26, "test", "F");
             AssertContents("Kent,25,,M{0}Belinda,26,test,F{0}");
+        }
+
+        [Fact]
+        public void TestWriteDataRecordParamsFormatProvider()
+        {
+            var items = new object[] { new DateTime(1979, 10, 26, 14, 31, 15), 3.81d };
+            var frenchProvider = CultureInfo.GetCultureInfo("fr");
+            var usProvider = CultureInfo.GetCultureInfo("en-US");
+            var date = new DateTime(1979, 10, 26);
+
+            _csvWriter.WriteDataRecord(frenchProvider, "First", date, 3.32);
+            _csvWriter.WriteDataRecord(usProvider, "Second", date, 3.32);
+            AssertContents(@"First,26/10/1979 00:00:00,""3,32""{0}Second,10/26/1979 12:00:00 AM,3.32{0}");
         }
 
         [Fact]
@@ -439,19 +606,19 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         [Fact]
         public void TestWriteAllNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteAll((DataSet)null));
+            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteAll(CultureInfo.InvariantCulture, (DataSet)null));
         }
 
         [Fact]
         public void TestWriteAllDataSetNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteAll((DataSet)null));
+            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteAll(CultureInfo.InvariantCulture, (DataSet)null));
         }
 
         [Fact]
         public void TestWriteAllDataSetNoTable()
         {
-            var ex = Assert.Throws<InvalidOperationException>(() => _csvWriter.WriteAll(new DataSet()));
+            var ex = Assert.Throws<InvalidOperationException>(() => _csvWriter.WriteAll(CultureInfo.InvariantCulture, new DataSet()));
             Assert.Equal("The specified DataSet does not contain a table to write.", ex.Message);
         }
 
@@ -467,7 +634,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             table.Rows.Add((object[])RECORD2);
             table.Rows.Add((object[])RECORD3);
 
-            _csvWriter.WriteAll(dataSet, false);
+            _csvWriter.WriteAll(CultureInfo.InvariantCulture, dataSet, false);
             AssertContents("Kent,25,M{0}Belinda,26,F{0}Tempany,0,F{0}");
         }
 
@@ -482,14 +649,29 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             table.Rows.Add((object[])RECORD1);
             table.Rows.Add((object[])RECORD2);
             table.Rows.Add((object[])RECORD3);
-            _csvWriter.WriteAll(dataSet);
+            _csvWriter.WriteAll(CultureInfo.InvariantCulture, dataSet);
             AssertContents("Name,Age,Gender{0}Kent,25,M{0}Belinda,26,F{0}Tempany,0,F{0}");
+        }
+
+        [Fact]
+        public void TestWriteAllDataSetWithProvider()
+        {
+            var dataSet = new DataSet();
+            var table = dataSet.Tables.Add("Table");
+            var provider = CultureInfo.GetCultureInfo("fr");
+
+            table.Columns.Add("Name", typeof(string));
+            table.Columns.Add("DOB", typeof(string));
+            table.Rows.Add(new object[] { "Kent", new DateTime(1979, 10, 26) });
+            table.Rows.Add(new object[] { "Belinda", new DateTime(1978, 12, 04) });
+            _csvWriter.WriteAll(provider, dataSet);
+            AssertContents(@"Name,DOB{0}Kent,26/10/1979 00:00:00{0}Belinda,04/12/1978 00:00:00{0}");
         }
 
         [Fact]
         public void WriteAllDataTableNull()
         {
-            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteAll((DataTable)null));
+            Assert.Throws<ArgumentNullException>(() => _csvWriter.WriteAll(CultureInfo.InvariantCulture, (DataTable)null));
         }
 
         [Fact]
@@ -502,7 +684,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             table.Rows.Add((object[])RECORD1);
             table.Rows.Add((object[])RECORD2);
             table.Rows.Add((object[])RECORD3);
-            _csvWriter.WriteAll(table, false);
+            _csvWriter.WriteAll(CultureInfo.InvariantCulture, table, false);
             AssertContents("Kent,25,M{0}Belinda,26,F{0}Tempany,0,F{0}");
         }
 
@@ -516,42 +698,42 @@ namespace Kent.Boogaart.KBCsv.UnitTest
             table.Rows.Add((object[])RECORD1);
             table.Rows.Add((object[])RECORD2);
             table.Rows.Add((object[])RECORD3);
-            _csvWriter.WriteAll(table);
+            _csvWriter.WriteAll(CultureInfo.InvariantCulture, table);
             AssertContents("Name,Age,Gender{0}Kent,25,M{0}Belinda,26,F{0}Tempany,0,F{0}");
         }
 
         [Fact]
         public void TestDelimitLeadingWhiteSpace()
         {
-            _csvWriter.WriteDataRecord(" Kent", "25");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, " Kent", "25");
             AssertContents("\" Kent\",25{0}");
         }
 
         [Fact]
         public void TestDelimitTrailingWhiteSpace()
         {
-            _csvWriter.WriteDataRecord("Kent ", "25");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "Kent ", "25");
             AssertContents("\"Kent \",25{0}");
         }
 
         [Fact]
         public void TestDelimitSeparator()
         {
-            _csvWriter.WriteDataRecord("Kent", "October, 1979");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "Kent", "October, 1979");
             AssertContents("Kent,\"October, 1979\"{0}");
         }
 
         [Fact]
         public void TestDelimitDelimiter()
         {
-            _csvWriter.WriteDataRecord("Kent", "Some \"thing\"");
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "Kent", "Some \"thing\"");
             AssertContents("Kent,\"Some \"\"thing\"\"\"{0}");
         }
 
         [Fact]
         public void TestDelimitNewLine()
         {
-            _csvWriter.WriteDataRecord("Kent", string.Format("Some {0}thing", Environment.NewLine));
+            _csvWriter.WriteDataRecord(CultureInfo.InvariantCulture, "Kent", string.Format("Some {0}thing", Environment.NewLine));
             AssertContents("Kent,\"Some {0}thing\"{0}");
         }
 
@@ -607,8 +789,18 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 
         private void AssertContents(string expected, string lineBreak)
         {
-            _csvWriter.Flush();
-            Assert.Equal(string.Format(expected, lineBreak), _stringWriter.ToString());
+            AssertContents(_csvWriter, _stringWriter, expected, lineBreak);
+        }
+
+        private void AssertContents(CsvWriter csvWriter, StringWriter stringWriter, string expected)
+        {
+            AssertContents(csvWriter, stringWriter, expected, Environment.NewLine);
+        }
+
+        private void AssertContents(CsvWriter csvWriter, StringWriter stringWriter, string expected, string lineBreak)
+        {
+            csvWriter.Flush();
+            Assert.Equal(string.Format(expected, lineBreak), stringWriter.ToString());
         }
     }
 }
