@@ -597,7 +597,7 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="headerRecord">
         /// The record to be written.
         /// </param>
-        public void WriteHeaderRecord(string[] headerRecord)
+        public void WriteHeaderRecord(params string[] headerRecord)
         {
             WriteHeaderRecord((IEnumerable<string>)headerRecord);
         }
@@ -716,7 +716,7 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="dataRecord">
         /// The record to be written.
         /// </param>
-        public void WriteDataRecord(string[] dataRecord)
+        public void WriteDataRecord(params string[] dataRecord)
         {
             WriteDataRecord((IEnumerable<string>)dataRecord);
         }
