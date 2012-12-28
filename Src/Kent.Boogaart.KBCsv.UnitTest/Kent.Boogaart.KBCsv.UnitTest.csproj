@@ -56,6 +56,26 @@
         <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
         <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FX45 Debug|AnyCPU'">
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>bin\FX45 Debug\</OutputPath>
+        <DefineConstants>TRACE;DEBUG</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+        <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FX45 Release|AnyCPU'">
+        <OutputPath>bin\FX45 Release\</OutputPath>
+        <DefineConstants>TRACE</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <ErrorReport>prompt</ErrorReport>
+        <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
+        <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    </PropertyGroup>
     <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL40 Debug|AnyCPU'">
         <DebugSymbols>true</DebugSymbols>
         <OutputPath>bin\SL40 Debug\</OutputPath>
@@ -86,6 +106,36 @@
         <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
         <SilverlightApplication>false</SilverlightApplication>
     </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50 Debug|AnyCPU'">
+        <DebugSymbols>true</DebugSymbols>
+        <OutputPath>bin\SL50 Debug\</OutputPath>
+        <DefineConstants>TRACE;DEBUG;SILVERLIGHT</DefineConstants>
+        <DebugType>full</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <NoStdLib>true</NoStdLib>
+        <NoConfig>true</NoConfig>
+        <ErrorReport>prompt</ErrorReport>
+        <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+        <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+        <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+        <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+        <SilverlightApplication>false</SilverlightApplication>
+    </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'SL50 Release|AnyCPU'">
+        <OutputPath>bin\SL50 Release\</OutputPath>
+        <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+        <Optimize>true</Optimize>
+        <DebugType>pdbonly</DebugType>
+        <PlatformTarget>AnyCPU</PlatformTarget>
+        <NoStdLib>true</NoStdLib>
+        <NoConfig>true</NoConfig>
+        <ErrorReport>prompt</ErrorReport>
+        <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+        <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+        <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
+        <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+        <SilverlightApplication>false</SilverlightApplication>
+    </PropertyGroup>
 
     <!--
     Shared for .NETFramework target framework
@@ -112,7 +162,7 @@
     </ItemGroup>
 
     <!--
-    SL40
+    Shared SL
     -->
     <ItemGroup Condition="$(TargetFrameworkIdentifier) == 'Silverlight'">
         <Reference Include="mscorlib" />
@@ -150,6 +200,15 @@
     <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.0' And $(TargetFrameworkIdentifier) == '.NETFramework'">
         <Reference  Include="System.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
             <RequiredTargetFramework>4.0</RequiredTargetFramework>
+        </Reference>
+    </ItemGroup>
+
+    <!--
+    FX40
+    -->
+    <ItemGroup Condition="$(TargetFrameworkVersion) == 'v4.5' And $(TargetFrameworkIdentifier) == '.NETFramework'">
+        <Reference  Include="System.Core, Version=4.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+            <RequiredTargetFramework>4.5</RequiredTargetFramework>
         </Reference>
     </ItemGroup>
     

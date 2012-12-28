@@ -194,6 +194,16 @@
 			<paramref name="trim"/> is <see langword="true"/>.
 		</exception>
         </member>
+        <member name="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertNotNullOrEmpty(System.Collections.ICollection,System.String)">
+            <summary>
+      Ensures the specified argument is non-<see langword="null"/> and not an empty collection. If it is, an
+      <see cref="T:System.ArgumentException"/> is thrown.
+    </summary><param name="arg">
+      The collection to check for <see langword="null"/> or empty.
+    </param><param name="argName">
+      The name of the argument.
+    </param>
+        </member>
         <member name="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertEnumMember``1(``0,System.String)">
             <summary>
 			Ensures the specified enumeration argument is a valid member of the <typeparamref name="TEnum"/> enumeration. If it
@@ -481,14 +491,14 @@
             </summary>
             <remarks>
             <para>
-            The <c>ExceptionHelper</c> class provides a centralised mechanism for throwing exceptions. This helps to keep exception
-            messages and types consistent.
+            The <c>ExceptionHelper</c> class provides a centralised mechanism for creating and throwing exceptions. This helps to
+            keep exception messages and types consistent.
             </para>
             <para>
-            Exception information is stored in an embedded resource called <c>ExceptionHelper.xml</c>, which must reside in the
-            <c>Properties</c> namespace for the assembly in which the for type is stored. For example, if the root namespace for
-            an assembly is <c>Company.Product</c> then the exception information must be stored in a resource called
-            <c>Company.Product.Properties.ExceptionHelper.xml</c>
+            Exception information is stored in an embedded resource with a default name of <c>[assemblyName].Properties.ExceptionHelper.xml</c>.
+            The type passed into the constructor is used to determine the assembly name. If, for any reason, the default naming scheme
+            does not work (such as when the assembly name does not match the root namespace name), there is a constructor overload that
+            allows you to specify a custom resource name.
             </para>
             <para>
             The format for the exception information XML includes a grouping mechanism such that exception keys are scoped to the
@@ -550,10 +560,26 @@
         </member>
         <member name="M:Kent.Boogaart.HelperTrinity.ExceptionHelper.#ctor(System.Type)">
             <summary>
-            Initializes a new instance of the <c>ExceptionHelper</c> class.
+            Initializes a new instance of the <c>ExceptionHelper</c> class for the specified type.
+            </summary>
+            <remarks>
+            <para>
+            A default resource name of <c>[assemblyName].Properties.ExceptionHelper.xml</c> is used, where <c>assemblyName</c> is the name of <paramref name="forType"/>'s containing assembly.
+            </para>
+            </remarks>
+            <param name="forType">
+            The type for which exceptions will be resolved.
+            </param>
+        </member>
+        <member name="M:Kent.Boogaart.HelperTrinity.ExceptionHelper.#ctor(System.Type,System.String)">
+            <summary>
+            Initializes a new instance of the <c>ExceptionHelper</c> class for the specified type and with the specified resource name.
             </summary>
             <param name="forType">
             The type for which exceptions will be resolved.
+            </param>
+            <param name="resourceName">
+            The name of the resource in which to find <c>ExceptionHelper</c> configuration.
             </param>
         </member>
         <member name="M:Kent.Boogaart.HelperTrinity.ExceptionHelper.Resolve(System.String,System.Object[])">
@@ -840,6 +866,16 @@
 			If <paramref name="arg"/> is <see langword="null"/> or an empty <c>string</c>, or if it is a blank <c>string</c> and
 			<paramref name="trim"/> is <see langword="true"/>.
 		</exception>
+        </member>
+        <member name="M:Kent.Boogaart.HelperTrinity.Extensions.ArgumentHelperExtensions.AssertNotNullOrEmpty(System.Collections.ICollection,System.String)">
+            <summary>
+      Ensures the specified argument is non-<see langword="null"/> and not an empty collection. If it is, an
+      <see cref="T:System.ArgumentException"/> is thrown.
+    </summary><param name="arg">
+      The collection to check for <see langword="null"/> or empty.
+    </param><param name="argName">
+      The name of the argument.
+    </param>
         </member>
         <member name="M:Kent.Boogaart.HelperTrinity.Extensions.ArgumentHelperExtensions.AssertEnumMember``1(``0,System.String)">
             <summary>
