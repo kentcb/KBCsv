@@ -50,6 +50,31 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         }
 
         [Fact]
+        public void empty_values_should_parse_correctly()
+        {
+            var csv = @" , 
+ 
+   
+""  """;
+
+            using (var reader = CsvReader.FromCsvString(csv))
+            {
+                var record = reader.ReadDataRecordAsStrings();
+                Assert.Equal("", record[0]);
+                Assert.Equal("", record[1]);
+
+                record = reader.ReadDataRecordAsStrings();
+                Assert.Equal("", record[0]);
+
+                record = reader.ReadDataRecordAsStrings();
+                Assert.Equal("", record[0]);
+
+                record = reader.ReadDataRecordAsStrings();
+                Assert.Equal("  ", record[0]);
+            }
+        }
+
+        [Fact]
         public void TestValueDelimiterSameAsSeparator_DelimiterFirst()
         {
             _csvParser.ValueDelimiter = '-';
