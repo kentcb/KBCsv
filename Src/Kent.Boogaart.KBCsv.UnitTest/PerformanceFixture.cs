@@ -8,24 +8,12 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 {
     public sealed class PerformanceFixture
     {
-[PerformanceTest]
-public void stackoverflow_real()
-{
-    using (var csvReader = new CsvReader(@"C:\Repository\KBCsv\trunk\Src\Kent.Boogaart.KBCsv.UnitTest\StackoverflowAnswers.csv"))
-    {
-        while (csvReader.HasMoreRecords)
-        {
-            csvReader.ReadDataRecord();
-        }
 
-        Assert.Equal(263541, csvReader.RecordNumber);
-    }
-}
-
+// latest: old is around 5s, new is around 5.5s
 [Fact]
 public void compare_old_to_new()
 {
-    var repeatCount = 200000;
+    var repeatCount = 100000;
 
     using (var textReader = new EnumerableStringReader(this.StackoverflowData.Repeat(repeatCount)))
     using (var csvReader = new CsvReader(textReader))
@@ -240,6 +228,23 @@ public void compare_old_to_new()
             }
         }
 
+        [PerformanceTest]
+        public void read_csv_with_copious_escaped_delimiters_all_whitespace_unpreserved()
+        {
+            var repeatCount = 1000000;
+
+            using (var textReader = new EnumerableStringReader(this.CopiousEscapedDelimiters.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.ReadDataRecord();
+                }
+
+                Assert.Equal(repeatCount, csvReader.RecordNumber);
+            }
+        }
+
         #region Supporting Members
 
         private IEnumerable<string> PlainData
@@ -259,6 +264,14 @@ public void compare_old_to_new()
                 yield return "        abc        ,              def,ghi            " + Environment.NewLine;
                 yield return "\t\t\t\tabc\t\t\t\t,\t\t\t\t\t\t\tdef,ghi\t\t\t\t\t\t" + Environment.NewLine;
                 yield return "\t \t   abc    \t  ,  \t     \t   def,ghi\t        \t" + Environment.NewLine;
+            }
+        }
+
+        private IEnumerable<string> CopiousEscapedDelimiters
+        {
+            get
+            {
+                yield return "\"\"\"\"\"\"\"\"\"\"" + Environment.NewLine;
             }
         }
 

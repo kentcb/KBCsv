@@ -129,7 +129,7 @@ namespace Kent.Boogaart.KBCsv
         /// <summary>
         /// One char less than the size of the internal buffer. The extra char is used to support a faster peek operation.
         /// </summary>
-        private const int BUFFER_SIZE = 4095;
+        public const int BufferSize = 4095;
 
         /// <summary>
         /// The default value separator.
@@ -256,7 +256,7 @@ namespace Kent.Boogaart.KBCsv
 
             _reader = reader;
             //the extra char is used to facilitate a faster peek operation
-            _buffer = new char[BUFFER_SIZE + 1];
+            _buffer = new char[BufferSize + 1];
             _valueList = new string[16];
             _valueBuffer = new char[128];
             _valuePartStartIndex = -1;
@@ -572,7 +572,7 @@ namespace Kent.Boogaart.KBCsv
                 }
             }
 
-            _bufferEndIndex = _reader.Read(_buffer, 0, BUFFER_SIZE);
+            _bufferEndIndex = _reader.Read(_buffer, 0, BufferSize);
             //this is possible because the buffer is one char bigger than BUFFER_SIZE. This fact is used to implement a faster peek operation
             _buffer[_bufferEndIndex] = (char) _reader.Peek();
             _bufferIndex = 0;
@@ -590,7 +590,7 @@ namespace Kent.Boogaart.KBCsv
         private bool FillBufferIgnoreValues()
         {
             Debug.Assert(_bufferIndex == _bufferEndIndex);
-            _bufferEndIndex = _reader.Read(_buffer, 0, BUFFER_SIZE);
+            _bufferEndIndex = _reader.Read(_buffer, 0, BufferSize);
             //this is possible because the buffer is one char bigger than BUFFER_SIZE. This fact is used to implement a faster peek operation
             _buffer[_bufferEndIndex] = (char) _reader.Peek();
             _bufferIndex = 0;
@@ -603,7 +603,7 @@ namespace Kent.Boogaart.KBCsv
         /// </summary>
         private void SwallowChar()
         {
-            if (_bufferIndex < BUFFER_SIZE)
+            if (_bufferIndex < BufferSize)
             {
                 //in this case there are still unread chars in the buffer so just skip one
                 ++_bufferIndex;

@@ -8,7 +8,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest.Issues
         [Fact]
         public void Issue12271_Repro()
         {
-            var csv = "first," + new string(' ', 2048) + "second";
+            var csv = "first," + new string(' ', CsvParser.BufferSize) + "second";
 
             using (var reader = CsvReader.FromCsvString(csv))
             {

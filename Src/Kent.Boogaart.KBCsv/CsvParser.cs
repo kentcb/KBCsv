@@ -14,11 +14,11 @@ namespace Kent.Boogaart.KBCsv
     {
         public const char DefaultValueSeparator = ',';
         public const char DefaultValueDelimiter = '"';
+        public const int BufferSize = 4096;
         private const char Space = ' ';
         private const char Tab = '\t';
         private const char CR = (char)0x0d;
         private const char LF = (char)0x0a;
-        private const int BufferSize = 4096;
         private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(CsvParser));
         private readonly TextReader reader;
         private readonly char[] buffer;
@@ -150,7 +150,7 @@ namespace Kent.Boogaart.KBCsv
                             else if (ch == CR)
                             {
                                 // we need to look at the next character, so make sure it is available
-                                if (this.IsBufferEmpty && !this.FillBuffer())
+                                if (this.IsBufferEmpty && !this.FillBufferWithoutNotify())
                                 {
                                     // last character available was CR, so we know we're done at this point
                                     return true;
@@ -172,7 +172,7 @@ namespace Kent.Boogaart.KBCsv
                         else if (ch == this.valueDelimiter)
                         {
                             // we need to look at the next character, so make sure it is available
-                            if (this.IsBufferEmpty && !this.FillBuffer())
+                            if (this.IsBufferEmpty && !this.FillBufferWithoutNotify())
                             {
                                 return true;
                             }
@@ -189,7 +189,7 @@ namespace Kent.Boogaart.KBCsv
                             }
                         }
                     }
-                    else if (!this.FillBuffer())
+                    else if (!this.FillBufferWithoutNotify())
                     {
                         // all out of data, so we successfully skipped the final record
                         return true;
@@ -222,7 +222,7 @@ namespace Kent.Boogaart.KBCsv
                     if (!this.IsPossiblySpecialCharacter(ch))
                     {
                         // if it's definitely not a special character, then we can just append it and continue on with the loop
-                        this.valueBuilder.Append(ch, delimited);
+                        this.valueBuilder.NotifyPreviousCharIncluded(this.delimited);
                         continue;
                     }
 
@@ -235,6 +235,7 @@ namespace Kent.Boogaart.KBCsv
                         }
                         else if (ch == this.valueDelimiter)
                         {
+                            this.valueBuilder.NotifyPreviousCharExcluded();
                             this.delimited = true;
                         }
                         else if (ch == CR)
@@ -263,7 +264,7 @@ namespace Kent.Boogaart.KBCsv
                         else
                         {
                             // it wasn't a special character after all, so just append it
-                            this.valueBuilder.Append(ch, false);
+                            this.valueBuilder.NotifyPreviousCharIncluded(false);
                         }
                     }
                     else if (ch == this.valueDelimiter)
@@ -279,19 +280,21 @@ namespace Kent.Boogaart.KBCsv
                         if (buffer[this.bufferIndex] == this.valueDelimiter)
                         {
                             // delimiter is escaped, so append it to the value and discard the escape character
-                            this.valueBuilder.Append(this.valueDelimiter, true);
+                            this.valueBuilder.NotifyPreviousCharExcluded();
                             ++this.bufferIndex;
+                            this.valueBuilder.NotifyPreviousCharIncluded(true);
                         }
                         else
                         {
                             // delimiter isn't escaped, so we are no longer in a delimited area
+                            this.valueBuilder.NotifyPreviousCharExcluded();
                             this.delimited = false;
                         }
                     }
                     else
                     {
                         // it wasn't a special character after all, so just append it
-                        this.valueBuilder.Append(ch, true);
+                        this.valueBuilder.NotifyPreviousCharIncluded(true);
                     }
                 }
                 else if (!this.FillBuffer())
@@ -324,7 +327,6 @@ namespace Kent.Boogaart.KBCsv
             this.Close();
         }
 
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private static bool IsWhiteSpace(char ch)
         {
             return ch == Space || ch == Tab;
@@ -341,7 +343,6 @@ namespace Kent.Boogaart.KBCsv
         // gets a value indicating whether the character is possibly a special character
         // as indicated by the name, false positives are possible, false negatives are not
         // that is, this may return true even for a character that isn't special, but will never return false for a character that is special
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsPossiblySpecialCharacter(char ch)
         {
             return (ch & this.specialCharacterMask) == ch;
@@ -349,6 +350,19 @@ namespace Kent.Boogaart.KBCsv
 
         // fill the character buffer with data from the text reader
         private bool FillBuffer()
+        {
+            Debug.Assert(this.IsBufferEmpty, "Buffer not empty.", "The buffer is not empty because the buffer index ({0}) does not equal the buffer end index ({1}).", this.bufferIndex, this.bufferEndIndex);
+
+            this.valueBuilder.NotifyBufferRefilling();
+            this.bufferEndIndex = this.reader.Read(this.buffer, 0, BufferSize);
+            this.bufferIndex = 0;
+            this.passedFirstRecord = true;
+
+            return this.bufferEndIndex > 0;
+        }
+
+        // fill the character buffer with data from the text reader. Does not notify the value builder that the fill is taking place, which is useful when the value builder is irrelevant (such as when skipping records)
+        private bool FillBufferWithoutNotify()
         {
             Debug.Assert(this.IsBufferEmpty, "Buffer not empty.", "The buffer is not empty because the buffer index ({0}) does not equal the buffer end index ({1}).", this.bufferIndex, this.bufferEndIndex);
 
@@ -377,13 +391,11 @@ namespace Kent.Boogaart.KBCsv
                 get { return this.valueEndIndex; }
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void Clear()
             {
                 this.valueEndIndex = 0;
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void Add(string value)
             {
                 this.EnsureSufficientCapacity();
@@ -391,7 +403,6 @@ namespace Kent.Boogaart.KBCsv
             }
 
             // convert this value list to an array, or null if there are no values
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public string[] ToArray()
             {
                 if (this.valueEndIndex == 0)
@@ -406,7 +417,6 @@ namespace Kent.Boogaart.KBCsv
 
             // convert this value list to an array, placing the extra value at the end of the array
             // this saves the client code having to add the value and then call ToArray, which is more expensive than just doing it in one step
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public string[] ToArray(string extra)
             {
                 var result = new string[this.valueEndIndex + 1];
@@ -415,7 +425,6 @@ namespace Kent.Boogaart.KBCsv
                 return result;
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             private void EnsureSufficientCapacity()
             {
                 if (this.valueEndIndex == this.values.Length)
@@ -428,121 +437,181 @@ namespace Kent.Boogaart.KBCsv
             }
         }
 
-        // lightweight value builder, which also encapsulates whitespace stripping logic
-        // using this out-performs a StringBuilder significantly
         private sealed class ValueBuilder
         {
             private readonly CsvParser parser;
-            private PendingChar[] pendingChars;
-            private int pendingCharsEndIndex;
-            private char[] buffer;
-            private int bufferEndIndex;
 
-            // preserved means either it's not whitespace, or it is delimited whitespace
-            private int? firstPreservedIndexInclusive;
-            private int? lastPreservedIndexExclusive;
+            // the total length of the value being built, regardless of whether it is stored in the parser's buffer or our own local buffer
+            private int length;
+
+            // the index into the parser's buffer where the value (or value part) starts, along with the length of the value (or value part) in the parser's buffer
+            private int bufferStartIndex;
+            private int bufferLength;
+
+            // a local buffer (only used if necessary), along with the length of the value (or value part) stored within it
+            private char[] localBuffer;
+            private int localBufferLength;
+
+            // indexes (relative to the start of the value) indicating where the first and last delimited characters are, if at all
+            private int? delimitedStartIndex;
+            private int? delimitedEndIndex;
 
             public ValueBuilder(CsvParser parser)
             {
                 this.parser = parser;
-                this.pendingChars = new PendingChar[256];
-                this.buffer = new char[1024];
 
-                Debug.Assert(this.pendingChars.Length <= this.buffer.Length, "Buffer is smaller than pending characters buffer.", "The pending characters buffer is of length {0} whilst the buffer is of length {1}. The buffer must never be smaller than the pending characters buffer.", this.pendingChars.Length, this.buffer.Length);
+                // to make the resize logic faster, our local buffer is the same size as the parser's buffer
+                this.localBuffer = new char[BufferSize];
             }
 
             public bool HasValue
             {
-                get { return this.bufferEndIndex > 0 || this.pendingCharsEndIndex > 0; }
+                get { return this.length > 0; }
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            // reset the value builder so it can start building a new value
             public void Clear()
             {
-                this.bufferEndIndex = 0;
-                this.firstPreservedIndexInclusive = null;
-                this.lastPreservedIndexExclusive = null;
+                this.length = 0;
+                this.bufferLength = 0;
+                this.localBufferLength = 0;
+                this.delimitedStartIndex = null;
+                this.delimitedEndIndex = null;
             }
 
-            // by pending appends until later, we can aggressively inline this method and make a big performance gain
-            // we can also avoid the overhead of calling EnsureSufficientCapacity per character, instead calling it once every time we apply pending chars
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            public void Append(char ch, bool delimited)
+            // tell the value builder that the previous character parsed should be included in the value
+            // the delimited parameter tells the value builder whether the character in question appeared within a delimited area
+            public void NotifyPreviousCharIncluded(bool delimited)
             {
-                if (this.pendingCharsEndIndex == this.pendingChars.Length)
+                if (this.bufferLength == 0)
                 {
-                    // the pending characters buffer is full, so we need to drain it
-                    this.ApplyPendingChars();
+                    // this is the first included char (for this demarcation), so we need to set our buffer start index
+                    this.bufferStartIndex = this.parser.bufferIndex - 1;
                 }
 
-                this.pendingChars[this.pendingCharsEndIndex++] = new PendingChar(ch, delimited || !IsWhiteSpace(ch));
-            }
+                // the overall value length has increased, as well as the piece of the value within the parser's buffer
+                ++this.length;
+                ++this.bufferLength;
 
-            private void ApplyPendingChars()
-            {
-                Debug.Assert(this.pendingCharsEndIndex > 0, "No pending chars.", "An attempt was made to apply pending characters, but there are none to apply.");
-
-                this.EnsureSufficientCapacity(this.pendingCharsEndIndex);
-
-                for (var i = 0; i < this.pendingCharsEndIndex; ++i)
+                if (delimited)
                 {
-                    var pendingChar = this.pendingChars[i];
-
-                    // we keep track of first and last preserved indexes so that we can retrospectively strip whitespace if necessary
-                    if (pendingChar.IsPreserved)
+                    if (!this.delimitedStartIndex.HasValue)
                     {
-                        if (!this.firstPreservedIndexInclusive.HasValue)
-                        {
-                            this.firstPreservedIndexInclusive = this.bufferEndIndex;
-                        }
-
-                        this.lastPreservedIndexExclusive = this.bufferEndIndex + 1;
+                        // haven't had a delimited character yet, so set the delimited index appropriately
+                        this.delimitedStartIndex = this.length - 1;
                     }
 
-                    this.buffer[this.bufferEndIndex++] = pendingChar.Char;
+                    this.delimitedEndIndex = this.length;
                 }
-
-                this.pendingCharsEndIndex = 0;
             }
 
+            // tell the value builder that the previous character parsed should not be included in the value
+            // this might happen, for example, with delimiters in the value
+            public void NotifyPreviousCharExcluded()
+            {
+                // since the value includes at least one extraneous character, we can't simply grab it straight out of the parser's buffer
+                // therefore, we copy what we have demarcated so far into our local buffer and use that instead
+                this.CopyBufferDemarcationToLocalBuffer();
+            }
+
+            // tell the value builder that the parser's buffer is about to be refilled because it is exhausted
+            public void NotifyBufferRefilling()
+            {
+                // the value spans more than one parser buffer, so we have to save what we have demarcated so far into our local buffer and use that instead
+                // of trying to just use the parser's buffer
+                this.CopyBufferDemarcationToLocalBuffer();
+                this.bufferStartIndex = 0;
+            }
+
+            // get the value built by the value builder
             public override string ToString()
             {
-                if (this.pendingCharsEndIndex != 0)
+                if (this.localBufferLength == 0)
                 {
-                    this.ApplyPendingChars();
+                    // fast path: the value fit entirely and contiguously in the parser's buffer, so we didn't need to copy anything to our local buffer
+                    var buffer = this.parser.buffer;
+                    var startIndex = this.delimitedStartIndex.GetValueOrDefault(this.bufferStartIndex);
+                    var endIndex = startIndex + this.delimitedEndIndex.GetValueOrDefault(this.bufferLength);
+
+                    if (!this.parser.preserveLeadingWhiteSpace)
+                    {
+                        while (startIndex < endIndex && IsWhiteSpace(buffer[startIndex]))
+                        {
+                            ++startIndex;
+                        }
+                    }
+
+                    if (!this.parser.preserveTrailingWhiteSpace)
+                    {
+                        while (endIndex > startIndex && IsWhiteSpace(buffer[endIndex - 1]))
+                        {
+                            --endIndex;
+                        }
+                    }
+
+                    return new string(buffer, startIndex, endIndex - startIndex);
                 }
+                else
+                {
+                    // slow path: we had to use our local buffer to construct the value
 
-                // the start and end indexes depend on whether white space is being preserved. If not, we use the first/last preserved indexes
-                var startIndexInclusive = this.parser.preserveLeadingWhiteSpace ? 0 : this.firstPreservedIndexInclusive.GetValueOrDefault();
-                var endIndexExclusive = this.parser.preserveTrailingWhiteSpace ? this.bufferEndIndex : this.lastPreservedIndexExclusive.GetValueOrDefault(0);
+                    // copy any outstanding data to our local buffer
+                    this.CopyBufferDemarcationToLocalBuffer();
 
-                var length = endIndexExclusive - startIndexInclusive;
-                return new string(this.buffer, startIndexInclusive, length);
+                    var buffer = this.localBuffer;
+                    var startIndex = 0;
+                    var endIndex = this.localBufferLength;
+
+                    if (!this.parser.preserveLeadingWhiteSpace)
+                    {
+                        var stripWhiteSpaceUpToIndex = this.delimitedStartIndex.GetValueOrDefault(endIndex);
+
+                        while (startIndex < stripWhiteSpaceUpToIndex  && IsWhiteSpace(buffer[startIndex]))
+                        {
+                            ++startIndex;
+                        }
+                    }
+
+                    if (!this.parser.preserveTrailingWhiteSpace)
+                    {
+                        var stripWhiteSpaceDownToIndex = this.delimitedEndIndex.GetValueOrDefault(startIndex);
+
+                        while (endIndex > stripWhiteSpaceDownToIndex && IsWhiteSpace(buffer[endIndex - 1]))
+                        {
+                            --endIndex;
+                        }
+                    }
+
+                    return new string(buffer, startIndex, endIndex - startIndex);
+                }
             }
 
-            [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            private void EnsureSufficientCapacity(int extraCapacityRequired)
+            private void CopyBufferDemarcationToLocalBuffer()
             {
-                if ((this.bufferEndIndex + extraCapacityRequired) > this.buffer.Length)
+                if (this.bufferLength > 0)
+                {
+                    this.EnsureLocalBufferHasSufficientCapacity(this.bufferLength);
+
+                    // copy what we demarcated in the parser's buffer into our local buffer
+                    Array.Copy(this.parser.buffer, this.bufferStartIndex, this.localBuffer, this.localBufferLength, this.bufferLength);
+
+                    this.localBufferLength += this.bufferLength;
+
+                    // reset the demarcation of the parser's buffer back to nothing
+                    this.bufferLength = 0;
+                }
+            }
+
+            private void EnsureLocalBufferHasSufficientCapacity(int extraCapacityRequired)
+            {
+                Debug.Assert(this.localBuffer.Length >= BufferSize, "Local buffer is smaller than parser buffer.", "This method is not correct unless this assertion holds true. This saves having to do a Math.Max call to determine the new buffer size.");
+
+                if ((this.localBufferLength + extraCapacityRequired) > this.localBuffer.Length)
                 {
                     // need to allocate larger buffer
-                    var newBuffer = new char[this.buffer.Length * 2];
-                    Array.Copy(this.buffer, 0, newBuffer, 0, this.buffer.Length);
-                    this.buffer = newBuffer;
-                }
-            }
-
-            // used to cache pending character appends so that we can apply them in bulk to save some cycles
-            private struct PendingChar
-            {
-                public readonly char Char;
-                public readonly bool IsPreserved;
-
-                [MethodImpl(MethodImplOptions.AggressiveInlining)]
-                public PendingChar(char ch, bool isPreserved)
-                {
-                    this.Char = ch;
-                    this.IsPreserved = isPreserved;
+                    var newBuffer = new char[this.localBuffer.Length * 2];
+                    Array.Copy(this.localBuffer, 0, newBuffer, 0, this.localBuffer.Length);
+                    this.localBuffer = newBuffer;
                 }
             }
         }
