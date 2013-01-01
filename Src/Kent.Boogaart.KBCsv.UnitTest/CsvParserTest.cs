@@ -50,6 +50,17 @@ namespace Kent.Boogaart.KBCsv.UnitTest
         }
 
         [Fact]
+        public void empty_string_should_parse_correctly()
+        {
+            using (var parser = new CsvParser(new StringReader(string.Empty)))
+            {
+                var record = parser.ParseRecord();
+                Assert.Null(record);
+            }
+        }
+
+
+        [Fact]
         public void empty_values_should_parse_correctly()
         {
             var csv = @" , 
@@ -57,19 +68,19 @@ namespace Kent.Boogaart.KBCsv.UnitTest
    
 ""  """;
 
-            using (var reader = CsvReader.FromCsvString(csv))
+            using (var parser = new CsvParser(new StringReader(csv)))
             {
-                var record = reader.ReadDataRecordAsStrings();
+                var record = parser.ParseRecord();
                 Assert.Equal("", record[0]);
                 Assert.Equal("", record[1]);
 
-                record = reader.ReadDataRecordAsStrings();
+                record = parser.ParseRecord();
                 Assert.Equal("", record[0]);
 
-                record = reader.ReadDataRecordAsStrings();
+                record = parser.ParseRecord();
                 Assert.Equal("", record[0]);
 
-                record = reader.ReadDataRecordAsStrings();
+                record = parser.ParseRecord();
                 Assert.Equal("  ", record[0]);
             }
         }

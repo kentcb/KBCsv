@@ -10,7 +10,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest
 
             for (var i = 0; i < 10; ++i)
             {
-                fixture.measure_reading_stackoverflow_answers();
+                fixture.read_stackoverflow_data();
             }
         }
     }

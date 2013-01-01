@@ -53,9 +53,13 @@
     <Compile Include="DataRecordTest.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="HeaderRecordTest.cs" />
+    <Compile Include="Utility\EnumerableStringReader.cs" />
     <Compile Include="PerformanceFixture.cs" />
     <Compile Include="RecordBaseTest.cs" />
     <Compile Include="Issues\Issue12271.cs" />
+    <Compile Include="Utility\Extensions.cs" />
+    <Compile Include="Utility\PerformanceTestAttribute.cs" />
+    <Compile Include="Utility\PerformanceTestCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

@@ -30,6 +30,7 @@ namespace Kent.Boogaart.KBCsv
         private bool preserveLeadingWhiteSpace;
         private bool preserveTrailingWhiteSpace;
         private bool passedFirstRecord;
+        private bool delimited;
         private char valueSeparator;
         private char valueDelimiter;
 
@@ -94,11 +95,9 @@ namespace Kent.Boogaart.KBCsv
                     // the buffer isn't empty so there must be more records
                     return true;
                 }
-                else
-                {
-                    // the buffer is empty, so we only have more records if we successfully fill it
-                    return this.FillBuffer();
-                }			
+
+                // the buffer is empty, so we only have more records if we successfully fill it
+                return this.FillBuffer();
             }
         }
 
@@ -115,199 +114,204 @@ namespace Kent.Boogaart.KBCsv
 
         public bool SkipRecord()
         {
-            if (!this.HasMoreRecords)
+            // Performance Notes:
+            //   - Checking !HasMoreRecords and exiting early degrades performance
+            //     Looking at the IL, I assume this is because the common case (more records) results in a branch, whereas the uncommon case (no more records) does not
+            //   - Using a local to refer to the buffer yields better performance
+            //     I haven't looked into the assembly, but I assume that it is able to better use registers
+            //   - Using a local for other stuff (like the delimiter flag) yields poorer performance
+            //     Again, I suspect this is related to effective use of registers, where too many locals thwarts the JITter
+            //   - Temporarily swapping the special character mask to valueDelimiter whilst in a delimited area makes no noticeable improvement to performance
+
+            Debug.Assert(!this.delimited, "Delimited is true.");
+
+            if (this.HasMoreRecords)
             {
-                // no record to skip
-                return false;
-            }
+                var buffer = this.buffer;
 
-            var delimitState = DelimitState.Undelimited;
-            var previousCharacterState = PreviousCharacterState.NothingImportant;
-
-            while (true)
-            {
-                if (this.IsBufferEmpty &&
-                    !this.FillBuffer())
+                while (true)
                 {
-                    // all out of data, so we've successfully skipped the last record
-                    return true;
-                }
-
-                var ch = this.buffer[this.bufferIndex];
-
-                // fast path: no outstanding state to apply and not a special character, so just skip the character and continue with loop
-                if (previousCharacterState == PreviousCharacterState.NothingImportant && !this.IsPossiblySpecialCharacter(ch))
-                {
-                    ++this.bufferIndex;
-                    continue;
-                }
-
-                // apply any outstanding state from the last character parsed
-                if (previousCharacterState == PreviousCharacterState.CarriageReturn)
-                {
-                    if (ch == LF)
+                    if (!this.IsBufferEmpty)
                     {
-                        // skip over the LF in the CRLF combination
-                        ++this.bufferIndex;
+                        var ch = buffer[this.bufferIndex++];
+
+                        if (!this.IsPossiblySpecialCharacter(ch))
+                        {
+                            // if it's definitely not a special character, then we can just continue on with the loop
+                            continue;
+                        }
+
+                        if (!this.delimited)
+                        {
+                            if (ch == this.valueDelimiter)
+                            {
+                                this.delimited = true;
+                            }
+                            else if (ch == CR)
+                            {
+                                // we need to look at the next character, so make sure it is available
+                                if (this.IsBufferEmpty && !this.FillBuffer())
+                                {
+                                    // last character available was CR, so we know we're done at this point
+                                    return true;
+                                }
+
+                                // we deal with CRLF right here by checking if the next character is LF, in which case we just discard it
+                                if (buffer[this.bufferIndex] == LF)
+                                {
+                                    ++this.bufferIndex;
+                                }
+
+                                return true;
+                            }
+                            else if (ch == LF)
+                            {
+                                return true;
+                            }
+                        }
+                        else if (ch == this.valueDelimiter)
+                        {
+                            // we need to look at the next character, so make sure it is available
+                            if (this.IsBufferEmpty && !this.FillBuffer())
+                            {
+                                return true;
+                            }
+
+                            if (buffer[this.bufferIndex] == this.valueDelimiter)
+                            {
+                                // delimiter is escaped, so just swallow it
+                                ++this.bufferIndex;
+                            }
+                            else
+                            {
+                                // delimiter isn't escaped, so we are no longer in a delimited area
+                                this.delimited = false;
+                            }
+                        }
                     }
-
-                    // undelimited CR or CRLF both indicate the end of a record
-                    return true;
-                }
-                else if (previousCharacterState == PreviousCharacterState.DelimiterInDelimitedArea)
-                {
-                    if (ch == this.valueDelimiter)
+                    else if (!this.FillBuffer())
                     {
-                        // delimiter was escaped, so skip it and continue on
-                        previousCharacterState = PreviousCharacterState.NothingImportant;
-                        ++this.bufferIndex;
-                        continue;
-                    }
-                    else
-                    {
-                        // delimiter not escaped in a delimited area, so we are no longer delimited
-                        delimitState = DelimitState.Undelimited;
-                        previousCharacterState = PreviousCharacterState.NothingImportant;
-                    }
-                }
-
-                ++this.bufferIndex;
-
-                if (delimitState == DelimitState.Undelimited)
-                {
-                    if (ch == this.valueDelimiter)
-                    {
-                        delimitState = DelimitState.Delimited;
-                    }
-                    else if (ch == CR)
-                    {
-                        // if the next character is LF, we need to swallow it before returning, so we set this state. Either way, an undelimited carriage return means the end of the record
-                        previousCharacterState = PreviousCharacterState.CarriageReturn;
-                    }
-                    else if (ch == LF)
-                    {
+                        // all out of data, so we successfully skipped the final record
                         return true;
                     }
                 }
-                else if (ch == this.valueDelimiter)
-                {
-                    // we've read a value delimiter in a delimited area. What we do with it is dependent upon the next character read
-                    previousCharacterState = PreviousCharacterState.DelimiterInDelimitedArea;
-                }
+            }
+            else
+            {
+                return false;
             }
         }
 
         public string[] ParseRecord()
         {
-            if (!this.HasMoreRecords)
-            {
-                return null;
-            }
+            // many of the performance notes in SkipRecord are relevant here, too
 
+            Debug.Assert(!this.delimited, "Delimited is true.");
+
+            var buffer = this.buffer;
+            var ch = char.MinValue;
             this.values.Clear();
             this.valueBuilder.Clear();
 
-            var delimitState = DelimitState.Undelimited;
-            var previousCharacterState = PreviousCharacterState.NothingImportant;
-
             while (true)
             {
-                if (this.IsBufferEmpty && !this.FillBuffer())
+                if (!this.IsBufferEmpty)
                 {
-                    this.values.Add(this.valueBuilder.ToString());
+                    ch = buffer[this.bufferIndex++];
 
-                    // data exhausted - we're done
-                    break;
-                }
-
-                var ch = this.buffer[this.bufferIndex];
-
-                // fast path: no outstanding state to apply and not a special character, so just add the character and continue with loop
-                if (previousCharacterState == PreviousCharacterState.NothingImportant && !this.IsPossiblySpecialCharacter(ch))
-                {
-                    this.valueBuilder.Append(ch, delimitState == DelimitState.Delimited);
-                    ++this.bufferIndex;
-                    continue;
-                }
-
-                // apply any outstanding state from the last character parsed
-                if (previousCharacterState == PreviousCharacterState.CarriageReturn)
-                {
-                    if (ch == LF)
+                    if (!this.IsPossiblySpecialCharacter(ch))
                     {
-                        // skip over the LF in the CRLF combination
-                        ++this.bufferIndex;
-                    }
-
-                    // undelimited CR or CRLF both indicate the end of a record, so add the existing value and then exit
-                    this.values.Add(this.valueBuilder.ToString());
-                    break;
-                }
-                else if (previousCharacterState == PreviousCharacterState.DelimiterInDelimitedArea)
-                {
-                    if (ch == this.valueDelimiter)
-                    {
-                        // delimiter was escaped, so add the delimiter to the value and continue on
-                        this.valueBuilder.Append(this.valueDelimiter, delimitState == DelimitState.Delimited);
-                        previousCharacterState = PreviousCharacterState.NothingImportant;
-                        ++this.bufferIndex;
+                        // if it's definitely not a special character, then we can just append it and continue on with the loop
+                        this.valueBuilder.Append(ch, delimited);
                         continue;
                     }
+
+                    if (!this.delimited)
+                    {
+                        if (ch == this.valueSeparator)
+                        {
+                            this.values.Add(this.valueBuilder.ToString());
+                            this.valueBuilder.Clear();
+                        }
+                        else if (ch == this.valueDelimiter)
+                        {
+                            this.delimited = true;
+                        }
+                        else if (ch == CR)
+                        {
+                            // we need to look at the next character, so make sure it is available
+                            if (this.IsBufferEmpty && !this.FillBuffer())
+                            {
+                                // undelimited CR indicates the end of a record, so add the existing value and then exit
+                                return this.values.ToArray(this.valueBuilder.ToString());
+                            }
+
+                            // we deal with CRLF right here by checking if the next character is LF, in which case we just discard it
+                            if (buffer[this.bufferIndex] == LF)
+                            {
+                                ++this.bufferIndex;
+                            }
+
+                            // undelimited CR or CRLF both indicate the end of a record, so add the existing value and then exit
+                            return this.values.ToArray(this.valueBuilder.ToString());
+                        }
+                        else if (ch == LF)
+                        {
+                            // undelimited LF indicates the end of a record, so add the existing value and then exit
+                            return this.values.ToArray(this.valueBuilder.ToString());
+                        }
+                        else
+                        {
+                            // it wasn't a special character after all, so just append it
+                            this.valueBuilder.Append(ch, false);
+                        }
+                    }
+                    else if (ch == this.valueDelimiter)
+                    {
+                        // we need to look at the next character, so make sure it is available
+                        if (this.IsBufferEmpty && !this.FillBuffer())
+                        {
+                            // out of data
+                            delimited = false;
+                            return this.values.ToArray(this.valueBuilder.ToString());
+                        }
+
+                        if (buffer[this.bufferIndex] == this.valueDelimiter)
+                        {
+                            // delimiter is escaped, so append it to the value and discard the escape character
+                            this.valueBuilder.Append(this.valueDelimiter, true);
+                            ++this.bufferIndex;
+                        }
+                        else
+                        {
+                            // delimiter isn't escaped, so we are no longer in a delimited area
+                            this.delimited = false;
+                        }
+                    }
                     else
                     {
-                        // delimiter not escaped in a delimited area, so we are no longer delimited
-                        delimitState = DelimitState.Undelimited;
-                        previousCharacterState = PreviousCharacterState.NothingImportant;
+                        // it wasn't a special character after all, so just append it
+                        this.valueBuilder.Append(ch, true);
                     }
                 }
-
-                ++this.bufferIndex;
-
-                if (delimitState == DelimitState.Undelimited)
+                else if (!this.FillBuffer())
                 {
-                    if (ch == this.valueDelimiter)
+                    if (this.valueBuilder.HasValue)
                     {
-                        delimitState = DelimitState.Delimited;
-                    }
-                    else if (ch == this.valueSeparator)
-                    {
+                        // a value is outstanding, so add it
                         this.values.Add(this.valueBuilder.ToString());
-                        this.valueBuilder.Clear();
-                        delimitState = DelimitState.Undelimited;
-                        previousCharacterState = PreviousCharacterState.NothingImportant;
                     }
-                    else if (ch == CR)
+
+                    if (ch == this.valueSeparator)
                     {
-                        // if the next character is LF, we need to swallow it before returning, so we set this state. Either way, an undelimited carriage return means the end of the record
-                        previousCharacterState = PreviousCharacterState.CarriageReturn;
+                        // special case: last character is a separator, which means there should be an empty value after it. eg. "foo," results in ["foo", ""]
+                        return this.values.ToArray(string.Empty);
                     }
-                    else if (ch == LF)
-                    {
-                        this.values.Add(this.valueBuilder.ToString());
-                        break;
-                    }
-                    else
-                    {
-                        this.valueBuilder.Append(ch, false);
-                    }
-                }
-                else if (ch == this.valueDelimiter)
-                {
-                    // we've read a value delimiter in a delimited area. What we do with it is dependent upon the next character read
-                    previousCharacterState = PreviousCharacterState.DelimiterInDelimitedArea;
-                }
-                else
-                {
-                    this.valueBuilder.Append(ch, delimitState == DelimitState.Delimited);
+
+                    // data exhausted - we're done. Note that this will return null if there are no values
+                    return this.values.ToArray();
                 }
             }
-
-            if (this.values.Count == 0)
-            {
-                return null;
-            }
-
-            return this.values.ToArray();
         }
 
         public void Close()
@@ -335,8 +339,8 @@ namespace Kent.Boogaart.KBCsv
         }
 
         // gets a value indicating whether the character is possibly a special character
-        // false positives are possible, false negatives are not
-        // ie. may return true when ch is not special, but will never return false if it is special
+        // as indicated by the name, false positives are possible, false negatives are not
+        // that is, this may return true even for a character that isn't special, but will never return false for a character that is special
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool IsPossiblySpecialCharacter(char ch)
         {
@@ -344,7 +348,6 @@ namespace Kent.Boogaart.KBCsv
         }
 
         // fill the character buffer with data from the text reader
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private bool FillBuffer()
         {
             Debug.Assert(this.IsBufferEmpty, "Buffer not empty.", "The buffer is not empty because the buffer index ({0}) does not equal the buffer end index ({1}).", this.bufferIndex, this.bufferEndIndex);
@@ -354,21 +357,6 @@ namespace Kent.Boogaart.KBCsv
             this.passedFirstRecord = true;
 
             return this.bufferEndIndex > 0;
-        }
-
-        // used to track whether the parser is within a delimited area or not
-        private enum DelimitState
-        {
-            Undelimited,
-            Delimited
-        }
-
-        // used to track whether a previously read character may need to be enacted when a subsequent character is read
-        private enum PreviousCharacterState
-        {
-            NothingImportant,
-            DelimiterInDelimitedArea,
-            CarriageReturn
         }
 
         // lightweight list to store the values comprising the record currently being parsed
@@ -399,15 +387,31 @@ namespace Kent.Boogaart.KBCsv
             public void Add(string value)
             {
                 this.EnsureSufficientCapacity();
-
                 this.values[this.valueEndIndex++] = value;
             }
 
+            // convert this value list to an array, or null if there are no values
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public string[] ToArray()
             {
+                if (this.valueEndIndex == 0)
+                {
+                    return null;
+                }
+
                 var result = new string[this.valueEndIndex];
                 Array.Copy(this.values, 0, result, 0, this.valueEndIndex);
+                return result;
+            }
+
+            // convert this value list to an array, placing the extra value at the end of the array
+            // this saves the client code having to add the value and then call ToArray, which is more expensive than just doing it in one step
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public string[] ToArray(string extra)
+            {
+                var result = new string[this.valueEndIndex + 1];
+                Array.Copy(this.values, 0, result, 0, this.valueEndIndex);
+                result[this.valueEndIndex] = extra;
                 return result;
             }
 
@@ -429,82 +433,116 @@ namespace Kent.Boogaart.KBCsv
         private sealed class ValueBuilder
         {
             private readonly CsvParser parser;
+            private PendingChar[] pendingChars;
+            private int pendingCharsEndIndex;
             private char[] buffer;
             private int bufferEndIndex;
-            private int? firstDelimitedIndexInclusive;
-            private int? lastDelimitedIndexExclusive;
+
+            // preserved means either it's not whitespace, or it is delimited whitespace
+            private int? firstPreservedIndexInclusive;
+            private int? lastPreservedIndexExclusive;
 
             public ValueBuilder(CsvParser parser)
             {
                 this.parser = parser;
+                this.pendingChars = new PendingChar[256];
                 this.buffer = new char[1024];
+
+                Debug.Assert(this.pendingChars.Length <= this.buffer.Length, "Buffer is smaller than pending characters buffer.", "The pending characters buffer is of length {0} whilst the buffer is of length {1}. The buffer must never be smaller than the pending characters buffer.", this.pendingChars.Length, this.buffer.Length);
+            }
+
+            public bool HasValue
+            {
+                get { return this.bufferEndIndex > 0 || this.pendingCharsEndIndex > 0; }
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void Clear()
             {
                 this.bufferEndIndex = 0;
-                this.firstDelimitedIndexInclusive = null;
-                this.lastDelimitedIndexExclusive = null;
+                this.firstPreservedIndexInclusive = null;
+                this.lastPreservedIndexExclusive = null;
             }
 
+            // by pending appends until later, we can aggressively inline this method and make a big performance gain
+            // we can also avoid the overhead of calling EnsureSufficientCapacity per character, instead calling it once every time we apply pending chars
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public void Append(char ch, bool delimited)
             {
-                // we keep track of first and last delimited indexes so that we can retrospectively strip whitespace
-                if (delimited)
+                if (this.pendingCharsEndIndex == this.pendingChars.Length)
                 {
-                    if (!this.firstDelimitedIndexInclusive.HasValue)
-                    {
-                        this.firstDelimitedIndexInclusive = this.bufferEndIndex;
-                    }
-
-                    this.lastDelimitedIndexExclusive = this.bufferEndIndex + 1;
+                    // the pending characters buffer is full, so we need to drain it
+                    this.ApplyPendingChars();
                 }
 
-                this.EnsureSufficientCapacity();
-                this.buffer[this.bufferEndIndex++] = ch;
+                this.pendingChars[this.pendingCharsEndIndex++] = new PendingChar(ch, delimited || !IsWhiteSpace(ch));
+            }
+
+            private void ApplyPendingChars()
+            {
+                Debug.Assert(this.pendingCharsEndIndex > 0, "No pending chars.", "An attempt was made to apply pending characters, but there are none to apply.");
+
+                this.EnsureSufficientCapacity(this.pendingCharsEndIndex);
+
+                for (var i = 0; i < this.pendingCharsEndIndex; ++i)
+                {
+                    var pendingChar = this.pendingChars[i];
+
+                    // we keep track of first and last preserved indexes so that we can retrospectively strip whitespace if necessary
+                    if (pendingChar.IsPreserved)
+                    {
+                        if (!this.firstPreservedIndexInclusive.HasValue)
+                        {
+                            this.firstPreservedIndexInclusive = this.bufferEndIndex;
+                        }
+
+                        this.lastPreservedIndexExclusive = this.bufferEndIndex + 1;
+                    }
+
+                    this.buffer[this.bufferEndIndex++] = pendingChar.Char;
+                }
+
+                this.pendingCharsEndIndex = 0;
             }
 
             public override string ToString()
             {
-                var startIndexInclusive = 0;
-                var endIndexExclusive = this.bufferEndIndex;
-
-                if (!this.parser.preserveLeadingWhiteSpace)
+                if (this.pendingCharsEndIndex != 0)
                 {
-                    // strip leading whitespace up to either the first delimited index, or the end index
-                    var delimitStartIndex = this.firstDelimitedIndexInclusive.GetValueOrDefault(endIndexExclusive - 1);
-
-                    while (startIndexInclusive < delimitStartIndex && IsWhiteSpace(this.buffer[startIndexInclusive]))
-                    {
-                        ++startIndexInclusive;
-                    }
+                    this.ApplyPendingChars();
                 }
 
-                if (!this.parser.preserveTrailingWhiteSpace)
-                {
-                    // strip trailing whitespace back to either the last delimited index, or the start index
-                    var delimitEndIndex = this.lastDelimitedIndexExclusive.GetValueOrDefault(startIndexInclusive);
-
-                    while (endIndexExclusive > delimitEndIndex && IsWhiteSpace(this.buffer[endIndexExclusive - 1]))
-                    {
-                        --endIndexExclusive;
-                    }
-                }
+                // the start and end indexes depend on whether white space is being preserved. If not, we use the first/last preserved indexes
+                var startIndexInclusive = this.parser.preserveLeadingWhiteSpace ? 0 : this.firstPreservedIndexInclusive.GetValueOrDefault();
+                var endIndexExclusive = this.parser.preserveTrailingWhiteSpace ? this.bufferEndIndex : this.lastPreservedIndexExclusive.GetValueOrDefault(0);
 
                 var length = endIndexExclusive - startIndexInclusive;
                 return new string(this.buffer, startIndexInclusive, length);
             }
 
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
-            private void EnsureSufficientCapacity()
+            private void EnsureSufficientCapacity(int extraCapacityRequired)
             {
-                if (this.bufferEndIndex == this.buffer.Length)
+                if ((this.bufferEndIndex + extraCapacityRequired) > this.buffer.Length)
                 {
-                    // need to reallocate larger buffer
+                    // need to allocate larger buffer
                     var newBuffer = new char[this.buffer.Length * 2];
                     Array.Copy(this.buffer, 0, newBuffer, 0, this.buffer.Length);
                     this.buffer = newBuffer;
+                }
+            }
+
+            // used to cache pending character appends so that we can apply them in bulk to save some cycles
+            private struct PendingChar
+            {
+                public readonly char Char;
+                public readonly bool IsPreserved;
+
+                [MethodImpl(MethodImplOptions.AggressiveInlining)]
+                public PendingChar(char ch, bool isPreserved)
+                {
+                    this.Char = ch;
+                    this.IsPreserved = isPreserved;
                 }
             }
         }
