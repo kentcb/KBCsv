@@ -39,7 +39,7 @@
 
     <Target Name="Test">
         <MakeDir Directories="$(GenDir)\Tests" />
-        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.UnitTest\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.UnitTest.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.UnitTest.xml" />
+        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.UnitTest\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.UnitTest.exe" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.UnitTest.xml" />
     </Target>
 
     <Target Name="GenerateDocumentation">

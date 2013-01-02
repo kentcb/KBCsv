@@ -6,7 +6,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest.Issues
     public sealed class Issue12271
     {
         [Fact]
-        public void Issue12271_Repro()
+        public void issue12271_repro()
         {
             var csv = "first," + new string(' ', CsvParser.BufferSize) + "second";
 

@@ -1077,7 +1077,10 @@ namespace Kent.Boogaart.KBCsv
         /// </summary>
         private void EnsureNotDisposed()
         {
-            _exceptionHelper.ResolveAndThrowIf(_disposed, "disposed");
+            if (this._disposed)
+            {
+                throw _exceptionHelper.Resolve("disposed");
+            }
         }
     }
 }

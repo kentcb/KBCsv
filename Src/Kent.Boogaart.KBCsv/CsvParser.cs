@@ -230,7 +230,7 @@ namespace Kent.Boogaart.KBCsv
                     {
                         if (ch == this.valueSeparator)
                         {
-                            this.values.Add(this.valueBuilder.ToString());
+                            this.values.Add(this.valueBuilder.GetValue());
                             this.valueBuilder.Clear();
                         }
                         else if (ch == this.valueDelimiter)
@@ -244,7 +244,7 @@ namespace Kent.Boogaart.KBCsv
                             if (this.IsBufferEmpty && !this.FillBuffer())
                             {
                                 // undelimited CR indicates the end of a record, so add the existing value and then exit
-                                return this.values.ToArray(this.valueBuilder.ToString());
+                                return this.values.ToArray(this.valueBuilder.GetValue());
                             }
 
                             // we deal with CRLF right here by checking if the next character is LF, in which case we just discard it
@@ -254,12 +254,12 @@ namespace Kent.Boogaart.KBCsv
                             }
 
                             // undelimited CR or CRLF both indicate the end of a record, so add the existing value and then exit
-                            return this.values.ToArray(this.valueBuilder.ToString());
+                            return this.values.ToArray(this.valueBuilder.GetValue());
                         }
                         else if (ch == LF)
                         {
                             // undelimited LF indicates the end of a record, so add the existing value and then exit
-                            return this.values.ToArray(this.valueBuilder.ToString());
+                            return this.values.ToArray(this.valueBuilder.GetValue());
                         }
                         else
                         {
@@ -274,7 +274,7 @@ namespace Kent.Boogaart.KBCsv
                         {
                             // out of data
                             delimited = false;
-                            return this.values.ToArray(this.valueBuilder.ToString());
+                            return this.values.ToArray(this.valueBuilder.GetValue());
                         }
 
                         if (buffer[this.bufferIndex] == this.valueDelimiter)
@@ -302,7 +302,7 @@ namespace Kent.Boogaart.KBCsv
                     if (this.valueBuilder.HasValue)
                     {
                         // a value is outstanding, so add it
-                        this.values.Add(this.valueBuilder.ToString());
+                        this.values.Add(this.valueBuilder.GetValue());
                     }
 
                     if (ch == this.valueSeparator)
@@ -351,7 +351,7 @@ namespace Kent.Boogaart.KBCsv
         // fill the character buffer with data from the text reader
         private bool FillBuffer()
         {
-            Debug.Assert(this.IsBufferEmpty, "Buffer not empty.", "The buffer is not empty because the buffer index ({0}) does not equal the buffer end index ({1}).", this.bufferIndex, this.bufferEndIndex);
+            Debug.Assert(this.IsBufferEmpty, "Buffer not empty.");
 
             this.valueBuilder.NotifyBufferRefilling();
             this.bufferEndIndex = this.reader.Read(this.buffer, 0, BufferSize);
@@ -364,7 +364,7 @@ namespace Kent.Boogaart.KBCsv
         // fill the character buffer with data from the text reader. Does not notify the value builder that the fill is taking place, which is useful when the value builder is irrelevant (such as when skipping records)
         private bool FillBufferWithoutNotify()
         {
-            Debug.Assert(this.IsBufferEmpty, "Buffer not empty.", "The buffer is not empty because the buffer index ({0}) does not equal the buffer end index ({1}).", this.bufferIndex, this.bufferEndIndex);
+            Debug.Assert(this.IsBufferEmpty, "Buffer not empty.");
 
             this.bufferEndIndex = this.reader.Read(this.buffer, 0, BufferSize);
             this.bufferIndex = 0;
@@ -412,6 +412,7 @@ namespace Kent.Boogaart.KBCsv
 
                 var result = new string[this.valueEndIndex];
                 Array.Copy(this.values, 0, result, 0, this.valueEndIndex);
+
                 return result;
             }
 
@@ -422,6 +423,7 @@ namespace Kent.Boogaart.KBCsv
                 var result = new string[this.valueEndIndex + 1];
                 Array.Copy(this.values, 0, result, 0, this.valueEndIndex);
                 result[this.valueEndIndex] = extra;
+
                 return result;
             }
 
@@ -511,6 +513,9 @@ namespace Kent.Boogaart.KBCsv
             {
                 // since the value includes at least one extraneous character, we can't simply grab it straight out of the parser's buffer
                 // therefore, we copy what we have demarcated so far into our local buffer and use that instead
+                // TODO: that this results in an unnecessary performance hit for a fairly common scenario where data is delimited unnecessarily such as: "foo","bar"
+                // in this scenario, the closing delimiter will result in this method being called and the data being copied from the parser's buffer to our local buffer, even though
+                // it is likely contiguous within the parser's buffer. Have tried a couple of things to get around this, but it's resulted in awful code that I'd rather not have
                 this.CopyBufferDemarcationToLocalBuffer();
             }
 
@@ -523,8 +528,8 @@ namespace Kent.Boogaart.KBCsv
                 this.bufferStartIndex = 0;
             }
 
-            // get the value built by the value builder
-            public override string ToString()
+            // gets the value built by the value builder
+            public string GetValue()
             {
                 if (this.localBufferLength == 0)
                 {
@@ -594,7 +599,6 @@ namespace Kent.Boogaart.KBCsv
 
                     // copy what we demarcated in the parser's buffer into our local buffer
                     Array.Copy(this.parser.buffer, this.bufferStartIndex, this.localBuffer, this.localBufferLength, this.bufferLength);
-
                     this.localBufferLength += this.bufferLength;
 
                     // reset the demarcation of the parser's buffer back to nothing
@@ -604,7 +608,7 @@ namespace Kent.Boogaart.KBCsv
 
             private void EnsureLocalBufferHasSufficientCapacity(int extraCapacityRequired)
             {
-                Debug.Assert(this.localBuffer.Length >= BufferSize, "Local buffer is smaller than parser buffer.", "This method is not correct unless this assertion holds true. This saves having to do a Math.Max call to determine the new buffer size.");
+                Debug.Assert(this.localBuffer.Length >= BufferSize, "Local buffer is smaller than parser buffer, which is not supported by this method.");
 
                 if ((this.localBufferLength + extraCapacityRequired) > this.localBuffer.Length)
                 {

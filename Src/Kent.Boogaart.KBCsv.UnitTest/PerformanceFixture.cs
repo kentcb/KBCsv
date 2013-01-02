@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Kent.Boogaart.KBCsv.UnitTest.Utility;
 using Xunit;
+using Xunit.Extensions;
 
 namespace Kent.Boogaart.KBCsv.UnitTest
 {
     public sealed class PerformanceFixture
     {
-
-// latest: old is around 5s, new is around 5.5s
-[Fact]
+[Fact(Skip = "Temporary test")]
 public void compare_old_to_new()
 {
     var repeatCount = 100000;
@@ -20,7 +19,7 @@ public void compare_old_to_new()
     {
         while (csvReader.HasMoreRecords)
         {
-            csvReader.ReadDataRecord();
+            csvReader.ReadDataRecordAsStrings();
         }
 
         Assert.Equal(20 * repeatCount, csvReader.RecordNumber);
@@ -33,7 +32,7 @@ public void compare_old_to_new()
 
         while (csvReader.HasMoreRecords)
         {
-            csvReader.ReadDataRecord();
+            csvReader.ReadDataRecordAsStrings();
         }
 
         stopwatch.Stop();
@@ -44,14 +43,137 @@ public void compare_old_to_new()
     }
 }
 
-        [PerformanceTest]
-        public void read_stackoverflow_data()
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void read_plain_csv(WhiteSpacePreservation whiteSpacePreservation)
+        {
+            var repeatCount = 100000;
+
+            using (var textReader = new EnumerableStringReader(this.PlainData.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.ReadDataRecord();
+                }
+
+                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
+            }
+        }
+
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void skip_plain_csv(WhiteSpacePreservation whiteSpacePreservation)
+        {
+            var repeatCount = 100000;
+
+            using (var textReader = new EnumerableStringReader(this.PlainData.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.SkipRecord();
+                }
+
+                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
+            }
+        }
+
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void read_csv_with_copious_whitespace(WhiteSpacePreservation whiteSpacePreservation)
+        {
+            var repeatCount = 100000;
+
+            using (var textReader = new EnumerableStringReader(this.CopiousWhitespace.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.ReadDataRecord();
+                }
+
+                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
+            }
+        }
+
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void skip_csv_with_copious_whitespace(WhiteSpacePreservation whiteSpacePreservation)
+        {
+            var repeatCount = 100000;
+
+            using (var textReader = new EnumerableStringReader(this.CopiousWhitespace.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.SkipRecord();
+                }
+
+                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
+            }
+        }
+
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void read_csv_with_copious_escaped_delimiters(WhiteSpacePreservation whiteSpacePreservation)
+        {
+            var repeatCount = 100000;
+
+            using (var textReader = new EnumerableStringReader(this.CopiousEscapedDelimiters.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.ReadDataRecord();
+                }
+
+                Assert.Equal(repeatCount, csvReader.RecordNumber);
+            }
+        }
+
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void skip_csv_with_copious_escaped_delimiters(WhiteSpacePreservation whiteSpacePreservation)
+        {
+            var repeatCount = 100000;
+
+            using (var textReader = new EnumerableStringReader(this.CopiousEscapedDelimiters.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.SkipRecord();
+                }
+
+                Assert.Equal(repeatCount, csvReader.RecordNumber);
+            }
+        }
+
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void read_stackoverflow_csv(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 30000;
 
             using (var textReader = new EnumerableStringReader(this.StackoverflowData.Repeat(repeatCount)))
             using (var csvReader = new CsvReader(textReader))
             {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
                 while (csvReader.HasMoreRecords)
                 {
                     csvReader.ReadDataRecord();
@@ -61,14 +183,17 @@ public void compare_old_to_new()
             }
         }
 
-        [PerformanceTest]
-        public void skip_stackoverflow_data()
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void skip_stackoverflow_csv(WhiteSpacePreservation whiteSpacePreservation)
         {
-            var repeatCount = 200000;
+            var repeatCount = 30000;
 
             using (var textReader = new EnumerableStringReader(this.StackoverflowData.Repeat(repeatCount)))
             using (var csvReader = new CsvReader(textReader))
             {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
                 while (csvReader.HasMoreRecords)
                 {
                     csvReader.SkipRecord();
@@ -78,32 +203,16 @@ public void compare_old_to_new()
             }
         }
 
-        [PerformanceTest]
-        public void read_plain_csv_all_whitespace_unpreserved()
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void read_csv_with_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
 
-            using (var textReader = new EnumerableStringReader(this.PlainData.Repeat(repeatCount)))
+            using (var textReader = new EnumerableStringReader(this.DelimitedData.Repeat(repeatCount)))
             using (var csvReader = new CsvReader(textReader))
             {
-                while (csvReader.HasMoreRecords)
-                {
-                    csvReader.ReadDataRecord();
-                }
-
-                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
-            }
-        }
-
-        [PerformanceTest]
-        public void read_plain_csv_leading_whitespace_preserved()
-        {
-            var repeatCount = 100000;
-
-            using (var textReader = new EnumerableStringReader(this.PlainData.Repeat(repeatCount)))
-            using (var csvReader = new CsvReader(textReader))
-            {
-                csvReader.PreserveLeadingWhiteSpace = true;
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
 
                 while (csvReader.HasMoreRecords)
                 {
@@ -114,15 +223,36 @@ public void compare_old_to_new()
             }
         }
 
-        [PerformanceTest]
-        public void read_plain_csv_trailing_whitespace_preserved()
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void skip_csv_with_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
 
-            using (var textReader = new EnumerableStringReader(this.PlainData.Repeat(repeatCount)))
+            using (var textReader = new EnumerableStringReader(this.DelimitedData.Repeat(repeatCount)))
             using (var csvReader = new CsvReader(textReader))
             {
-                csvReader.PreserveTrailingWhiteSpace = true;
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
+                while (csvReader.HasMoreRecords)
+                {
+                    csvReader.SkipRecord();
+                }
+
+                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
+            }
+        }
+
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void read_csv_with_unnecessary_delimiters(WhiteSpacePreservation whiteSpacePreservation)
+        {
+            var repeatCount = 100000;
+
+            using (var textReader = new EnumerableStringReader(this.UnnecessarilyDelimitedData.Repeat(repeatCount)))
+            using (var csvReader = new CsvReader(textReader))
+            {
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
 
                 while (csvReader.HasMoreRecords)
                 {
@@ -133,115 +263,23 @@ public void compare_old_to_new()
             }
         }
 
-        [PerformanceTest]
-        public void read_plain_csv_all_whitespace_preserved()
+        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        public void skip_csv_with_unnecessary_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
 
-            using (var textReader = new EnumerableStringReader(this.PlainData.Repeat(repeatCount)))
+            using (var textReader = new EnumerableStringReader(this.UnnecessarilyDelimitedData.Repeat(repeatCount)))
             using (var csvReader = new CsvReader(textReader))
             {
-                csvReader.PreserveLeadingWhiteSpace = true;
-                csvReader.PreserveTrailingWhiteSpace = true;
-                
+                csvReader.PreserveLeadingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Leading);
+                csvReader.PreserveTrailingWhiteSpace = whiteSpacePreservation.HasFlag(WhiteSpacePreservation.Trailing);
+
                 while (csvReader.HasMoreRecords)
                 {
-                    csvReader.ReadDataRecord();
+                    csvReader.SkipRecord();
                 }
 
                 Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
-            }
-        }
-
-        [PerformanceTest]
-        public void read_csv_with_copious_all_whitespace_unpreserved()
-        {
-            var repeatCount = 100000;
-
-            using (var textReader = new EnumerableStringReader(this.CopiousWhitespace.Repeat(repeatCount)))
-            using (var csvReader = new CsvReader(textReader))
-            {
-                while (csvReader.HasMoreRecords)
-                {
-                    csvReader.ReadDataRecord();
-                }
-
-                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
-            }
-        }
-
-        [PerformanceTest]
-        public void read_csv_with_copious_leading_whitespace_preserved()
-        {
-            var repeatCount = 100000;
-
-            using (var textReader = new EnumerableStringReader(this.CopiousWhitespace.Repeat(repeatCount)))
-            using (var csvReader = new CsvReader(textReader))
-            {
-                csvReader.PreserveLeadingWhiteSpace = true;
-
-                while (csvReader.HasMoreRecords)
-                {
-                    csvReader.ReadDataRecord();
-                }
-
-                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
-            }
-        }
-
-        [PerformanceTest]
-        public void read_csv_with_copious_trailing_whitespace_preserved()
-        {
-            var repeatCount = 100000;
-
-            using (var textReader = new EnumerableStringReader(this.CopiousWhitespace.Repeat(repeatCount)))
-            using (var csvReader = new CsvReader(textReader))
-            {
-                csvReader.PreserveTrailingWhiteSpace = true;
-
-                while (csvReader.HasMoreRecords)
-                {
-                    csvReader.ReadDataRecord();
-                }
-
-                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
-            }
-        }
-
-        [PerformanceTest]
-        public void read_csv_with_copious_all_whitespace_preserved()
-        {
-            var repeatCount = 100000;
-
-            using (var textReader = new EnumerableStringReader(this.CopiousWhitespace.Repeat(repeatCount)))
-            using (var csvReader = new CsvReader(textReader))
-            {
-                csvReader.PreserveLeadingWhiteSpace = true;
-                csvReader.PreserveTrailingWhiteSpace = true;
-
-                while (csvReader.HasMoreRecords)
-                {
-                    csvReader.ReadDataRecord();
-                }
-
-                Assert.Equal(3 * repeatCount, csvReader.RecordNumber);
-            }
-        }
-
-        [PerformanceTest]
-        public void read_csv_with_copious_escaped_delimiters_all_whitespace_unpreserved()
-        {
-            var repeatCount = 1000000;
-
-            using (var textReader = new EnumerableStringReader(this.CopiousEscapedDelimiters.Repeat(repeatCount)))
-            using (var csvReader = new CsvReader(textReader))
-            {
-                while (csvReader.HasMoreRecords)
-                {
-                    csvReader.ReadDataRecord();
-                }
-
-                Assert.Equal(repeatCount, csvReader.RecordNumber);
             }
         }
 
@@ -275,6 +313,32 @@ public void compare_old_to_new()
             }
         }
 
+        private IEnumerable<string> DelimitedData
+        {
+            get
+            {
+                yield return @"""She said ""hello"""",""first,second,third"",""a value over
+two lines""" + Environment.NewLine;
+                yield return @"""He said ""hi there"""",""fourth,fifth,sixth"",""a value over
+three
+lines""" + Environment.NewLine;
+                yield return @"""She said ""what's up?"""",""seventh,eighth,ninth,tenth"",""a value
+over
+four
+lines""" + Environment.NewLine;
+            }
+        }
+
+        private IEnumerable<string> UnnecessarilyDelimitedData
+        {
+            get
+            {
+                yield return @"""first"",""second"",""third fourth fifth""" + Environment.NewLine;
+                yield return @"""1"",""2"",""3 4 5""" + Environment.NewLine;
+                yield return @"""abc"",""def"",""ghijklmnoopqrstuvwxyz - 0123456789""" + Environment.NewLine;
+            }
+        }
+
         private IEnumerable<string> StackoverflowData
         {
             get
@@ -304,6 +368,7 @@ public void compare_old_to_new()
 
         // TODO:
         // delimited data
+        // data delimited unnecessarily
         // complex data (with multi-lines, delimited, whitespace et cetera)
         // do a skip permutation for all tests
 

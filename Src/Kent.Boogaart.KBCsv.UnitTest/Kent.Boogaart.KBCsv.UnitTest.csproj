@@ -53,13 +53,15 @@
     <Compile Include="DataRecordTest.cs" />
     <Compile Include="Entry.cs" />
     <Compile Include="HeaderRecordTest.cs" />
+    <Compile Include="Issues\Issue12693.cs" />
     <Compile Include="Utility\EnumerableStringReader.cs" />
     <Compile Include="PerformanceFixture.cs" />
     <Compile Include="RecordBaseTest.cs" />
     <Compile Include="Issues\Issue12271.cs" />
     <Compile Include="Utility\Extensions.cs" />
-    <Compile Include="Utility\PerformanceTestAttribute.cs" />
-    <Compile Include="Utility\PerformanceTestCommand.cs" />
+    <Compile Include="Utility\ReadPerformanceTestAttribute.cs" />
+    <Compile Include="Utility\ReadPerformanceTestCommand.cs" />
+    <Compile Include="Utility\WhiteSpacePreservation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
