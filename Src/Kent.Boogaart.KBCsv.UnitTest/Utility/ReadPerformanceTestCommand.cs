@@ -32,7 +32,7 @@
             stopwatch.Stop();
 
             // put the time taken into the pass result
-            return new PassedResult(this.testMethod, string.Format("{0} with white space preservation '{1}': {1}ms", this.testMethod.Name, this.whiteSpacePreservation, stopwatch.ElapsedMilliseconds));
+            return new PassedResult(this.testMethod, string.Format("{0} with white space preservation '{1}': {2}ms", this.testMethod.Name, this.whiteSpacePreservation, stopwatch.ElapsedMilliseconds));
         }
     }
 }
