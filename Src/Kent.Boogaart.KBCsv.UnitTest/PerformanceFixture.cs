@@ -1,49 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using Kent.Boogaart.KBCsv.UnitTest.Utility;
-using Xunit;
-using Xunit.Extensions;
-
-namespace Kent.Boogaart.KBCsv.UnitTest
+﻿namespace Kent.Boogaart.KBCsv.UnitTest
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using Kent.Boogaart.KBCsv.UnitTest.Utility;
+    using Xunit;
+    using Xunit.Extensions;
+
     public sealed class PerformanceFixture
     {
-[Fact(Skip = "Temporary test")]
-public void compare_old_to_new()
-{
-    var repeatCount = 100000;
-
-    using (var textReader = new EnumerableStringReader(this.StackoverflowData.Repeat(repeatCount)))
-    using (var csvReader = new CsvReader(textReader))
-    {
-        while (csvReader.HasMoreRecords)
-        {
-            csvReader.ReadDataRecordAsStrings();
-        }
-
-        Assert.Equal(20 * repeatCount, csvReader.RecordNumber);
-    }
-
-    using (var textReader = new EnumerableStringReader(this.StackoverflowData.Repeat(repeatCount)))
-    using (var csvReader = new CsvReader(textReader))
-    {
-        var stopwatch = Stopwatch.StartNew();
-
-        while (csvReader.HasMoreRecords)
-        {
-            csvReader.ReadDataRecordAsStrings();
-        }
-
-        stopwatch.Stop();
-
-        Assert.Equal(20 * repeatCount, csvReader.RecordNumber);
-
-        Console.WriteLine("Done: {0}ms", stopwatch.ElapsedMilliseconds);
-    }
-}
-
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void read_plain_csv(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -63,7 +30,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void skip_plain_csv(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -83,7 +51,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void read_csv_with_copious_whitespace(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -103,7 +72,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void skip_csv_with_copious_whitespace(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -123,7 +93,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void read_csv_with_copious_escaped_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -143,7 +114,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void skip_csv_with_copious_escaped_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -163,7 +135,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void read_stackoverflow_csv(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 30000;
@@ -183,7 +156,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void skip_stackoverflow_csv(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 30000;
@@ -203,7 +177,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void read_csv_with_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -223,7 +198,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void skip_csv_with_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -243,7 +219,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void read_csv_with_unnecessary_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;
@@ -263,7 +240,8 @@ public void compare_old_to_new()
             }
         }
 
-        [ReadPerformanceTest(Skip = "Performance tests skipped by default.")]
+        [ReadPerformanceTest]
+        [Trait("Slow-running", "true")]
         public void skip_csv_with_unnecessary_delimiters(WhiteSpacePreservation whiteSpacePreservation)
         {
             var repeatCount = 100000;

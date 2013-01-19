@@ -1,149 +1,251 @@
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using Kent.Boogaart.HelperTrinity.Extensions;
-
 namespace Kent.Boogaart.KBCsv
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Text;
+    using Kent.Boogaart.HelperTrinity.Extensions;
+
     /// <summary>
-    /// A base class for CSV record types.
+    /// A base class for CSV records.
     /// </summary>
     /// <remarks>
-    /// The CSV record types <see cref="HeaderRecord"/> and <see cref="DataRecord"/> obtain common functionality by inheriting from this class.
+    /// <para>
+    /// A record consists of zero or more non-<see langword="null"/> <see cref="string"/> values, which are accessible via their index. <see cref="Count"/> returns the number of values in the record.
+    /// A record may be read-only, as indicated by the <see cref="IsReadOnly"/> property. Read-only records will throw an exception if any attempt is made to modify the record,
+    /// such as by calling <see cref="Add"/> or <see cref="Remove"/>.
+    /// </para>
     /// </remarks>
-#if !SILVERLIGHT
-    [Serializable]
-#endif
-    public abstract class RecordBase
+    public abstract class RecordBase : IEnumerable<string>, IList<string>, IEquatable<RecordBase>
     {
-        /// <summary>
-        /// See <see cref="Values"/>.
-        /// </summary>
-        private IList<string> _values;
+        private const char ValueSeparator = (char)0x2022;
+        private readonly IList<string> values;
 
         /// <summary>
-        /// The character used to separator values in the <see cref="ToString"/> implementation
-        /// </summary>
-        public const char ValueSeparator = (char) 0x2022;
-
-        /// <summary>
-        /// Gets the value at the specified index for this CSV record.
-        /// </summary>
-        public string this[int index]
-        {
-            get
-            {
-                return _values[index];
-            }
-            set
-            {
-                _values[index] = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets a collection of values in this CSV record.
-        /// </summary>
-        public IList<string> Values
-        {
-            get
-            {
-                return _values;
-            }
-        }
-
-        /// <summary>
-        /// Initialises an instance of <c>RecordBase</c> with no values.
-        /// </summary>
-        protected RecordBase()
-        {
-            _values = new List<string>();
-        }
-
-        /// <summary>
-        /// Initialises an instance of the <c>RecordBase</c> class with the values specified.
+        /// Initializes a new instance of the RecordBase class.
         /// </summary>
         /// <param name="values">
-        /// The values for the CSV record.
-        /// </param>
-        protected RecordBase(IEnumerable<string> values)
-            : this(values, false)
-        {
-        }
-
-        /// <summary>
-        /// Initialises an instance of the <c>RecordBase</c> class with the values specified, optionally making the value collection read-only.
-        /// </summary>
-        /// <param name="values">
-        /// The values for the CSV record.
+        /// The values comprising the record.
         /// </param>
         /// <param name="readOnly">
-        /// If <see langword="true"/>, the value collection will be read-only.
+        /// <see langword="true"/> if the record is read-only, otherwise <see langword="false"/>.
         /// </param>
         protected RecordBase(IEnumerable<string> values, bool readOnly)
         {
-            values.AssertNotNull("values");
-
-            _values = new List<string>(values);
+            this.values = new List<string>(values);
 
             if (readOnly)
             {
-                //just use the wrapper readonly collection
-                _values = new ReadOnlyCollection<string>(_values);
+                this.values = new ReadOnlyCollection<string>(this.values);
+            }
+        }
+
+        // used internally by the parser to speed up the creation of parsed records
+        internal RecordBase(IList<string> values)
+        {
+            Debug.Assert(values != null, "Expecting non-null values.");
+            Debug.Assert(values.IsReadOnly, "Expecting only read-only values.");
+
+            this.values = values;
+        }
+
+        /// <summary>
+        /// Gets or sets a value in this record by index.
+        /// </summary>
+        /// <param name="index">
+        /// The index of the value to retrieve.
+        /// </param>
+        /// <returns>
+        /// The value at the specified index.
+        /// </returns>
+        public virtual string this[int index]
+        {
+            get
+            {
+                return this.values[index];
+            }
+
+            set
+            {
+                value.AssertNotNull("value");
+                var oldValue = this.values[index];
+                this.values[index] = value;
             }
         }
 
         /// <summary>
-        /// Gets the value at the specified index, or <see langword="null"/> if the index is invalid.
+        /// Gets a value indicating whether this record is read-only.
         /// </summary>
-        /// <param name="index">
-        /// The index.
-        /// </param>
-        /// <returns>
-        /// The value, or <see langword="null"/>.
-        /// </returns>
-        public string GetValueOrNull(int index)
+        public bool IsReadOnly
         {
-            return _values.ElementAtOrDefault(index);
+            get { return this.values.IsReadOnly; }
         }
 
         /// <summary>
-        /// Determines whether this <c>RecordBase</c> is equal to <paramref name="obj"/>.
+        /// Gets the number of values in this record.
         /// </summary>
-        /// <remarks>
-        /// Two <c>RecordBase</c> instances are considered equal if they contain the same number of values, and each of their corresponding values are also
-        /// equal.
-        /// </remarks>
-        /// <param name="obj">
-        /// The object to compare to this <c>RecordBase</c>.
+        public int Count
+        {
+            get { return this.values.Count; }
+        }
+
+        /// <summary>
+        /// Gets a value at the specified index, or <see langword="null"/> if the index is invalid.
+        /// </summary>
+        /// <param name="index">
+        /// The index of the value to retrieve.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if <paramref name="obj"/> is equal to this <c>RecordBase</c>, otherwise <see langword="false"/>.
+        /// The value at the specified index, or <see langword="null"/> if the index is not valid.
         /// </returns>
-        public override bool Equals(object obj)
+        public string GetValueOrNull(int index)
         {
-            if (object.ReferenceEquals(obj, this))
+            if (index >= 0 && index < this.values.Count)
+            {
+                return this.values[index];
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Clears all values in this record.
+        /// </summary>
+        public virtual void Clear()
+        {
+            this.values.Clear();
+        }
+
+        /// <summary>
+        /// Determines whether this record contains the specified value.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if this record contains <paramref name="value"/>, otherwise <see langword="false"/>.
+        /// </returns>
+        public bool Contains(string value)
+        {
+            value.AssertNotNull("value");
+            return this.values.Contains(value);
+        }
+
+        /// <summary>
+        /// Determines the index of the specified value within this record.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        /// <returns>
+        /// The index of the value, or <c>-1</c> if the value does not exist in this record.
+        /// </returns>
+        public int IndexOf(string value)
+        {
+            return this.values.IndexOf(value);
+        }
+
+        /// <summary>
+        /// Adds the specified value to this record.
+        /// </summary>
+        /// <param name="value">
+        /// The value.
+        /// </param>
+        public virtual void Add(string value)
+        {
+            value.AssertNotNull("value");
+            this.values.Add(value);
+        }
+
+        /// <summary>
+        /// Inserts the specified value into this record.
+        /// </summary>
+        /// <param name="index">
+        /// The index at which to insert the value.
+        /// </param>
+        /// <param name="value">
+        /// The value to insert.
+        /// </param>
+        public virtual void Insert(int index, string value)
+        {
+            value.AssertNotNull("value");
+            this.values.Insert(index, value);
+        }
+
+        /// <summary>
+        /// Removes the specified value from this record.
+        /// </summary>
+        /// <param name="value">
+        /// The value to remove.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the value was removed, otherwise <see langword="false"/>.
+        /// </returns>
+        public virtual bool Remove(string value)
+        {
+            value.AssertNotNull("value");
+            return this.values.Remove(value);
+        }
+
+        /// <summary>
+        /// Removes the value at the specified index.
+        /// </summary>
+        /// <param name="index">
+        /// The index of the value to remove.
+        /// </param>
+        public virtual void RemoveAt(int index)
+        {
+            var value = this.values[index];
+            this.values.RemoveAt(index);
+        }
+
+        /// <summary>
+        /// Copies the values in this record to the specified array.
+        /// </summary>
+        /// <param name="array">
+        /// The array.
+        /// </param>
+        /// <param name="arrayIndex">
+        /// The starting index in the array to which values will be copied.
+        /// </param>
+        public void CopyTo(string[] array, int arrayIndex)
+        {
+            this.values.CopyTo(array, arrayIndex);
+        }
+
+        /// <summary>
+        /// Determines whether this record is equal to another.
+        /// </summary>
+        /// <remarks>
+        /// Records are considered equal if they have the same number of values, and every corresponding value is equal.
+        /// </remarks>
+        /// <param name="other">
+        /// The other record.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the records are equal, otherwise <see langword="false"/>.
+        /// </returns>
+        public bool Equals(RecordBase other)
+        {
+            if (other == null)
+            {
+                return false;
+            }
+
+            if (object.ReferenceEquals(other, this))
             {
                 return true;
             }
 
-            var record = obj as RecordBase;
-
-            if (record == null)
+            if (values.Count != other.values.Count)
             {
                 return false;
             }
 
-            if (_values.Count != record._values.Count)
+            for (var i = 0; i < values.Count; ++i)
             {
-                return false;
-            }
-
-            for (var i = 0; i < _values.Count; ++i)
-            {
-                if (_values[i] != record._values[i])
+                if (!string.Equals(values[i], other.values[i], StringComparison.CurrentCulture))
                 {
                     return false;
                 }
@@ -152,44 +254,48 @@ namespace Kent.Boogaart.KBCsv
             return true;
         }
 
-        /// <summary>
-        /// Gets a hash code for this <c>RecordBase</c>.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this <c>RecordBase</c>.
-        /// </returns>
-        public override int GetHashCode()
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
         {
-            var retVal = 17;
-
-            for (var i = 0; i < _values.Count; ++i)
-            {
-                retVal += _values[i].GetHashCode();
-            }
-
-            return retVal;
+            return this.Equals(obj as RecordBase);
         }
 
-        /// <summary>
-        /// Returns a <c>string</c> representation of this CSV record.
-        /// </summary>
-        /// <remarks>
-        /// This method is provided for debugging and diagnostics only. Each value in the record is present in the returned string, with a bullet
-        /// character (<c>U+2022</c>) separating them.
-        /// </remarks>
-        /// <returns>
-        /// A <c>string</c> representation of this record.
-        /// </returns>
+        /// <inheritdoc/>
+        public override int GetHashCode()
+        {
+            var hash = 17;
+
+            for (var i = 0; i < values.Count; ++i)
+            {
+                hash = hash * 23 + values[i].GetHashCode();
+            }
+
+            return hash;
+        }
+
+        /// <inheritdoc/>
         public sealed override string ToString()
         {
             var retVal = new StringBuilder();
 
-            foreach (var val in _values)
+            foreach (var val in values)
             {
                 retVal.Append(val).Append(ValueSeparator);
             }
 
             return retVal.ToString();
+        }
+
+        /// <inheritdoc/>
+        IEnumerator<string> IEnumerable<string>.GetEnumerator()
+        {
+            return this.values.GetEnumerator();
+        }
+
+        /// <inheritdoc/>
+        System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+        {
+            return this.values.GetEnumerator();
         }
     }
 }

@@ -1,213 +1,199 @@
-using System;
-using System.Collections.Generic;
-using Kent.Boogaart.HelperTrinity;
-using Kent.Boogaart.HelperTrinity.Extensions;
-
 namespace Kent.Boogaart.KBCsv
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Kent.Boogaart.HelperTrinity;
+
     /// <summary>
-    /// Represents a single CSV data record.
+    /// Represents a data record in a CSV file.
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Instances of this class are used to represent a record of CSV data. Each record has any number of values in it, accessible via the indexers in
-    /// this class.
-    /// </para>
-    /// <para>
-    /// If the CSV data source that this record originates from had a header record initialised, it is exposed via the <see cref="HeaderRecord"/>
-    /// property.
+    /// A <c>DataRecord</c> represents a CSV record that is not the header record. Values in the data record can be accessed by their index. A data record can have an associated
+    /// <see cref="T:HeaderRecord"/> (exposed via <see cref="HeaderRecord"/>), in which case values in the data record may also be accessed via a column name.
     /// </para>
     /// </remarks>
-#if !SILVERLIGHT
-    [Serializable]
-#endif
-    public sealed class DataRecord : RecordBase
+    public sealed class DataRecord : RecordBase, IEquatable<DataRecord>
     {
-        private static readonly ExceptionHelper _exceptionHelper = new ExceptionHelper(typeof(DataRecord));
+        private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(DataRecord));
+        private readonly HeaderRecord headerRecord;
 
         /// <summary>
-        /// See <see cref="HeaderRecord"/>.
-        /// </summary>
-        private HeaderRecord _headerRecord;
-
-        /// <summary>
-        /// Gets the header record for this CSV record, or <see langword="null"/> if no header record applies.
+        /// Initializes a new instance of the DataRecord class.
         /// </summary>
         /// <remarks>
-        /// If no header record was initially read from the CSV data source, then this property yields <see langword="null"/>. Otherwise, it yields the
-        /// <see cref="HeaderRecord"/> instance that contains the details of the header record.
+        /// The resultant data record will have no values, but is not read-only.
         /// </remarks>
-        public HeaderRecord HeaderRecord
+        public DataRecord()
+            : base(Enumerable.Empty<string>(), false)
         {
-            get
-            {
-                return _headerRecord;
-            }
         }
 
         /// <summary>
-        /// Gets a value in this CSV record by column name.
+        /// Initializes a new instance of the DataRecord class.
         /// </summary>
         /// <remarks>
-        /// This indexer can be used to retrieve a record value by column name. It is only possible to do so if the header record was initialised in the
-        /// CSV data source. If not, <see cref="HeaderRecord"/> will be <see langword="null"/> and this indexer will throw an exception if used.
+        /// The resultant data record will have no values, but is not read-only. It will use the specified <see cref="T:HeaderRecord"/> (which will therefore
+        /// be returned from <see cref="HeaderRecord"/>).
         /// </remarks>
-        public string this[string column]
-        {
-            get
-            {
-                _exceptionHelper.ResolveAndThrowIf(_headerRecord == null, "no-header-record");
-                return Values[_headerRecord[column]];
-            }
-        }
-
-        /// <summary>
-        /// Creates and returns an instance of <c>DataRecord</c> by parsing with the provided CSV parser.
-        /// </summary>
-        /// <param name="headerRecord">
-        /// The header record for the parsed data record, or <see langword="null"/> if irrelevant.
-        /// </param>
-        /// <param name="parser">
-        /// The CSV parser to use.
-        /// </param>
-        /// <returns>
-        /// The CSV record, or <see langword="null"/> if no record was found in the reader provided.
-        /// </returns>
-        internal static DataRecord FromParser(HeaderRecord headerRecord, CsvParser parser)
-        {
-            DataRecord retVal = null;
-            var values = parser.ParseRecord();
-
-            if (values != null)
-            {
-                retVal = new DataRecord(headerRecord, values, true);
-            }
-
-            return retVal;
-        }
-
-        /// <summary>
-        /// Constructs an instance of <c>DataRecord</c> with the header specified.
-        /// </summary>
-        /// <param name="headerRecord">
-        /// The header record for this CSV record, or <see langword="null"/> if no header record applies.
-        /// </param>
         public DataRecord(HeaderRecord headerRecord)
+            : this(headerRecord, Enumerable.Empty<string>(), false)
         {
-            _headerRecord = headerRecord;
         }
 
         /// <summary>
-        /// Constructs an instance of <c>DataRecord</c> with the header and values specified.
+        /// Initializes a new instance of the DataRecord class.
         /// </summary>
-        /// <param name="headerRecord">
-        /// The header record for this CSV record, or <see langword="null"/> if no header record applies.
-        /// </param>
-        /// <param name="values">
-        /// The values for this CSV record.
-        /// </param>
+        /// <remarks>
+        /// The resultant data record will the specified values, and is not read-only. It will use the specified <see cref="T:HeaderRecord"/> (which will therefore
+        /// be returned from <see cref="HeaderRecord"/>).
+        /// </remarks>
         public DataRecord(HeaderRecord headerRecord, IEnumerable<string> values)
             : this(headerRecord, values, false)
         {
         }
 
         /// <summary>
-        /// Constructs an instance of <c>DataRecord</c> with the header and values specified, optionally making the values in this data record
-        /// read-only.
+        /// Initializes a new instance of the DataRecord class.
         /// </summary>
-        /// <param name="headerRecord">
-        /// The header record for this CSV record, or <see langword="null"/> if no header record applies.
-        /// </param>
-        /// <param name="values">
-        /// The values for this CSV record.
-        /// </param>
-        /// <param name="readOnly">
-        /// If <see langword="true"/>, the values in this data record are read-only.
-        /// </param>
+        /// <remarks>
+        /// The resultant data record will have the specified values, and may or may not be read-only. It will use the specified <see cref="T:HeaderRecord"/> (which will therefore
+        /// be returned from <see cref="HeaderRecord"/>).
+        /// </remarks>
         public DataRecord(HeaderRecord headerRecord, IEnumerable<string> values, bool readOnly)
             : base(values, readOnly)
         {
-            _headerRecord = headerRecord;
+            this.headerRecord = headerRecord;
         }
 
-        /// <summary>
-        /// Gets the value in the specified column, or <see langword="null"/> if the value does not exist.
-        /// </summary>
-        /// <param name="column">
-        /// The column name.
-        /// </param>
-        /// <returns>
-        /// The value, or <see langword="null"/> if the value does not exist for this record.
-        /// </returns>
-        public string GetValueOrNull(string column)
+        // used internally by the parser to speed up the creation of parsed records
+        internal DataRecord(HeaderRecord headerRecord, IList<string> values)
+            : base(values)
         {
-            column.AssertNotNull("column");
-            _exceptionHelper.ResolveAndThrowIf(_headerRecord == null, "no-header-record");
-            return GetValueOrNull(_headerRecord.IndexOf(column));
+            this.headerRecord = headerRecord;
         }
 
         /// <summary>
-        /// Determines whether this <c>DataRecord</c> is equal to <paramref name="obj"/>.
+        /// Gets the <see cref="T:HeaderRecord"/> in use by this data record.
         /// </summary>
         /// <remarks>
-        /// Two <c>DataRecord</c> instances are considered equal if all their values are equal and their header records are equal.
+        /// In order to get or set values in a data record via their column name, a header record must be provided. This property gets the <see cref="T:HeaderRecord"/> that
+        /// this data record uses to resolve column indexes given a column name.
         /// </remarks>
-        /// <param name="obj">
-        /// The object to compare to this <c>DataRecord</c>.
+        public HeaderRecord HeaderRecord
+        {
+            get { return this.headerRecord; }
+        }
+
+        /// <summary>
+        /// Gets or sets a value in this data record by its column name.
+        /// </summary>
+        /// <param name="columnName">
+        /// The name of the column.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if this <c>DataRecord</c> equals <paramref name="obj"/>, otherwise <see langword="false"/>.
+        /// The value in the specified column.
         /// </returns>
-        public override bool Equals(object obj)
+        public string this[string columnName]
         {
-            if (object.ReferenceEquals(obj, this))
+            get
             {
-                return true;
+                exceptionHelper.ResolveAndThrowIf(this.headerRecord == null, "noHeader");
+                return this[this.headerRecord[columnName]];
             }
 
-            var record = obj as DataRecord;
+            set
+            {
+                exceptionHelper.ResolveAndThrowIf(this.headerRecord == null, "noHeader");
+                this[this.headerRecord[columnName]] = value;
+            }
+        }
 
-            if (record == null)
+        /// <summary>
+        /// Gets a value in this data record given the column name, or <see langword="null"/> if the specified column does not exist, or if there is no value in this data record at the column's index.
+        /// </summary>
+        /// <param name="columnName">
+        /// The name of the column.
+        /// </param>
+        /// <returns>
+        /// The value in the specified column, or <see langword="null"/> if the column does not exist, or if there is no value in this data record at the column's index.
+        /// </returns>
+        public string GetValueOrNull(string columnName)
+        {
+            exceptionHelper.ResolveAndThrowIf(this.headerRecord == null, "noHeader");
+            var columnIndex = this.headerRecord.GetColumnIndexOrNull(columnName);
+
+            if (columnIndex.HasValue)
+            {
+                // GetValueOrDefault is a performance tweak: since we know there's a value we can use it safely
+                return this.GetValueOrNull(columnIndex.GetValueOrDefault());
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Determines whether this data record is equal to another.
+        /// </summary>
+        /// <remarks>
+        /// Data records are considered equal if their <see cref="HeaderRecord"/>s are equal (or both absent), and if their values are equal.
+        /// </remarks>
+        /// <param name="other">
+        /// The other data record.
+        /// </param>
+        /// <returns>
+        /// <see langword="true"/> if the data records are equal, otherwise <see langword="false"/>.
+        /// </returns>
+        public bool Equals(DataRecord other)
+        {
+            if (other == null)
             {
                 return false;
             }
 
-            //this checks that all values are equal
-            if (!base.Equals(obj))
+            if (object.ReferenceEquals(other, this))
+            {
+                return true;
+            }
+
+            // this checks that all values are equal
+            if (!base.Equals(other))
             {
                 return false;
             }
 
-            if ((_headerRecord == null) && (record._headerRecord == null))
+            if ((this.headerRecord == null) && (other.headerRecord == null))
             {
-                //both have no header and equal values, therefore they are equal
+                // both have no header and equal values, therefore they are equal
                 return true;
             }
-            else if (((_headerRecord != null) && (record._headerRecord != null)) && (_headerRecord.Equals(record._headerRecord)))
+            else if (this.headerRecord != null && other.headerRecord != null && this.headerRecord.Equals(other.headerRecord))
             {
-                //both have equal headers and equal values, therefore they are equal
+                // both have equal headers and equal values, therefore they are equal
                 return true;
             }
 
             return false;
         }
 
-        /// <summary>
-        /// Gets a hash code for this <c>DataRecord</c>.
-        /// </summary>
-        /// <returns>
-        /// A hash code for this <c>DataRecord</c>.
-        /// </returns>
+        /// <inheritdoc/>
+        public override bool Equals(object obj)
+        {
+            return this.Equals(obj as DataRecord);
+        }
+
+        /// <inheritdoc/>
         public override int GetHashCode()
         {
-            var retVal = base.GetHashCode();
+            var hash = base.GetHashCode();
 
-            if (_headerRecord != null)
+            if (this.headerRecord != null)
             {
-                retVal = (int) Math.Pow(retVal, _headerRecord.GetHashCode());
+                hash = hash * 23 + this.headerRecord.GetHashCode();
             }
 
-            return retVal;
+            return hash;
         }
     }
 }

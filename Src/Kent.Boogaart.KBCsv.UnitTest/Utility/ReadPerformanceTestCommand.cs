@@ -1,9 +1,10 @@
-﻿using System;
-using System.Diagnostics;
-using Xunit.Sdk;
-
-namespace Kent.Boogaart.KBCsv.UnitTest.Utility
+﻿namespace Kent.Boogaart.KBCsv.UnitTest.Utility
 {
+    using System;
+    using System.Diagnostics;
+    using System.Threading;
+    using Xunit.Sdk;
+
     /// <summary>
     /// A command used to execute a performance test.
     /// </summary>
@@ -13,7 +14,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest.Utility
         private readonly WhiteSpacePreservation whiteSpacePreservation;
 
         public ReadPerformanceTestCommand(IMethodInfo method, WhiteSpacePreservation whiteSpacePreservation)
-            : base(method)
+            : base(method, method.Name, -1)
         {
             this.whiteSpacePreservation = whiteSpacePreservation;
         }
@@ -31,7 +32,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest.Utility
             stopwatch.Stop();
 
             // put the time taken into the pass result
-            return new PassedResult(this.testMethod, string.Format("With white space preservation '{0}': {1}ms", this.whiteSpacePreservation, stopwatch.ElapsedMilliseconds));
+            return new PassedResult(this.testMethod, string.Format("{0} with white space preservation '{1}': {1}ms", this.testMethod.Name, this.whiteSpacePreservation, stopwatch.ElapsedMilliseconds));
         }
     }
 }

@@ -2,14 +2,17 @@ using System;
 using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
+
+#if FX35
 using System.Security.Permissions;
+#endif
 
 [assembly: AssemblyCompany("Kent Boogaart")]
 [assembly: AssemblyProduct("KBCsv")]
-[assembly: AssemblyCopyright("© Copyright 2005. Kent Boogaart.")]
+[assembly: AssemblyCopyright("© Copyright. Kent Boogaart.")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("1.4.0.0")]
+[assembly: AssemblyVersion("2.0.0.0")]
 [assembly: CLSCompliant(true)]
 [assembly: ComVisible(false)]
 [assembly: NeutralResourcesLanguage("en-US")]

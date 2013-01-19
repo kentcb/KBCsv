@@ -1,11 +1,11 @@
-﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Sockets;
-using Xunit;
-
-namespace Kent.Boogaart.KBCsv.UnitTest.Issues
+﻿namespace Kent.Boogaart.KBCsv.UnitTest.Issues
 {
+    using System;
+    using System.IO;
+    using System.Net;
+    using System.Net.Sockets;
+    using Xunit;
+
     // This issue was caused by the following sequence of events:
     //  1. the StreamReader being used by the CsvParser notices it gets back less data than it asked for (mimicked in the fake server below by using a very small buffer)
     //  2. StreamReader therefore sets a flag indicating that it is blocked
@@ -33,10 +33,10 @@ namespace Kent.Boogaart.KBCsv.UnitTest.Issues
 
                 for (var value = 0; value < random.Next(100, 200); ++value)
                 {
-                    dataRecord.Values.Add("value" + random.Next(0, 100000));
+                    dataRecord.Add("value" + random.Next(0, 100000));
                 }
 
-                csvWriter.WriteDataRecord(dataRecord);
+                csvWriter.WriteRecord(dataRecord);
             }
 
             memoryStream.Position = 0;
@@ -48,7 +48,7 @@ namespace Kent.Boogaart.KBCsv.UnitTest.Issues
             {
                 while (csvReader.HasMoreRecords)
                 {
-                    csvReader.ReadDataRecordAsStrings();
+                    csvReader.ReadDataRecord();
                 }
 
                 // when the bug manifests itself, the parser may stop parsing prematurely so the record counts won't match

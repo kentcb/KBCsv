@@ -43,27 +43,29 @@
     <Compile Include="..\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
-    <Compile Include="CsvReaderTest.cs">
+    <Compile Include="CsvWriterFixture.cs" />
+    <Compile Include="Internal\CsvParserComplianceFixture.cs" />
+    <Compile Include="Internal\CsvParserFixture.cs" />
+    <Compile Include="CsvReaderFixture.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CsvWriterTest.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CsvParserTest.cs" />
-    <Compile Include="DataRecordTest.cs" />
+    <Compile Include="DataRecordFixture.cs" />
     <Compile Include="Entry.cs" />
-    <Compile Include="HeaderRecordTest.cs" />
-    <Compile Include="Issues\Issue12693.cs" />
-    <Compile Include="Utility\EnumerableStringReader.cs" />
-    <Compile Include="PerformanceFixture.cs" />
-    <Compile Include="RecordBaseTest.cs" />
+    <Compile Include="HeaderRecordFixture.cs" />
     <Compile Include="Issues\Issue12271.cs" />
+    <Compile Include="Issues\Issue12693.cs" />
+    <Compile Include="PerformanceFixture.cs" />
+    <Compile Include="RecordBaseFixture.cs" />
+    <Compile Include="Utility\EnumerableStringReader.cs" />
     <Compile Include="Utility\Extensions.cs" />
     <Compile Include="Utility\ReadPerformanceTestAttribute.cs" />
     <Compile Include="Utility\ReadPerformanceTestCommand.cs" />
     <Compile Include="Utility\WhiteSpacePreservation.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\..\Lib\Moq\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />

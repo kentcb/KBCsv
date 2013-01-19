@@ -28,8 +28,7 @@
     <MissingTags>Summary, Parameter, Returns, Namespace, TypeParameter</MissingTags>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
-      <NamespaceSummaryItem name="Kent.Boogaart.KBCsv" isDocumented="True">Contains the KBCsv types.</NamespaceSummaryItem>
-    </NamespaceSummaries>
+<NamespaceSummaryItem name="Kent.Boogaart.KBCsv" isDocumented="True">Contains KBCsv types that facilitate the reading and writing of CSV data.</NamespaceSummaryItem></NamespaceSummaries>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <Preliminary>False</Preliminary>
     <SdkLinkTarget>Blank</SdkLinkTarget>

@@ -4,19 +4,82 @@
         <name>xunit.runner.utility</name>
     </assembly>
     <members>
-        <member name="T:Xunit.Sdk.Guard">
+        <member name="T:Guard">
             <summary>
             Guard class, used for guard clauses and argument validation
             </summary>
         </member>
-        <member name="M:Xunit.Sdk.Guard.ArgumentNotNull(System.String,System.Object)">
+        <member name="M:Guard.ArgumentNotNull(System.String,System.Object)">
             <summary/>
         </member>
-        <member name="M:Xunit.Sdk.Guard.ArgumentNotNullOrEmpty(System.String,System.Collections.IEnumerable)">
+        <member name="M:Guard.ArgumentNotNullOrEmpty(System.String,System.Collections.IEnumerable)">
             <summary/>
         </member>
-        <member name="M:Xunit.Sdk.Guard.ArgumentValid(System.String,System.String,System.Boolean)">
+        <member name="M:Guard.ArgumentValid(System.String,System.String,System.Boolean)">
             <summary/>
+        </member>
+        <member name="T:Xunit.MultiValueDictionary`2">
+            <summary>
+            A dictionary which contains multiple unique values for each key.
+            </summary>
+            <typeparam name="TKey">The type of the key.</typeparam>
+            <typeparam name="TValue">The type of the value.</typeparam>
+        </member>
+        <member name="M:Xunit.MultiValueDictionary`2.AddValue(`0,`1)">
+            <summary>
+            Adds the value for the given key. If the key does not exist in the
+            dictionary yet, it will add it.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Xunit.MultiValueDictionary`2.Clear">
+            <summary>
+            Removes all keys and values from the dictionary.
+            </summary>
+        </member>
+        <member name="M:Xunit.MultiValueDictionary`2.Contains(`0,`1)">
+            <summary>
+            Determines whether the dictionary contains to specified key and value.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Xunit.MultiValueDictionary`2.ForEach(System.Action{`0,`1})">
+            <summary>
+            Calls the delegate once for each key/value pair in the dictionary.
+            </summary>
+        </member>
+        <member name="M:Xunit.MultiValueDictionary`2.Remove(`0)">
+            <summary>
+            Removes the given key and all of its values.
+            </summary>
+        </member>
+        <member name="M:Xunit.MultiValueDictionary`2.RemoveValue(`0,`1)">
+            <summary>
+            Removes the given value from the given key. If this was the
+            last value for the key, then the key is removed as well.
+            </summary>
+            <param name="key">The key.</param>
+            <param name="value">The value.</param>
+        </member>
+        <member name="M:Xunit.MultiValueDictionary`2.GetEnumerator">
+            <inheritdoc/>
+        </member>
+        <member name="P:Xunit.MultiValueDictionary`2.Item(`0)">
+            <summary>
+            Gets the values for the given key.
+            </summary>
+        </member>
+        <member name="P:Xunit.MultiValueDictionary`2.Count">
+            <summary>
+            Gets the count of the keys in the dictionary.
+            </summary>
+        </member>
+        <member name="P:Xunit.MultiValueDictionary`2.Keys">
+            <summary>
+            Gets the keys.
+            </summary>
         </member>
         <member name="T:Xunit.ExecutorWrapper">
             <summary>
@@ -103,12 +166,17 @@
             Gets the version of xunit.dll used by the test assembly.
             </summary>
         </member>
+        <member name="M:Xunit.ExecutorWrapper.#cctor">
+            <summary>
+            Initializes the <see cref="T:Xunit.ExecutorWrapper"/> class.
+            </summary>
+        </member>
         <member name="M:Xunit.ExecutorWrapper.#ctor(System.String,System.String,System.Boolean)">
             <summary>
             Initializes a new instance of the <see cref="T:Xunit.ExecutorWrapper"/> class.
             </summary>
-            <param name="assemblyFilename">The assembly filename.</param>
-            <param name="configFilename">The config filename. If null, the default config filename will be used.</param>
+            <param name="assemblyFileName">The assembly filename.</param>
+            <param name="configFileName">The config filename. If null, the default config filename will be used.</param>
             <param name="shadowCopy">Set to true to enable shadow copying; false, otherwise.</param>
         </member>
         <member name="M:Xunit.ExecutorWrapper.Dispose">
@@ -143,10 +211,111 @@
         <member name="P:Xunit.ExecutorWrapper.XunitVersion">
             <inheritdoc/>
         </member>
-        <member name="M:Xunit.ExecutorWrapper.CallbackHandler`1.InitializeLifetimeService">
+        <member name="T:Xunit.ExecutorWrapper.IntCallbackHandler">
+            <summary>
+            THIS CLASS IS FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.IntCallbackHandler.InitializeLifetimeService">
             <summary/>
         </member>
-        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackWrapper.InitializeLifetimeService">
+        <member name="P:Xunit.ExecutorWrapper.IntCallbackHandler.Result">
+            <summary/>
+        </member>
+        <member name="T:Xunit.ExecutorWrapper.IntCallbackHandlerWithIMessageSink">
+            <summary>
+            THIS CLASS IS FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.IntCallbackHandlerWithIMessageSink.AsyncProcessMessage(System.Runtime.Remoting.Messaging.IMessage,System.Runtime.Remoting.Messaging.IMessageSink)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.IntCallbackHandlerWithIMessageSink.SyncProcessMessage(System.Runtime.Remoting.Messaging.IMessage)">
+            <summary/>
+        </member>
+        <member name="P:Xunit.ExecutorWrapper.IntCallbackHandlerWithIMessageSink.NextSink">
+            <summary/>
+        </member>
+        <member name="T:Xunit.ExecutorWrapper.IntCallbackHandlerWithICallbackEventHandler">
+            <summary>
+            THIS CLASS IS FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.IntCallbackHandlerWithICallbackEventHandler.GetCallbackResult">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.IntCallbackHandlerWithICallbackEventHandler.RaiseCallbackEvent(System.String)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.IntCallbackHandlerWithICallbackEventHandler.InitializeLifetimeService">
+            <summary/>
+        </member>
+        <member name="T:Xunit.ExecutorWrapper.XmlNodeCallbackHandler">
+            <summary>
+            THIS CLASS IS FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandler.#ctor(System.Predicate{System.Xml.XmlNode},System.String)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandler.InitializeLifetimeService">
+            <summary/>
+        </member>
+        <member name="P:Xunit.ExecutorWrapper.XmlNodeCallbackHandler.Callback">
+            <summary/>
+        </member>
+        <member name="P:Xunit.ExecutorWrapper.XmlNodeCallbackHandler.LastNode">
+            <summary/>
+        </member>
+        <member name="P:Xunit.ExecutorWrapper.XmlNodeCallbackHandler.LastNodeName">
+            <summary/>
+        </member>
+        <member name="P:Xunit.ExecutorWrapper.XmlNodeCallbackHandler.LastNodeArrived">
+            <summary/>
+        </member>
+        <member name="T:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithIMessageSink">
+            <summary>
+            THIS CLASS IS FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithIMessageSink.#ctor(System.Predicate{System.Xml.XmlNode},System.String)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithIMessageSink.AsyncProcessMessage(System.Runtime.Remoting.Messaging.IMessage,System.Runtime.Remoting.Messaging.IMessageSink)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithIMessageSink.SyncProcessMessage(System.Runtime.Remoting.Messaging.IMessage)">
+            <summary/>
+        </member>
+        <member name="P:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithIMessageSink.NextSink">
+            <summary/>
+        </member>
+        <member name="T:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithICallbackEventHandler">
+            <summary>
+            THIS CLASS IS FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithICallbackEventHandler.#ctor(System.Predicate{System.Xml.XmlNode},System.String)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithICallbackEventHandler.RaiseCallbackEvent(System.String)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.XmlNodeCallbackHandlerWithICallbackEventHandler.GetCallbackResult">
+            <summary/>
+        </member>
+        <member name="T:Xunit.ExecutorWrapper.OutgoingMessage">
+            <summary>
+            THIS CLASS IS FOR INTERNAL USE ONLY.
+            </summary>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.OutgoingMessage.#ctor(System.Object)">
+            <summary/>
+        </member>
+        <member name="M:Xunit.ExecutorWrapper.OutgoingMessage.InitializeLifetimeService">
+            <summary/>
+        </member>
+        <member name="P:Xunit.ExecutorWrapper.OutgoingMessage.Properties">
             <summary/>
         </member>
         <member name="T:Xunit.ITestMethodRunnerCallback">
@@ -203,18 +372,6 @@
             <param name="testMethod">The test method.</param>
             <returns>Return true to continue running tests; return false to stop the test run.</returns>
         </member>
-        <member name="T:Xunit.ITestMethodRunner">
-            <summary>
-            Represents the ability to run one or more test methods.
-            </summary>
-        </member>
-        <member name="M:Xunit.ITestMethodRunner.Run(System.Collections.Generic.IEnumerable{Xunit.TestMethod},Xunit.ITestMethodRunnerCallback)">
-            <summary>
-            Runs the specified test methods.
-            </summary>
-            <param name="testMethods">The test methods to run.</param>
-            <param name="callback">The run status information callback.</param>
-        </member>
         <member name="T:Xunit.MultiAssemblyTestEnvironment">
             <summary>
             Represents the ability to load and unload test assemblies, as well as enumerate
@@ -237,10 +394,13 @@
             </summary>
             <param name="filter">The test method filter.</param>
         </member>
-        <member name="F:Xunit.MultiAssemblyTestEnvironment.testAssemblies">
+        <member name="M:Xunit.MultiAssemblyTestEnvironment.#ctor">
             <summary>
-            The test assemblies loaded into the environment.
+            Initializes a new instance of the <see cref="T:Xunit.MultiAssemblyTestEnvironment"/> class.
             </summary>
+        </member>
+        <member name="M:Xunit.MultiAssemblyTestEnvironment.Dispose">
+            <inheritdoc/>
         </member>
         <member name="M:Xunit.MultiAssemblyTestEnvironment.EnumerateTestAssemblies">
             <summary>
@@ -262,7 +422,7 @@
             <summary>
             Loads the specified assembly, using the default configuration file.
             </summary>
-            <param name="assemblyFilename">The assembly filename.</param>
+            <param name="assemblyFileName">The assembly filename.</param>
             <returns>The <see cref="T:Xunit.TestAssembly"/> which represents the newly
             loaded test assembly.</returns>
         </member>
@@ -270,8 +430,8 @@
             <summary>
             Loads the specified assembly using the specified configuration file.
             </summary>
-            <param name="assemblyFilename">The assembly filename.</param>
-            <param name="configFilename">The config filename.</param>
+            <param name="assemblyFileName">The assembly filename.</param>
+            <param name="configFileName">The config filename.</param>
             <returns>The <see cref="T:Xunit.TestAssembly"/> which represents the newly
             loaded test assembly.</returns>
         </member>
@@ -279,8 +439,8 @@
             <summary>
             Loads the specified assembly using the specified configuration file.
             </summary>
-            <param name="assemblyFilename">The assembly filename.</param>
-            <param name="configFilename">The config filename.</param>
+            <param name="assemblyFileName">The assembly filename.</param>
+            <param name="configFileName">The config filename.</param>
             <param name="shadowCopy">Whether the DLLs should be shadow copied.</param>
             <returns>The <see cref="T:Xunit.TestAssembly"/> which represents the newly
             loaded test assembly.</returns>
@@ -295,13 +455,23 @@
             loaded test assembly.</returns>
         </member>
         <member name="M:Xunit.MultiAssemblyTestEnvironment.Run(System.Collections.Generic.IEnumerable{Xunit.TestMethod},Xunit.ITestMethodRunnerCallback)">
-            <inheritdoc/>
+            <summary>
+            Runs the specified test methods.
+            </summary>
+            <param name="testMethods">The test methods to run.</param>
+            <param name="callback">The run status information callback.</param>
+            <returns>Returns the result as XML.</returns>
         </member>
         <member name="M:Xunit.MultiAssemblyTestEnvironment.Unload(Xunit.TestAssembly)">
             <summary>
             Unloads the specified assembly.
             </summary>
             <param name="assembly">The assembly to unload.</param>
+        </member>
+        <member name="P:Xunit.MultiAssemblyTestEnvironment.TestAssemblies">
+            <summary>
+            The test assemblies loaded into the environment.
+            </summary>
         </member>
         <member name="T:Xunit.TestFailedResult">
             <summary>
@@ -393,7 +563,7 @@
             <summary>
             Called when the assembly has finished running.
             </summary>
-            <param name="assemblyFilename">The assembly filename.</param>
+            <param name="assemblyFileName">The assembly filename.</param>
             <param name="total">The total number of tests run.</param>
             <param name="failed">The number of failed tests.</param>
             <param name="skipped">The number of skipped tests.</param>
@@ -403,9 +573,9 @@
             <summary>
             Called when the assembly has started running.
             </summary>
-            <param name="assemblyFilename">The assembly filename.</param>
-            <param name="configFilename">The configuration filename, if given; null, otherwise.</param>
-            <param name="xUnitVersion">The version of xunit.dll.</param>
+            <param name="assemblyFileName">The assembly filename.</param>
+            <param name="configFileName">The configuration filename, if given; null, otherwise.</param>
+            <param name="xunitVersion">The version of xunit.dll.</param>
         </member>
         <member name="M:Xunit.IRunnerLogger.ClassFailed(System.String,System.String,System.String,System.String)">
             <summary>
@@ -422,7 +592,7 @@
             <summary>
             Called when an exception is thrown (i.e., a catastrophic failure of the testing system).
             </summary>
-            <param name="assemblyFilename">The assembly filename.</param>
+            <param name="assemblyFileName">The assembly filename.</param>
             <param name="exception">The exception that was thrown.</param>
         </member>
         <member name="M:Xunit.IRunnerLogger.TestFailed(System.String,System.String,System.String,System.Double,System.String,System.String,System.String,System.String)">
@@ -552,6 +722,38 @@
             At least one test result for the last run was skipped, and none failed
             </summary>
         </member>
+        <member name="T:Xunit.XunitFilters">
+            <summary>
+            Represents a set of filters for an <see cref="T:Xunit.XunitProject"/>.
+            </summary>
+        </member>
+        <member name="M:Xunit.XunitFilters.#ctor">
+            <summary>
+            Initializes a new instance of the <see cref="T:Xunit.XunitFilters"/> class.
+            </summary>
+        </member>
+        <member name="M:Xunit.XunitFilters.Filter(Xunit.TestMethod)">
+            <summary>
+            Filters the given method using the defined filter values.
+            </summary>
+            <param name="method">The methods to filter.</param>
+            <returns>Returns true if the method passed the filter; return false otherwise.</returns>
+        </member>
+        <member name="P:Xunit.XunitFilters.ExcludedTraits">
+            <summary>
+            Gets the set of trait filters for tests to exclude.
+            </summary>
+        </member>
+        <member name="P:Xunit.XunitFilters.IncludedTraits">
+            <summary>
+            Gets the set of trait filters for tests to include.
+            </summary>
+        </member>
+        <member name="P:Xunit.XunitFilters.IsFiltered">
+            <summary>
+            Gets a value indicating whether there are any active filters.
+            </summary>
+        </member>
         <member name="T:Xunit.XunitProject">
             <summary>
             Represents an xUnit Test Project file (.xunit file)
@@ -562,21 +764,55 @@
             Initializes a new instance of the <see cref="T:Xunit.XunitProject"/> class.
             </summary>
         </member>
+        <member name="M:Xunit.XunitProject.AddAssembly(Xunit.XunitProjectAssembly)">
+            <summary>
+            Adds an assembly to the project
+            </summary>
+            <param name="assembly">The assembly to be added</param>
+        </member>
         <member name="M:Xunit.XunitProject.Load(System.String)">
             <summary>
             Loads an xUnit.net Test Project file from disk.
             </summary>
-            <param name="filename">The test project filename</param>
+            <param name="fileName">The test project filename</param>
         </member>
-        <member name="M:Xunit.XunitProject.Save(System.String)">
+        <member name="M:Xunit.XunitProject.RemoveAssembly(Xunit.XunitProjectAssembly)">
             <summary>
-            Saves the xUnit.net Test Project file to disk.
+            Removes assembly from the assembly list
             </summary>
-            <param name="filename">The test project filename</param>
+            <param name="assembly">The assembly to be removed</param>
+        </member>
+        <member name="M:Xunit.XunitProject.Save">
+            <summary>
+            Saves the xUnit.net Test Project file to disk using the project's filename.
+            </summary>
+        </member>
+        <member name="M:Xunit.XunitProject.SaveAs(System.String)">
+            <summary>
+            Saves the xUnit.net Test Project file to disk using the provided filename.
+            The projects filename is updated to match this new name.
+            </summary>
+            <param name="outputFileName">The test project filename</param>
         </member>
         <member name="P:Xunit.XunitProject.Assemblies">
             <summary>
             Gets or sets the assemblies in the project.
+            </summary>
+        </member>
+        <member name="P:Xunit.XunitProject.Filename">
+            <summary>
+            Gets or set the filename of the project.
+            </summary>
+        </member>
+        <member name="P:Xunit.XunitProject.Filters">
+            <summary>
+            Gets the filters applied to this project.
+            </summary>
+        </member>
+        <member name="P:Xunit.XunitProject.IsDirty">
+            <summary>
+            Gets or sets a flag which indicates if this project has been modified since
+            the last time it was loaded or saved.
             </summary>
         </member>
         <member name="T:Xunit.XunitProjectAssembly">
@@ -686,7 +922,12 @@
             <inheritdoc/>
         </member>
         <member name="M:Xunit.TestAssembly.Run(System.Collections.Generic.IEnumerable{Xunit.TestMethod},Xunit.ITestMethodRunnerCallback)">
-            <inheritdoc/>
+            <summary>
+            Runs the specified test methods.
+            </summary>
+            <param name="testMethods">The test methods to run.</param>
+            <param name="callback">The run status information callback.</param>
+            <returns>Returns the result as XML.</returns>
         </member>
         <member name="P:Xunit.TestAssembly.AssemblyFilename">
             <summary>
@@ -727,15 +968,21 @@
         <member name="M:Xunit.TestClass.EnumerateTestMethods(System.Predicate{Xunit.TestMethod})">
             <inheritdoc/>
         </member>
-        <member name="M:Xunit.TestClass.GetTestRunner(Xunit.ITestMethodRunnerCallback)">
-            <summary>
-            Gets the test runner used to run tests. Exists as an overload primarily
-            for the purposes of unit testing.
-            </summary>
-            <param name="callback">The run status information callback.</param>
-        </member>
         <member name="M:Xunit.TestClass.Run(System.Collections.Generic.IEnumerable{Xunit.TestMethod},Xunit.ITestMethodRunnerCallback)">
-            <inheritdoc/>
+            <summary>
+            Runs the specified test methods.
+            </summary>
+            <param name="testMethodsToRun">The test methods to run.</param>
+            <param name="callback">The run status information callback.</param>
+            <returns>Returns the result as XML.</returns>
+        </member>
+        <member name="M:Xunit.TestClass.RunTests(System.Collections.Generic.List{System.String},Xunit.ITestMethodRunnerCallback)">
+            <summary>
+            Runs the specified tests in the given type, calling the callback as appropriate.
+            This override point exists primarily for unit testing purposes.
+            </summary>
+            <param name="methods">The test methods to run</param>
+            <param name="callback">The run status information callback.</param>
         </member>
         <member name="P:Xunit.TestClass.TestAssembly">
             <summary>
@@ -821,14 +1068,9 @@
             </summary>
             <param name="xml">The assembly XML.</param>
         </member>
-        <member name="P:Xunit.IResultXmlTransform.Filename">
+        <member name="P:Xunit.IResultXmlTransform.OutputFilename">
             <summary>
             Gets the output filename, if known; returns null if the output isn't done to file.
-            </summary>
-        </member>
-        <member name="P:Xunit.IResultXmlTransform.OutputType">
-            <summary>
-            Gets the type of the output.
             </summary>
         </member>
         <member name="T:Xunit.TestRunner">
@@ -869,15 +1111,12 @@
             <summary>
             Initializes a new instance of the <see cref="T:Xunit.NullTransformer"/> class.
             </summary>
-            <param name="filename">The output filename.</param>
+            <param name="fileName">The output filename.</param>
         </member>
         <member name="M:Xunit.NullTransformer.Transform(System.String)">
             <inheritdoc/>
         </member>
-        <member name="P:Xunit.NullTransformer.Filename">
-            <inheritdoc/>
-        </member>
-        <member name="P:Xunit.NullTransformer.OutputType">
+        <member name="P:Xunit.NullTransformer.OutputFilename">
             <inheritdoc/>
         </member>
         <member name="T:Xunit.XslStreamTransformer">
@@ -886,97 +1125,35 @@
             XML to a file after applying the XSL stylesheet in the given stream.
             </summary>
         </member>
-        <member name="M:Xunit.XslStreamTransformer.#ctor(System.IO.Stream,System.String,System.String)">
+        <member name="M:Xunit.XslStreamTransformer.#ctor(System.String,System.String)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Xunit.XslStreamTransformer"/> class.
+            </summary>
+            <param name="xslFileName">The XSL filename.</param>
+            <param name="outputFileName">The output filename.</param>
+        </member>
+        <member name="M:Xunit.XslStreamTransformer.#ctor(System.IO.Stream,System.String)">
             <summary>
             Initializes a new instance of the <see cref="T:Xunit.XslStreamTransformer"/> class.
             </summary>
             <param name="xslStream">The stream with the XSL stylesheet.</param>
-            <param name="filename">The output filename.</param>
-            <param name="outputType">The output type.</param>
+            <param name="outputFileName">The output filename.</param>
         </member>
         <member name="M:Xunit.XslStreamTransformer.Transform(System.String)">
             <inheritdoc/>
         </member>
-        <member name="P:Xunit.XslStreamTransformer.Filename">
+        <member name="P:Xunit.XslStreamTransformer.OutputFilename">
             <inheritdoc/>
         </member>
-        <member name="P:Xunit.XslStreamTransformer.OutputType">
-            <inheritdoc/>
-        </member>
-        <member name="T:Xunit.MultiValueDictionary`2">
+        <member name="P:Xunit.XslStreamTransformer.XslFilename">
             <summary>
-            A dictionary which contains multiple unique values for each key.
-            </summary>
-            <typeparam name="TKey">The type of the key.</typeparam>
-            <typeparam name="TValue">The type of the value.</typeparam>
-        </member>
-        <member name="M:Xunit.MultiValueDictionary`2.AddValue(`0,`1)">
-            <summary>
-            Adds the value for the given key. If the key does not exist in the
-            dictionary yet, it will add it.
-            </summary>
-            <param name="key">The key.</param>
-            <param name="value">The value.</param>
-        </member>
-        <member name="M:Xunit.MultiValueDictionary`2.Clear">
-            <summary>
-            Removes all keys and values from the dictionary.
+            Gets or sets the XSL filename.
             </summary>
         </member>
-        <member name="M:Xunit.MultiValueDictionary`2.Contains(`0,`1)">
+        <member name="P:Xunit.XslStreamTransformer.XslStream">
             <summary>
-            Determines whether the dictionary contains to specified key and value.
+            Gets or sets the XSL stream.
             </summary>
-            <param name="key">The key.</param>
-            <param name="value">The value.</param>
-        </member>
-        <member name="M:Xunit.MultiValueDictionary`2.ForEach(Xunit.MultiValueDictionary{`0,`1}.ForEachDelegate)">
-            <summary>
-            Calls the delegate once for each key/value pair in the dictionary.
-            </summary>
-        </member>
-        <member name="M:Xunit.MultiValueDictionary`2.Remove(`0)">
-            <summary>
-            Removes the given key and all of its values.
-            </summary>
-        </member>
-        <member name="M:Xunit.MultiValueDictionary`2.RemoveValue(`0,`1)">
-            <summary>
-            Removes the given value from the given key. If this was the
-            last value for the key, then the key is removed as well.
-            </summary>
-            <param name="key">The key.</param>
-            <param name="value">The value.</param>
-        </member>
-        <member name="P:Xunit.MultiValueDictionary`2.Item(`0)">
-            <summary>
-            Gets the values for the given key.
-            </summary>
-        </member>
-        <member name="P:Xunit.MultiValueDictionary`2.Count">
-            <summary>
-            Gets the count of the keys in the dictionary.
-            </summary>
-        </member>
-        <member name="P:Xunit.MultiValueDictionary`2.Keys">
-            <summary>
-            Gets the keys.
-            </summary>
-        </member>
-        <member name="T:Xunit.MultiValueDictionary`2.ForEachDelegate">
-            <summary/>
-        </member>
-        <member name="T:Xunit.StackFrameTransformer">
-            <summary>
-            Transforms stack frames and stack traces into compiler-like output
-            so they can be double-clicked in Visual Studio.
-            </summary>
-        </member>
-        <member name="M:Xunit.StackFrameTransformer.TransformFrame(System.String)">
-            <summary/>
-        </member>
-        <member name="M:Xunit.StackFrameTransformer.TransformStack(System.String)">
-            <summary/>
         </member>
         <member name="T:Xunit.TestAssemblyBuilder">
             <summary>
