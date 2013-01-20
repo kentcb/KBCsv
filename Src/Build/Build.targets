@@ -8,6 +8,9 @@
         <SrcDir>$(MSBuildThisFileDirectory)..\</SrcDir>
         <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
         <Configuration Condition=" $(Configuration) == '' ">Release</Configuration>
+        
+        <!-- eg. can be set to "-alpha" or "-beta" if relevant -->
+        <VersionSuffix>-alpha</VersionSuffix>
     </PropertyGroup>
 
     <Import Project="$(LibDir)\MSBuild Community Tasks\MSBuild.Community.Tasks.Targets" />
@@ -59,14 +62,7 @@
         <Error Text="Building documentation failed. Please ensure you have the following components installed: Latest Sandcastle (http://sandcastle.codeplex.com/), latest Sandcastle Help File Builder (http://shfb.codeplex.com/), any relevant updates to styles from Sandcastle Styles (http://sandcastlestyles.codeplex.com/). You may also need to log out and back in."/>
     </Target>
 
-    <Target Name="CreateArchives">
-        <GetAssemblyIdentity AssemblyFiles="$(SrcDir)\Kent.Boogaart.KBCsv\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.dll">
-            <Output TaskParameter="Assemblies" ItemName="AssemblyIdentity" />
-        </GetAssemblyIdentity>
-        <CreateProperty Condition="$(Version) == ''" Value="@(AssemblyIdentity -> '%(Version)')">
-            <Output TaskParameter="Value" PropertyName="Version" />
-        </CreateProperty>
-
+    <Target Name="CreateArchives" DependsOnTargets="GetVersion">
         <MakeDir Directories="$(GenDir)" Condition="!Exists('$(GenDir)')" />
         <RemoveDir Directories="$(GenDir)\Temp" />
         <MakeDir Directories="$(GenDir)\Temp" Condition="!Exists('$(GenDir)\Temp')" />
@@ -130,15 +126,8 @@
         <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-SL50-bin.zip" WorkingDirectory="$(GenDir)\Temp\SL50\" ZipLevel="9" Files="@(SL50Binaries)" />
     </Target>
 
-    <Target Name="CreateNuGetPackages">
+    <Target Name="CreateNuGetPackages" DependsOnTargets="GetVersion">
         <MakeDir Directories="$(GenDir)\NuGet"/>
-
-        <GetAssemblyIdentity AssemblyFiles="$(SrcDir)\Kent.Boogaart.KBCsv\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.dll">
-            <Output TaskParameter="Assemblies" ItemName="AssemblyIdentity" />
-        </GetAssemblyIdentity>
-        <CreateProperty Condition="$(Version) == ''" Value="@(AssemblyIdentity -> '%(Version)')">
-            <Output TaskParameter="Value" PropertyName="Version" />
-        </CreateProperty>
 
         <ItemGroup>
             <Tokens Include="Version">
@@ -189,15 +178,21 @@
     <!--
     this target does not execute automatically - it must be done explicitly
     -->
-    <Target Name="PublishNuGetPackages">
+    <Target Name="PublishNuGetPackages" DependsOnTargets="GetVersion">
+        <!-- symbols package is automatically pushed too -->
+        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.$(Version).nupkg"'/>
+    </Target>
+
+    <!-- ensure the Version property is set appropriately -->
+    <Target Name="GetVersion">
         <GetAssemblyIdentity AssemblyFiles="$(SrcDir)\Kent.Boogaart.KBCsv\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.dll">
             <Output TaskParameter="Assemblies" ItemName="AssemblyIdentity" />
         </GetAssemblyIdentity>
-        <CreateProperty Condition="$(Version) == ''" Value="@(AssemblyIdentity -> '%(Version)')">
+        <CreateProperty Condition="$(AssemblyVersion) == ''" Value="@(AssemblyIdentity -> '%(Version)')">
+            <Output TaskParameter="Value" PropertyName="AssemblyVersion" />
+        </CreateProperty>
+        <CreateProperty Condition="$(Version) == ''" Value="$(AssemblyVersion)$(VersionSuffix)">
             <Output TaskParameter="Value" PropertyName="Version" />
         </CreateProperty>
-
-        <!-- symbols package is automatically pushed too -->
-        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.$(Version).nupkg"'/>
     </Target>
 </Project>
