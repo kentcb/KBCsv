@@ -3,7 +3,23 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv", "Kent.Boogaart.KBCsv\Kent.Boogaart.KBCsv.csproj", "{15BE0D57-FEBE-40EE-870E-4B891F25A807}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.UnitTest", "Kent.Boogaart.KBCsv.UnitTest\Kent.Boogaart.KBCsv.UnitTest.csproj", "{49A50581-272E-40A8-92E4-89D4BA8F0A0E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{C2DF445D-88C9-4390-907A-CB00823266C4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Examples.CSharp", "Kent.Boogaart.KBCsv.Examples.CSharp\Kent.Boogaart.KBCsv.Examples.CSharp.csproj", "{1C43651C-155C-48BA-A5FF-5C625FDD6878}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Kent.Boogaart.KBCsv.Examples.VB", "Kent.Boogaart.KBCsv.Examples.VB\Kent.Boogaart.KBCsv.Examples.VB.vbproj", "{2373873E-6F12-425F-886F-F07978BE11CB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.UnitTests", "Kent.Boogaart.KBCsv.UnitTests\Kent.Boogaart.KBCsv.UnitTests.csproj", "{49A50581-272E-40A8-92E4-89D4BA8F0A0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.PerformanceTests", "Kent.Boogaart.KBCsv.PerformanceTests\Kent.Boogaart.KBCsv.PerformanceTests.csproj", "{49A50581-272E-50A8-92E4-89D4BA8F0A0E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Items", "Shared Items", "{39EBCE4B-478D-489C-9140-637530545F27}"
+	ProjectSection(SolutionItems) = preProject
+		AssemblyInfoCommon.cs = AssemblyInfoCommon.cs
+		AssemblyInfoCommon.vb = AssemblyInfoCommon.vb
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +55,30 @@ Global
 		{15BE0D57-FEBE-40EE-870E-4B891F25A807}.SL50 Debug|Any CPU.Build.0 = SL50 Debug|Any CPU
 		{15BE0D57-FEBE-40EE-870E-4B891F25A807}.SL50 Release|Any CPU.ActiveCfg = SL50 Release|Any CPU
 		{15BE0D57-FEBE-40EE-870E-4B891F25A807}.SL50 Release|Any CPU.Build.0 = SL50 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX35 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX35 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX45 Debug|Any CPU.ActiveCfg = FX45 Debug|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX45 Debug|Any CPU.Build.0 = FX45 Debug|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX45 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.FX45 Release|Any CPU.Build.0 = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.SL40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.SL40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.SL50 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.SL50 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX35 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX35 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX45 Debug|Any CPU.ActiveCfg = FX45 Debug|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX45 Debug|Any CPU.Build.0 = FX45 Debug|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX45 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.FX45 Release|Any CPU.Build.0 = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.SL40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.SL40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.SL50 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{2373873E-6F12-425F-886F-F07978BE11CB}.SL50 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
 		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.FX35 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
 		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.FX35 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
 		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.FX40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
@@ -51,9 +91,27 @@ Global
 		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.SL40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
 		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.SL50 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
 		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.SL50 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX35 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX35 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX45 Debug|Any CPU.ActiveCfg = FX45 Debug|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX45 Debug|Any CPU.Build.0 = FX45 Debug|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX45 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.FX45 Release|Any CPU.Build.0 = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.SL40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.SL40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.SL50 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.SL50 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{49A50581-272E-40A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
+		{49A50581-272E-50A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878} = {C2DF445D-88C9-4390-907A-CB00823266C4}
+		{2373873E-6F12-425F-886F-F07978BE11CB} = {C2DF445D-88C9-4390-907A-CB00823266C4}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

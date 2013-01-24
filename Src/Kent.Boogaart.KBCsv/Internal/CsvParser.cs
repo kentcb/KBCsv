@@ -1,6 +1,7 @@
 ﻿namespace Kent.Boogaart.KBCsv.Internal
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using Kent.Boogaart.HelperTrinity;
@@ -59,8 +60,7 @@
             get { return this.valueSeparator; }
             set
             {
-                exceptionHelper.ResolveAndThrowIf(value == this.valueDelimiter, "value-separator-same-as-value-delimiter");
-                exceptionHelper.ResolveAndThrowIf(value == Constants.Space, "value-separator-or-value-delimiter-space");
+                exceptionHelper.ResolveAndThrowIf(value == this.valueDelimiter, "valueSeparatorAndDelimiterCannotMatch");
 
                 this.valueSeparator = value;
                 this.UpdateSpecialCharacterMask();
@@ -72,8 +72,7 @@
             get { return this.valueDelimiter; }
             set
             {
-                exceptionHelper.ResolveAndThrowIf(value == this.valueSeparator, "value-separator-same-as-value-delimiter");
-                exceptionHelper.ResolveAndThrowIf(value == Constants.Space, "value-separator-or-value-delimiter-space");
+                exceptionHelper.ResolveAndThrowIf(value == this.valueSeparator, "valueSeparatorAndDelimiterCannotMatch");
 
                 this.valueDelimiter = value;
                 this.UpdateSpecialCharacterMask();
@@ -410,7 +409,8 @@
                 // clear
                 this.valueEndIndex = 0;
 
-                return new DataRecord(headerRecord, result);
+                // cast is to select the internal constructor, which is faster
+                return new DataRecord(headerRecord, (IList<string>)result);
             }
 
             // convert this value list to a data record, placing the extra value at the end of the record's values, then clear ready to construct the next list of values
@@ -424,7 +424,8 @@
                 // clear
                 this.valueEndIndex = 0;
 
-                return new DataRecord(headerRecord, result);
+                // cast is to select the internal constructor, which is faster
+                return new DataRecord(headerRecord, (IList<string>)result);
             }
 
             private void EnsureSufficientCapacity()

@@ -17,7 +17,7 @@ namespace Kent.Boogaart.KBCsv
     /// such as by calling <see cref="Add"/> or <see cref="Remove"/>.
     /// </para>
     /// </remarks>
-    public abstract class RecordBase : IEnumerable<string>, IList<string>, IEquatable<RecordBase>
+    public abstract class RecordBase : IList<string>, IEquatable<RecordBase>
     {
         private const char ValueSeparator = (char)0x2022;
         private readonly IList<string> values;
@@ -25,13 +25,13 @@ namespace Kent.Boogaart.KBCsv
         /// <summary>
         /// Initializes a new instance of the RecordBase class.
         /// </summary>
-        /// <param name="values">
-        /// The values comprising the record.
-        /// </param>
         /// <param name="readOnly">
         /// <see langword="true"/> if the record is read-only, otherwise <see langword="false"/>.
         /// </param>
-        protected RecordBase(IEnumerable<string> values, bool readOnly)
+        /// <param name="values">
+        /// The values comprising the record.
+        /// </param>
+        protected RecordBase(bool readOnly, IEnumerable<string> values)
         {
             this.values = new List<string>(values);
 

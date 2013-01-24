@@ -26,7 +26,7 @@ namespace Kent.Boogaart.KBCsv
         /// The resultant data record will have no values, but is not read-only.
         /// </remarks>
         public DataRecord()
-            : base(Enumerable.Empty<string>(), false)
+            : this(null, false)
         {
         }
 
@@ -38,7 +38,31 @@ namespace Kent.Boogaart.KBCsv
         /// be returned from <see cref="HeaderRecord"/>).
         /// </remarks>
         public DataRecord(HeaderRecord headerRecord)
-            : this(headerRecord, Enumerable.Empty<string>(), false)
+            : this(headerRecord, false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DataRecord class.
+        /// </summary>
+        /// <remarks>
+        /// The resultant data record will the specified values, and is not read-only. It will use the specified <see cref="T:HeaderRecord"/> (which will therefore
+        /// be returned from <see cref="HeaderRecord"/>).
+        /// </remarks>
+        public DataRecord(HeaderRecord headerRecord, params string[] values)
+            : this(headerRecord, false, values)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DataRecord class.
+        /// </summary>
+        /// <remarks>
+        /// The resultant data record will have the specified values, and may or may not be read-only. It will use the specified <see cref="T:HeaderRecord"/> (which will therefore
+        /// be returned from <see cref="HeaderRecord"/>).
+        /// </remarks>
+        public DataRecord(HeaderRecord headerRecord, bool readOnly, params string[] values)
+            : this(headerRecord, readOnly, (IEnumerable<string>)values)
         {
         }
 
@@ -50,7 +74,7 @@ namespace Kent.Boogaart.KBCsv
         /// be returned from <see cref="HeaderRecord"/>).
         /// </remarks>
         public DataRecord(HeaderRecord headerRecord, IEnumerable<string> values)
-            : this(headerRecord, values, false)
+            : this(headerRecord, false, values)
         {
         }
 
@@ -61,8 +85,8 @@ namespace Kent.Boogaart.KBCsv
         /// The resultant data record will have the specified values, and may or may not be read-only. It will use the specified <see cref="T:HeaderRecord"/> (which will therefore
         /// be returned from <see cref="HeaderRecord"/>).
         /// </remarks>
-        public DataRecord(HeaderRecord headerRecord, IEnumerable<string> values, bool readOnly)
-            : base(values, readOnly)
+        public DataRecord(HeaderRecord headerRecord, bool readOnly, IEnumerable<string> values)
+            : base(readOnly, values)
         {
             this.headerRecord = headerRecord;
         }

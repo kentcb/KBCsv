@@ -9,7 +9,51 @@
     using Kent.Boogaart.HelperTrinity.Extensions;
     using Kent.Boogaart.KBCsv.Internal;
 
-    /// <ignore/>
+    /// <summary>
+    /// Provides a means of writing CSV data.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The <c>CsvWriter</c> class allows CSV data to be written to an underlying data sink. The data sink may be a <see cref="Stream"/>, <see cref="TextWriter"/>, or a file.
+    /// There are various constructors allowing for file-, <c>Stream</c>- and <c>TextWriter</c>- based data sinks.
+    /// </para>
+    /// <para>
+    /// By default, CSV values will be separated with a comma (<c>,</c>) and delimited where necessary with double quotes (<c>"</c>). If desired, the <see cref="ValueSeparator"/>
+    /// and <see cref="ValueDelimiter"/> properties enable these defaults to be customized. In addition, delimiters around values can be included even when not necessary by setting
+    /// the <see cref="ForceDelimit"/> property to <see langword="true"/>.
+    /// </para>
+    /// <para>
+    /// Records can be written with the <see cref="WriteRecord"/> and <see cref="WriteRecords"/> methods (or their async counterparts, <see cref="WriteRecordAsync"/> and
+    /// <see cref="WriteRecordsAsync"/>). Doing so will increase <see cref="RecordNumber"/> accordingly.
+    /// </para>
+    /// </remarks>
+    /// <threadsafety>
+    /// A <c>CsvReader</c> cannot be used safely from multiple threads without synchronization. When using the <c>Async</c> methods, you should ensure that any prior task has
+    /// completed before instigating another.
+    /// </threadsafety>
+    /// <example>
+    /// <para>
+    /// The following example writes CSV data to a <see cref="StringWriter"/>:
+    /// </para>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 6" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 6" lang="vb"/>
+    /// </example>
+    /// <example>
+    /// <para>
+    /// The following example writes CSV data (with delimiters forced) to a <see cref="MemoryStream"/> with ASCII encoding. The <see cref="MemoryStream"/> is left open when
+    /// the <c>CsvWriter</c> is closed:
+    /// </para>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 7" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 7" lang="vb"/>
+    /// </example>
+    /// <example>
+    /// <para>
+    /// The following example asynchronously reads CSV from a file and asynchronously writes it to another. The data is written as tab-delimited with a single quote delimiter.
+    /// A buffer is used to read and write data in blocks of records rather than one record at a time:
+    /// </para>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 8" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 8" lang="vb"/>
+    /// </example>
     public partial class CsvWriter : IDisposable
     {
         private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(CsvWriter));
@@ -23,55 +67,139 @@
         private char valueSeparator;
         private long recordNumber;
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <remarks>
+        /// <paramref name="stream"/> will be encoded with <see cref="T:Encoding.Default"/>, and will be disposed when this <c>CsvWriter</c> is disposed.
+        /// </remarks>
+        /// <param name="stream">
+        /// A stream to which CSV data will be written.
+        /// </param>
         public CsvWriter(Stream stream)
             : this(stream, Constants.DefaultEncoding)
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <remarks>
+        /// <paramref name="stream"/> will be disposed when this <c>CsvWriter</c> is disposed.
+        /// </remarks>
+        /// <param name="stream">
+        /// A stream to which CSV data will be written.
+        /// </param>
+        /// <param name="encoding">
+        /// The encoding for CSV data written to <paramref name="stream"/>.
+        /// </param>
         public CsvWriter(Stream stream, Encoding encoding)
             : this(stream, encoding, false)
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <param name="stream">
+        /// A stream to which CSV data will be written.
+        /// </param>
+        /// <param name="encoding">
+        /// The encoding for CSV data written to <paramref name="stream"/>.
+        /// </param>
+        /// <param name="leaveOpen">
+        /// If <see langword="true"/>, <paramref name="stream"/> will not be disposed when this <c>CsvWriter</c> is disposed.
+        /// </param>
         public CsvWriter(Stream stream, Encoding encoding, bool leaveOpen)
-            : this(new StreamWriter(stream, encoding), false)
+            : this(new StreamWriter(stream, encoding), leaveOpen)
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <remarks>
+        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="T:Encoding.Default"/>.
+        /// </remarks>
+        /// <param name="path">
+        /// The path of the file to write.
+        /// </param>
         public CsvWriter(string path)
             : this(path, Constants.DefaultEncoding)
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <param name="path">
+        /// The path of the file to write.
+        /// </param>
+        /// <param name="encoding">
+        /// The encoding to use when writing CSV data to the file.
+        /// </param>
         public CsvWriter(string path, Encoding encoding)
             : this(path, false, encoding)
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <remarks>
+        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="T:Encoding.Default"/>.
+        /// </remarks>
+        /// <param name="path">
+        /// The path of the file to write.
+        /// </param>
+        /// <param name="append">
+        /// If <see langword="true"/>, data will be appended to the end of the file rather than truncating.
+        /// </param>
         public CsvWriter(string path, bool append)
             : this(path, append, Constants.DefaultEncoding)
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <param name="path">
+        /// The path of the file to write.
+        /// </param>
+        /// <param name="encoding">
+        /// The encoding to use when writing CSV data to the file.
+        /// </param>
+        /// <param name="append">
+        /// If <see langword="true"/>, data will be appended to the end of the file rather than truncating.
+        /// </param>
         public CsvWriter(string path, bool append, Encoding encoding)
             : this(new StreamWriter(path, append, encoding))
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <remarks>
+        /// <paramref name="textWriter"/> will be disposed when this <c>CsvWriter</c> is disposed.
+        /// </remarks>
+        /// <param name="textWriter">
+        /// The target for the CSV data.
+        /// </param>
         public CsvWriter(TextWriter textWriter)
             : this(textWriter, false)
         {
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Initializes a new instance of the CsvWriter class.
+        /// </summary>
+        /// <param name="textWriter">
+        /// The target for the CSV data.
+        /// </param>
+        /// <param name="leaveOpen">
+        /// If <see langword="true"/>, <paramref name="textWriter"/> will not be disposed when this <c>CsvWriter</c> is disposed.
+        /// </param>
         public CsvWriter(TextWriter textWriter, bool leaveOpen)
         {
             textWriter.AssertNotNull("textWriter");
@@ -84,7 +212,9 @@
             this.valueDelimiter = Constants.DefaultValueDelimiter;
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Gets the <see cref="T:Encoding"/> being used when writing CSV data.
+        /// </summary>
         public Encoding Encoding
         {
             get
@@ -94,7 +224,12 @@
             }
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Gets the current record number.
+        /// </summary>
+        /// <remarks>
+        /// This property gives the number of records that have been written by this <c>CsvWriter</c>.
+        /// </remarks>
         public long RecordNumber
         {
             get
@@ -104,7 +239,13 @@
             }
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Gets or sets a value indicating whether delimiters should always be written.
+        /// </summary>
+        /// <remarks>
+        /// If this property is set to <see langword="true"/>, values will always be wrapped in <see cref="ValueDelimiter"/>s, even if they're not actually required. If <see langword="false"/>,
+        /// values will only be delimited where necessary. That is, when they contain characters that require delimiting.
+        /// </remarks>
         public bool ForceDelimit
         {
             get
@@ -120,7 +261,12 @@
             }
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Gets or sets the character used to separate values within the CSV.
+        /// </summary>
+        /// <remarks>
+        /// This property specifies what character is used to separate values within the CSV. The default value separator is a comma (<c>,</c>).
+        /// </remarks>
         public char ValueSeparator
         {
             get
@@ -133,12 +279,19 @@
             {
                 this.EnsureNotDisposed();
                 exceptionHelper.ResolveAndThrowIf(value == this.valueDelimiter, "valueSeparatorAndDelimiterCannotMatch");
-                exceptionHelper.ResolveAndThrowIf(IsWhitespace(value), "valueSeparatorAndDelimiterCannotBeWhiteSpace");
                 this.valueSeparator = value;
             }
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Gets or sets the character used to delimit values within the CSV.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This property specifies what character is used to delimit values within the CSV. The default value delimiter is a double quote (<c>"</c>).
+        /// If <see cref="ForceDelimit"/> is <see langword="false"/>, delimiters will only be written where necessary.
+        /// </para>
+        /// </remarks>
         public char ValueDelimiter
         {
             get
@@ -151,12 +304,16 @@
             {
                 this.EnsureNotDisposed();
                 exceptionHelper.ResolveAndThrowIf(value == this.valueSeparator, "valueSeparatorAndDelimiterCannotMatch");
-                exceptionHelper.ResolveAndThrowIf(IsWhitespace(value), "valueSeparatorAndDelimiterCannotBeWhiteSpace");
                 this.valueDelimiter = value;
             }
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Gets or sets the <see cref="String"/> used to separate lines within the CSV.
+        /// </summary>
+        /// <remarks>
+        /// By default, this property is set to <see cref="Environment.NewLine"/>.
+        /// </remarks>
         public string NewLine
         {
             get
@@ -172,7 +329,15 @@
             }
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Writes a record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// All values within <paramref name="record"/> are written in the order they appear.
+        /// </remarks>
+        /// <param name="record">
+        /// The record to write.
+        /// </param>
         public void WriteRecord(RecordBase record)
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -183,7 +348,15 @@
             this.FlushBufferToTextWriter();
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Writes a record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// Any <see langword="null"/> values will be written as empty strings.
+        /// </remarks>
+        /// <param name="values">
+        /// The values comprising the record.
+        /// </param>
         public void WriteRecord(params string[] values)
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -194,7 +367,40 @@
             this.FlushBufferToTextWriter();
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Writes a record to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// Any <see langword="null"/> values will be written as empty strings.
+        /// </remarks>
+        /// <param name="values">
+        /// The values comprising the record.
+        /// </param>
+        public void WriteRecord(IEnumerable<string> values)
+        {
+            Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
+
+            this.EnsureNotDisposed();
+            values.AssertNotNull("values");
+            this.WriteRecordToBuffer(values);
+            this.FlushBufferToTextWriter();
+        }
+
+        /// <summary>
+        /// Writes <paramref name="length"/> records to this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// When writing a lot of data, it is possible that better performance can be achieved by using this method.
+        /// </remarks>
+        /// <param name="buffer">
+        /// The buffer containing the records to be written.
+        /// </param>
+        /// <param name="offset">
+        /// The offset into <paramref name="buffer"/> from which the first record will be obtained.
+        /// </param>
+        /// <param name="length">
+        /// The number of records to write.
+        /// </param>
         public void WriteRecords(RecordBase[] buffer, int offset, int length)
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -215,7 +421,12 @@
             this.FlushBufferToTextWriter();
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Flushes this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method can be used to flush the underlying <see cref="TextWriter"/> to which this <c>CsvWriter</c> is writing data.
+        /// </remarks>
         public void Flush()
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -224,13 +435,20 @@
             this.textWriter.Flush();
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Closes this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// This method is an alternative means of disposing the <c>CsvWriter</c>. Generally one should prefer a <c>using</c> block to automatically dispose of the <c>CsvWriter</c>.
+        /// </remarks>
         public void Close()
         {
             this.Dispose();
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Disposes of this <c>CsvWriter</c>.
+        /// </summary>
         public void Dispose()
         {
             if (this.disposed)
@@ -243,13 +461,35 @@
             this.disposed = true;
         }
 
-        /// <ignore/>
+        /// <summary>
+        /// Disposes of this <c>CsvWriter</c>.
+        /// </summary>
+        /// <remarks>
+        /// Subclasses can override this method to supplement dispose logic.
+        /// </remarks>
+        /// <param name="disposing">
+        /// <see langword="true"/> if being called in response to a <see cref="Dispose"/> call, otherwise <see langword="false"/>.
+        /// </param>
         protected virtual void Dispose(bool disposing)
         {
             if (disposing && !this.leaveOpen)
             {
                 this.textWriter.Dispose();
             }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the inclusion of <paramref name="ch"/> in a value should result in the value being delimited.
+        /// </summary>
+        /// <remarks>
+        /// This method is only called if delimiting hasn't already been determined as necessary. Once delimiting of a value is established as necessary, this method will
+        /// not be called for any remaining characters in the value.
+        /// </remarks>
+        /// <param name="ch"></param>
+        /// <returns></returns>
+        protected virtual bool ShouldDelimit(char ch)
+        {
+            return ch == this.valueSeparator || ch == Constants.CR || ch == Constants.LF;
         }
 
         private static bool IsWhitespace(char ch)
@@ -312,7 +552,7 @@
                 {
                     var ch = value[i];
 
-                    if ((ch == this.valueSeparator) || (ch == Constants.CR) || (ch == Constants.LF))
+                    if (!delimit && this.ShouldDelimit(ch))
                     {
                         // all these characters require the value to be delimited
                         this.valueBuilder.Append(ch);

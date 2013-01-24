@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="CopiousEscapedDelimiters" xml:space="preserve">
+    <value>""""""""""""""""""</value>
+  </data>
+  <data name="CopiousWhiteSpace" xml:space="preserve">
+    <value>abc        ,              def,ghi            
+				abc				,							def,ghi						
+	 	   abc    	  ,  	     	   def,ghi</value>
+  </data>
+  <data name="Delimited" xml:space="preserve">
+    <value>"She said ""hello""","first,second,third","a value over
+two lines"
+"He said ""hi there""","fourth,fifth,sixth","a value over
+three
+lines"
+"She said ""what's up?""","seventh,eighth,ninth,tenth","a value
+over
+four
+lines"</value>
+  </data>
+  <data name="PlainData" xml:space="preserve">
+    <value>Kent,Boogaart,33,Sidcup
+Belinda,Boogaart,34,Sidcup
+Tempany,Boogaart,8,Sidcup</value>
+  </data>
+  <data name="Stackoverflow" xml:space="preserve">
+    <value>"1",563355,62701,0,1235000081,"php,error,gd,image-processing",220,2,563372,67183,2,1235000501
+"2",563355,62701,0,1235000081,"php,error,gd,image-processing",220,2,563374,66554,0,1235000551
+"3",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,563358,15842,3,1235000177
+"4",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,563413,893,18,1235001545
+"5",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,563454,11649,4,1235002457
+"6",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,563472,50742,6,1235002809
+"7",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,563484,8899,1,1235003266
+"8",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,563635,60190,12,1235007817
+"9",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,563642,65235,1,1235007913
+"10",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,564028,32797,8,1235020626
+"11",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,564747,19619,1,1235040652
+"12",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,568102,10728,3,1235098147
+"13",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,568213,68757,5,1235101761
+"14",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,568221,26177,0,1235102039
+"15",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,568975,31141,0,1235124207
+"16",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,569399,21734,3,1235132888
+"17",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,931176,114979,0,1243739978
+"18",563356,15842,10,1235000140,"lisp,scheme,subjective,clojure",1047,16,931214,82368,1,1243741787
+"19",563365,68122,0,1235000369,"cocoa-touch,objective-c,design-patterns",108,3,563376,68122,0,1235000573
+"20",563365,68122,0,1235000369,"cocoa-touch,objective-c,design-patterns",108,3,563379,66344,2,1235000607</value>
+  </data>
+  <data name="UnnecessarilyDelimited" xml:space="preserve">
+    <value>"first","second","third fourth fifth"
+"1","2","3 4 5"
+"abc","def","ghijklmnoopqrstuvwxyz - 0123456789"</value>
+  </data>
+</root>

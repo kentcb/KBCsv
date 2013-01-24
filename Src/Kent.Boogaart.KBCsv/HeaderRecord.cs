@@ -33,7 +33,35 @@ namespace Kent.Boogaart.KBCsv
         /// The resultant header record will have no values, but is not read-only.
         /// </remarks>
         public HeaderRecord()
-            : this(Enumerable.Empty<string>(), false)
+            : this(false)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the HeaderRecord class with the specified column names.
+        /// </summary>
+        /// <remarks>
+        /// The resultant header record will have the specified column names as values and is not read-only.
+        /// </remarks>
+        /// <param name="columnNames">
+        /// The names of the columns in the header record.
+        /// </param>
+        public HeaderRecord(params string[] columnNames)
+            : this(false, columnNames)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the HeaderRecord class.
+        /// </summary>
+        /// <param name="columnNames">
+        /// The names of the columns in the header record.
+        /// </param>
+        /// <param name="readOnly">
+        /// <see langword="true"/> if the header record is read-only, otherwise <see langword="false"/>.
+        /// </param>
+        public HeaderRecord(bool readOnly, params string[] columnNames)
+            : this(readOnly, (IEnumerable<string>)columnNames)
         {
         }
 
@@ -47,7 +75,7 @@ namespace Kent.Boogaart.KBCsv
         /// The names of the columns in the header record.
         /// </param>
         public HeaderRecord(IEnumerable<string> columnNames)
-            : this(columnNames, false)
+            : this(false, columnNames)
         {
         }
 
@@ -60,8 +88,8 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="readOnly">
         /// <see langword="true"/> if the header record is read-only, otherwise <see langword="false"/>.
         /// </param>
-        public HeaderRecord(IEnumerable<string> columnNames, bool readOnly)
-            : base(columnNames, readOnly)
+        public HeaderRecord(bool readOnly, IEnumerable<string> columnNames)
+            : base(readOnly, columnNames)
         {
             columnNames.AssertNotNull("columnNames", true);
 

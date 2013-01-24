@@ -21,18 +21,12 @@
         <exception key="passedFirstRecord" type="System.InvalidOperationException">
             The CsvReader has already passed the first record, so this operation is not permitted.
         </exception>
-        <exception key="noRecords" type="System.InvalidOperationException">
-            No records remaining.
-        </exception>
     </exceptionGroup>
 
     <exceptionGroup type="Kent.Boogaart.KBCsv.CsvWriter">
         <exception key="disposed" type="System.ObjectDisposedException"/>
         <exception key="valueSeparatorAndDelimiterCannotMatch" type="System.ArgumentException">
             Value separator and delimiter cannot be the same.
-        </exception>
-        <exception key="valueSeparatorAndDelimiterCannotBeWhiteSpace" type="System.ArgumentException">
-            Value separator and delimiter cannot be white space.
         </exception>
         <exception key="invalidOffset" type="System.ArgumentException">
             Invalid offset.
@@ -46,11 +40,8 @@
     </exceptionGroup>
 
     <exceptionGroup type="Kent.Boogaart.KBCsv.Internal.CsvParser">
-        <exception key="value-separator-same-as-value-delimiter" type="System.ArgumentException">
-            The value separator and value delimiter must be different.
-        </exception>
-        <exception key="value-separator-or-value-delimiter-space" type="System.ArgumentException">
-            Space is not a valid value separator or delimiter.
+        <exception key="valueSeparatorAndDelimiterCannotMatch" type="System.ArgumentException">
+            Value separator and delimiter cannot be the same.
         </exception>
     </exceptionGroup>
 </exceptionHelper>
