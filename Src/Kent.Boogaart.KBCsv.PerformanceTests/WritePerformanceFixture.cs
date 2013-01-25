@@ -9,7 +9,7 @@
         [WritePerformanceTest]
         public void write_plain_csv(bool forceDelimit)
         {
-            var repeatCount = 100000;
+            var repeatCount = 200000;
 
             using (var csvWriter = new CsvWriter(new StringWriter()))
             {
@@ -27,7 +27,7 @@
         [WritePerformanceTest]
         public void write_csv_with_copious_whitespace(bool forceDelimit)
         {
-            var repeatCount = 100000;
+            var repeatCount = 200000;
 
             using (var csvWriter = new CsvWriter(new StringWriter()))
             {
@@ -81,7 +81,7 @@
         [WritePerformanceTest]
         public void write_csv_with_unnecessary_delimiters(bool forceDelimit)
         {
-            var repeatCount = 100000;
+            var repeatCount = 200000;
 
             using (var csvWriter = new CsvWriter(new StringWriter()))
             {

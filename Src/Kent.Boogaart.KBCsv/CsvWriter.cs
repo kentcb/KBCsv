@@ -479,17 +479,37 @@
         }
 
         /// <summary>
-        /// Gets a value indicating whether the inclusion of <paramref name="ch"/> in a value should result in the value being delimited.
+        /// Writes a character to the buffer being used to construct a value.
         /// </summary>
         /// <remarks>
-        /// This method is only called if delimiting hasn't already been determined as necessary. Once delimiting of a value is established as necessary, this method will
-        /// not be called for any remaining characters in the value.
+        /// <para>
+        /// By default, this method will ensure <paramref name="delimit"/> is <see langword="true"/> if <paramref name="ch"/> is <see cref="ValueSeparator"/>, <see cref="ValueDelimiter"/>, or an end of line character.
+        /// If <paramref name="ch"/> is <see cref="ValueDelimiter"/>, it will repeat it so that it is escaped in the CSV value.
+        /// </para>
+        /// <para>
+        /// Subclasses can override this behavior if necessary, but should take care to ensure that the resultant value in <paramref name="buffer"/> is valid for the scenario being addressed. <paramref name="delimit"/>
+        /// must be set to <see langword="true"/> if the value needs to be delimited prior to writing it to the underlying <see cref="TextWriter"/>.
+        /// </para>
         /// </remarks>
-        /// <param name="ch"></param>
-        /// <returns></returns>
-        protected virtual bool ShouldDelimit(char ch)
+        /// <param name="buffer">
+        /// The buffer containing the value being constructed.
+        /// </param>
+        /// <param name="ch">
+        /// The character to append.
+        /// </param>
+        /// <param name="delimit">
+        /// <see langword="true"/> if the value should be delimited.
+        /// </param>
+        protected virtual void WriteCharToBuffer(StringBuilder buffer, char ch, ref bool delimit)
         {
-            return ch == this.valueSeparator || ch == Constants.CR || ch == Constants.LF;
+            delimit = delimit || ch == this.valueSeparator || ch == this.valueDelimiter || ch == Constants.CR || ch == Constants.LF;
+            buffer.Append(ch);
+
+            if (ch == this.valueDelimiter)
+            {
+                // value delimiter is repeated so it is escaped
+                buffer.Append(ch);
+            }
         }
 
         private static bool IsWhitespace(char ch)
@@ -550,24 +570,7 @@
 
                 for (var i = 0; i < value.Length; ++i)
                 {
-                    var ch = value[i];
-
-                    if (!delimit && this.ShouldDelimit(ch))
-                    {
-                        // all these characters require the value to be delimited
-                        this.valueBuilder.Append(ch);
-                        delimit = true;
-                    }
-                    else if (ch == this.valueDelimiter)
-                    {
-                        // if the value contains the delimiter, we need to delimit the value and repeat the delimiter within to escape it
-                        this.valueBuilder.Append(this.valueDelimiter, 2);
-                        delimit = true;
-                    }
-                    else
-                    {
-                        this.valueBuilder.Append(ch);
-                    }
+                    this.WriteCharToBuffer(this.valueBuilder, value[i], ref delimit);
                 }
             }
 

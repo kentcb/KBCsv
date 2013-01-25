@@ -790,16 +790,15 @@ seven,eight,nine
         }
 
         [Fact]
-        public void should_delimit_can_be_used_to_customize_the_characters_that_cause_delimiting()
+        public void write_char_to_buffer_can_be_used_to_customize_the_way_values_are_written()
         {
             var stringWriter = new StringWriter();
-            var writer = new Mock<CsvWriter>(stringWriter);
-            writer.Protected().Setup<bool>("ShouldDelimit", '-').Returns(true);
+            var writer = new CustomCsvWriter(stringWriter);
 
-            writer.Object.ValueDelimiter = '\'';
-            writer.Object.NewLine = string.Empty;
-            writer.Object.WriteRecord("foo", "bar", "foo-bar");
-            writer.Object.Flush();
+            writer.ValueDelimiter = '\'';
+            writer.NewLine = string.Empty;
+            writer.WriteRecord("foo", "bar", "foo-bar");
+            writer.Flush();
 
             Assert.Equal("foo,bar,'foo-bar'", stringWriter.ToString());
         }
@@ -885,5 +884,24 @@ seven,eight,nine
 
             textWriter.Verify();
         }
+
+        #region Supporting Types
+
+        private sealed class CustomCsvWriter : CsvWriter
+        {
+            public CustomCsvWriter(TextWriter textWriter)
+                : base(textWriter)
+            {
+            }
+
+            protected override void WriteCharToBuffer(StringBuilder buffer, char ch, ref bool delimit)
+            {
+                // only values containing hyphens will be delimited
+                delimit = delimit || ch == '-';
+                buffer.Append(ch);
+            }
+        }
+
+        #endregion
     }
 }

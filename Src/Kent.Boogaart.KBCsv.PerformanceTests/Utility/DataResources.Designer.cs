@@ -8,8 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Kent.Boogaart.KBCsv.PerformanceTests.Utility
-{
+namespace Kent.Boogaart.KBCsv.PerformanceTests.Utility {
     using System;
     
     
@@ -40,7 +39,7 @@ namespace Kent.Boogaart.KBCsv.PerformanceTests.Utility
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kent.Boogaart.KBCsv.PerformanceTest.Utility.DataResources", typeof(DataResources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Kent.Boogaart.KBCsv.PerformanceTests.Utility.DataResources", typeof(DataResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
