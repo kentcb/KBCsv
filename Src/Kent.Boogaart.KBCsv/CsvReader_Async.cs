@@ -90,7 +90,7 @@ namespace Kent.Boogaart.KBCsv
         /// </para>
         /// </remarks>
         /// <returns>
-        /// The <see cref="T:HeaderRecord"/> that was read, also available via the <see cref="HeaderRecord"/> property. If no records are left, this method returns <see langword="null"/>.
+        /// The <see cref="Kent.Boogaart.KBCsv.HeaderRecord"/> that was read, also available via the <see cref="HeaderRecord"/> property. If no records are left, this method returns <see langword="null"/>.
         /// </returns>
         public async Task<HeaderRecord> ReadHeaderRecordAsync()
         {

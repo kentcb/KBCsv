@@ -235,6 +235,8 @@
     <Compile Include="..\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="CsvReaderExtensions.cs" />
+    <Compile Include="CsvReaderExtensions_Async.cs" />
     <Compile Include="DataExtensions.cs" />
     <Compile Include="DataExtensions_Async.cs" />
     <Compile Include="EnumerableExtensions.cs" />

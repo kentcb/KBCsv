@@ -32,11 +32,12 @@
     /// <para>
     /// Data records can be read via <see cref="ReadDataRecord"/> or <see cref="ReadDataRecords"/> (or their async counterparts, <see cref="ReadDataRecordAsync"/> and
     /// <see cref="ReadDataRecordsAsync"/>). These methods provide instances of <see cref="DataRecord"/>, which enables you to get at the underlying CSV values. Values can be
-    /// accessed by index, or - if a <see cref="T:HeaderRecord"/> has been assigned - by column names.
+    /// accessed by index, or - if a <see cref="Kent.Boogaart.KBCsv.HeaderRecord"/> has been assigned - by column names.
     /// </para>
     /// <para>
-    /// Data can be skipped via <see cref="SkipRecord"/> or <see cref="SkipRecords"/> (or their async counterparts, <see cref="SkipRecordAsync"/> and <see cref="SkipRecordsAsync"/>).
-    /// Skipping data is faster than reading (and discarding) it. Thus, if it is known that a number of records are not needed, it is recommended they be skipped rather than read.
+    /// Data can be skipped via <see cref="O:Kent.Boogaart.KBCsv.CsvReader.SkipRecord"/> or <see cref="O:Kent.Boogaart.KBCsv.CsvReader.SkipRecords"/> (or their async counterparts,
+    /// <see cref="O:Kent.Boogaart.KBCsv.CsvReader.SkipRecordAsync"/> and <see cref="O:Kent.Boogaart.KBCsv.CsvReader.SkipRecordsAsync"/>). Skipping data is faster than reading (and discarding)
+    /// it. Thus, if it is known that a number of records are not needed, it is recommended they be skipped rather than read.
     /// </para>
     /// <para>
     /// The <see cref="RecordNumber"/> property gives the total number of records read, including any header record.
@@ -62,7 +63,7 @@
     /// </example>
     /// <example>
     /// <para>
-    /// The following example reads data from an underlying UTF-8 encoded <see cref="Stream"/>. It treats the first record as a <see cref="T:HeaderRecord"/>, thus enabling
+    /// The following example reads data from an underlying UTF-8 encoded <see cref="Stream"/>. It treats the first record as a <see cref="Kent.Boogaart.KBCsv.HeaderRecord"/>, thus enabling
     /// the data to be accessed via column names.
     /// </para>
     /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 3" lang="cs"/>
@@ -447,7 +448,7 @@
         /// </para>
         /// </remarks>
         /// <returns>
-        /// The <see cref="T:HeaderRecord"/> that was read, also available via the <see cref="HeaderRecord"/> property. If no records are left, this method returns <see langword="null"/>.
+        /// The <see cref="Kent.Boogaart.KBCsv.HeaderRecord"/> that was read, also available via the <see cref="HeaderRecord"/> property. If no records are left, this method returns <see langword="null"/>.
         /// </returns>
         public HeaderRecord ReadHeaderRecord()
         {

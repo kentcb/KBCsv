@@ -21,7 +21,8 @@ Module Program
         'Example10()
         'Example11().Wait()
         'Example12()
-        Example13().Wait()
+        'Example13().Wait()
+        'Example14()
 
         Console.WriteLine()
         Console.WriteLine("DONE - any key to exit")
@@ -259,6 +260,25 @@ Module Program
             End Using
         End Using
     End Function
+
+#End Region
+
+#Region "Example 14"
+
+    Sub Example14()
+        Using stringWriter = New StringWriter()
+            Using reader = New CsvReader("PlanetaryData.csv")
+                Using writer = New CsvWriter(stringWriter)
+                    writer.ValueSeparator = Constants.vbTab
+                    writer.ValueDelimiter = "'"
+
+                    reader.CopyTo(writer)
+                End Using
+            End Using
+
+            Console.WriteLine(stringWriter)
+        End Using
+    End Sub
 
 #End Region
 

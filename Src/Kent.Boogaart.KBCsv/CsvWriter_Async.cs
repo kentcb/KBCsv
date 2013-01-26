@@ -18,6 +18,9 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="record">
         /// The record to write.
         /// </param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation.
+        /// </returns>
         public async Task WriteRecordAsync(RecordBase record)
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -37,6 +40,9 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="values">
         /// The values comprising the record.
         /// </param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation.
+        /// </returns>
         public async Task WriteRecordAsync(params string[] values)
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -56,6 +62,9 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="values">
         /// The values comprising the record.
         /// </param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation.
+        /// </returns>
         public async Task WriteRecordAsync(IEnumerable<string> values)
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -81,6 +90,9 @@ namespace Kent.Boogaart.KBCsv
         /// <param name="length">
         /// The number of records to write.
         /// </param>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation.
+        /// </returns>
         public async Task WriteRecordsAsync(RecordBase[] buffer, int offset, int length)
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
@@ -107,6 +119,9 @@ namespace Kent.Boogaart.KBCsv
         /// <remarks>
         /// This method can be used to flush the underlying <see cref="System.IO.TextWriter"/> to which this <c>CsvWriter</c> is writing data.
         /// </remarks>
+        /// <returns>
+        /// A <see cref="Task"/> representing the asynchronous operation.
+        /// </returns>
         public async Task FlushAsync()
         {
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");

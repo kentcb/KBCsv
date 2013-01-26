@@ -39,6 +39,7 @@
     <Compile Include="..\AssemblyInfoCommon.cs">
       <Link>Properties\AssemblyInfoCommon.cs</Link>
     </Compile>
+    <Compile Include="CsvReaderExtensionsFixture.cs" />
     <Compile Include="DataExtensionsFixture.cs" />
     <Compile Include="EnumerableExtensionsFixture.cs" />
   </ItemGroup>

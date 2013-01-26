@@ -18,16 +18,16 @@
     <OutputPath>..\Gen\Documentation\</OutputPath>
     <HtmlHelpName>KBCsv</HtmlHelpName>
     <DocumentationSources>
-      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\FX40 Release\Kent.Boogaart.KBCsv.dll" />
-      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\FX40 Release\Kent.Boogaart.KBCsv.xml" />
-      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\FX40 Release\Kent.Boogaart.KBCsv.Extensions.dll" />
-      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\FX40 Release\Kent.Boogaart.KBCsv.Extensions.xml" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\FX45 Release\Kent.Boogaart.KBCsv.dll" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\FX45 Release\Kent.Boogaart.KBCsv.xml" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\FX45 Release\Kent.Boogaart.KBCsv.Extensions.dll" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\FX45 Release\Kent.Boogaart.KBCsv.Extensions.xml" />
     </DocumentationSources>
-    <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
     <HelpTitle>KBCsv</HelpTitle>
     <RootNamespaceContainer>True</RootNamespaceContainer>
     <RootNamespaceTitle>API Documentation</RootNamespaceTitle>
-    <MissingTags>Summary, Parameter, Returns, Namespace, TypeParameter</MissingTags>
+    <MissingTags>Summary, Parameter, Returns, Namespace, TypeParameter, IncludeTargets</MissingTags>
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
       <NamespaceSummaryItem name="Kent.Boogaart.KBCsv" isDocumented="True">Contains KBCsv types that facilitate the reading and writing of CSV data.</NamespaceSummaryItem>
@@ -35,9 +35,9 @@
     </NamespaceSummaries>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <Preliminary>False</Preliminary>
-    <SdkLinkTarget>Blank</SdkLinkTarget>
+    <SdkLinkTarget>Self</SdkLinkTarget>
     <ComponentConfigurations>
-      <ComponentConfig id="Code Block Component" enabled="True" xmlns="">
+      <ComponentConfig id="Code Block Component" enabled="True">
         <component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
           <basePath value="{@HtmlEncProjectFolder}" />
           <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
@@ -47,11 +47,18 @@
         </component>
       </ComponentConfig>
     </ComponentConfigurations>
-    <SyntaxFilters>Standard</SyntaxFilters>
+    <SyntaxFilters>CSharp, VisualBasic, CPlusPlus, FSharp</SyntaxFilters>
     <PresentationStyle>VS2010</PresentationStyle>
-    <NamingMethod>Guid</NamingMethod>
+    <NamingMethod>MemberName</NamingMethod>
     <Language>en-US</Language>
     <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <IndentHtml>False</IndentHtml>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <CleanIntermediates>True</CleanIntermediates>
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->

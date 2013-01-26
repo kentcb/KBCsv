@@ -14,7 +14,7 @@ namespace Kent.Boogaart.KBCsv
     /// <remarks>
     /// <para>
     /// A <c>HeaderRecord</c> is a specialized <see cref="RecordBase"/> whose values are the names of columns in the CSV. It permits the index of each column to be obtained given
-    /// its name (see <see cref="P:PerfTest.HeaderRecord.Item(System.String)"/> and <see cref="GetColumnIndexOrNull"/>).
+    /// its name (see <see cref="P:Kent.Boogaart.KBCsv.HeaderRecord.Item(System.String)"/> and <see cref="GetColumnIndexOrNull"/>).
     /// </para>
     /// <para>
     /// Note that there is a cost to maintaining the indexes of columns by their name. If possible, favor passing in all column names during construction. Otherwise, favor using

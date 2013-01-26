@@ -23,8 +23,8 @@
     /// the <see cref="ForceDelimit"/> property to <see langword="true"/>.
     /// </para>
     /// <para>
-    /// Records can be written with the <see cref="WriteRecord"/> and <see cref="WriteRecords"/> methods (or their async counterparts, <see cref="WriteRecordAsync"/> and
-    /// <see cref="WriteRecordsAsync"/>). Doing so will increase <see cref="RecordNumber"/> accordingly.
+    /// Records can be written with <see cref="O:Kent.Boogaart.KBCsv.CsvWriter.WriteRecord"/> and <see cref="WriteRecords"/> methods (or their async counterparts,
+    /// <see cref="O:Kent.Boogaart.KBCsv.CsvWriter.WriteRecordAsync"/> and <see cref="WriteRecordsAsync"/>). Doing so will increase <see cref="RecordNumber"/> accordingly.
     /// </para>
     /// </remarks>
     /// <threadsafety>
@@ -71,7 +71,7 @@
         /// Initializes a new instance of the CsvWriter class.
         /// </summary>
         /// <remarks>
-        /// <paramref name="stream"/> will be encoded with <see cref="T:Encoding.Default"/>, and will be disposed when this <c>CsvWriter</c> is disposed.
+        /// <paramref name="stream"/> will be encoded with <see cref="System.Text.Encoding.Default"/>, and will be disposed when this <c>CsvWriter</c> is disposed.
         /// </remarks>
         /// <param name="stream">
         /// A stream to which CSV data will be written.
@@ -119,7 +119,7 @@
         /// Initializes a new instance of the CsvWriter class.
         /// </summary>
         /// <remarks>
-        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="T:Encoding.Default"/>.
+        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="System.Text.Encoding.Default"/>.
         /// </remarks>
         /// <param name="path">
         /// The path of the file to write.
@@ -147,7 +147,7 @@
         /// Initializes a new instance of the CsvWriter class.
         /// </summary>
         /// <remarks>
-        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="T:Encoding.Default"/>.
+        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="System.Text.Encoding.Default"/>.
         /// </remarks>
         /// <param name="path">
         /// The path of the file to write.
@@ -213,7 +213,7 @@
         }
 
         /// <summary>
-        /// Gets the <see cref="T:Encoding"/> being used when writing CSV data.
+        /// Gets the <see cref="System.Text.Encoding"/> being used when writing CSV data.
         /// </summary>
         public Encoding Encoding
         {

@@ -28,6 +28,7 @@
             //Example11().Wait();
             //Example12();
             //Example13();
+            //Example14();
 
             Console.WriteLine();
             Console.WriteLine("DONE - any key to exit");
@@ -294,6 +295,27 @@
             {
                 await Process.GetProcesses().WriteCsvAsync(writer, true, new string[] { "Id", "ProcessName", "WorkingSet64" });
                 await writer.FlushAsync();
+
+                Console.WriteLine(stringWriter);
+            }
+
+            #endregion
+        }
+
+        private static void Example14()
+        {
+            #region Example 14
+
+            using (var stringWriter = new StringWriter())
+            {
+                using (var reader = new CsvReader("PlanetaryData.csv"))
+                using (var writer = new CsvWriter(stringWriter))
+                {
+                    writer.ValueSeparator = '\t';
+                    writer.ValueDelimiter = '\'';
+
+                    reader.CopyTo(writer);
+                }
 
                 Console.WriteLine(stringWriter);
             }
