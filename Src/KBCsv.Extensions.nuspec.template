@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
   <metadata>
-    <id>Kent.Boogaart.KBCsv</id>
+    <id>Kent.Boogaart.KBCsv.Extensions</id>
     <version>${VERSION}</version>
     <authors>Kent Boogaart</authors>
     <owners>Kent Boogaart</owners>
@@ -9,11 +9,12 @@
     <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-        KBCsv is an efficient, easy to use .NET parsing and writing library for the CSV (comma-separated values) format. Online at http://kbcsv.codeplex.com/.
+        Provides extensions to KBCsv. Online at http://kbcsv.codeplex.com/.
     </description>
-    <tags>.NET CSV comma separated value library mono Silverlight KBCsv</tags>
+    <tags>.NET CSV comma separated value library mono Silverlight KBCsv extensions</tags>
     <dependencies>
         <dependency id="Kent.Boogaart.HelperTrinity" version="1.4.0.0" />
+        <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
     </dependencies>
   </metadata>
 </package>

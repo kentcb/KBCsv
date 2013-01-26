@@ -34,6 +34,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\AssemblyInfoCommon.cs">
@@ -55,6 +58,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Kent.Boogaart.KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.csproj">
+      <Project>{25be0d57-febe-40ee-870e-4b891f25a807}</Project>
+      <Name>Kent.Boogaart.KBCsv.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kent.Boogaart.KBCsv\Kent.Boogaart.KBCsv.csproj">
       <Project>{15be0d57-febe-40ee-870e-4b891f25a807}</Project>
       <Name>Kent.Boogaart.KBCsv</Name>

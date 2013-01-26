@@ -20,6 +20,8 @@
     <DocumentationSources>
       <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\FX40 Release\Kent.Boogaart.KBCsv.dll" />
       <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\FX40 Release\Kent.Boogaart.KBCsv.xml" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\FX40 Release\Kent.Boogaart.KBCsv.Extensions.dll" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\FX40 Release\Kent.Boogaart.KBCsv.Extensions.xml" />
     </DocumentationSources>
     <FrameworkVersion>.NET Framework 4.0</FrameworkVersion>
     <HelpTitle>KBCsv</HelpTitle>
@@ -29,6 +31,7 @@
     <NamespaceSummaries>
       <NamespaceSummaryItem name="(global)" isDocumented="False" />
       <NamespaceSummaryItem name="Kent.Boogaart.KBCsv" isDocumented="True">Contains KBCsv types that facilitate the reading and writing of CSV data.</NamespaceSummaryItem>
+      <NamespaceSummaryItem name="Kent.Boogaart.KBCsv.Extensions" isDocumented="True">Contains types that extend core KBCsv functionality.</NamespaceSummaryItem>
     </NamespaceSummaries>
     <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
     <Preliminary>False</Preliminary>

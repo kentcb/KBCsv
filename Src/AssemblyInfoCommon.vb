@@ -9,7 +9,7 @@ Imports System.Security.Permissions
 
 ' this is used to version artifacts. AssemblyInformationalVersion should use semantic versioning (http://semver.org/)
 ' be sure to update the corresponding C# AssemblyInfoCommon.cs
-<Assembly: AssemblyInformationalVersion("2.0.0-alpha")> 
+<Assembly: AssemblyInformationalVersion("2.0.0-beta")> 
 <Assembly: AssemblyVersion("2.0.0.0")> 
 
 <Assembly: AssemblyCompany("Kent Boogaart")> 

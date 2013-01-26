@@ -1,6 +1,9 @@
-﻿Imports System.IO
+﻿Imports System.Data
+Imports System.IO
 Imports System.Text
 Imports System.Threading.Tasks
+Imports Kent.Boogaart.KBCsv.Extensions
+Imports System.Windows.Forms
 
 Module Program
 
@@ -14,6 +17,11 @@ Module Program
         'Example6()
         'Example7()
         'Example8().Wait()
+        'Example9()
+        'Example10()
+        'Example11().Wait()
+        'Example12()
+        Example13().Wait()
 
         Console.WriteLine()
         Console.WriteLine("DONE - any key to exit")
@@ -160,6 +168,94 @@ Module Program
                     Dim read As Integer = Await reader.ReadDataRecordsAsync(buffer, 0, buffer.Length)
                     Await writer.WriteRecordsAsync(buffer, 0, read)
                 End While
+            End Using
+        End Using
+    End Function
+
+#End Region
+
+#Region "Example 9"
+
+    Sub Example9()
+        Dim table As New DataTable()
+
+        Using reader = New CsvReader("PlanetaryData.csv")
+            reader.ReadHeaderRecord()
+            table.Fill(reader)
+        End Using
+
+        Console.WriteLine("Table contains {0} rows.", table.Rows.Count)
+    End Sub
+
+#End Region
+
+#Region "Example 10"
+
+    Sub Example10()
+        Dim table As New DataTable()
+        table.Columns.Add("Name")
+        table.Columns.Add("Age")
+        table.Rows.Add("Kent", 33)
+        table.Rows.Add("Belinda", 34)
+        table.Rows.Add("Tempany", 8)
+        table.Rows.Add("Xak", 0)
+
+        Using stringWriter = New StringWriter()
+            Using writer = New CsvWriter(stringWriter)
+                table.WriteCsv(writer)
+            End Using
+
+            Console.WriteLine("CSV: {0}", stringWriter)
+        End Using
+    End Sub
+
+#End Region
+
+#Region "Example 11"
+
+    Async Function Example11() As Task
+        Dim table As New DataTable()
+
+        Using reader = New CsvReader("PlanetaryData.csv")
+            Await reader.ReadHeaderRecordAsync()
+            Await table.FillAsync(reader)
+        End Using
+
+        Using stringWriter = New StringWriter()
+            Using writer = New CsvWriter(stringWriter)
+                table.WriteCsv(writer, False, 5)
+            End Using
+
+            Console.WriteLine("CSV: {0}", stringWriter)
+        End Using
+    End Function
+
+#End Region
+
+#Region "Example 12"
+
+    Sub Example12()
+        Using stringWriter = New StringWriter()
+            Using writer = New CsvWriter(stringWriter)
+                Screen.AllScreens.WriteCsv(writer)
+                writer.Flush()
+
+                Console.WriteLine(stringWriter)
+            End Using
+        End Using
+    End Sub
+
+#End Region
+
+#Region "Example 13"
+
+    Async Function Example13() As Task
+        Using stringWriter = New StringWriter()
+            Using writer = New CsvWriter(stringWriter)
+                Await Process.GetProcesses().WriteCsvAsync(writer, True, {"Id", "ProcessName", "WorkingSet64"})
+                Await writer.FlushAsync()
+
+                Console.WriteLine(stringWriter)
             End Using
         End Using
     End Function

@@ -1,9 +1,14 @@
 ﻿namespace Kent.Boogaart.KBCsv.Examples.CSharp
 {
     using System;
+    using System.Data;
+    using System.Diagnostics;
     using System.IO;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
+    using System.Windows.Forms;
+    using Kent.Boogaart.KBCsv.Extensions;
 
     class Program
     {
@@ -18,6 +23,11 @@
             //Example6();
             //Example7();
             //Example8().Wait();
+            //Example9();
+            //Example10();
+            //Example11().Wait();
+            //Example12();
+            //Example13();
 
             Console.WriteLine();
             Console.WriteLine("DONE - any key to exit");
@@ -187,6 +197,105 @@
                     var read = await reader.ReadDataRecordsAsync(buffer, 0, buffer.Length);
                     await writer.WriteRecordsAsync(buffer, 0, read);
                 }
+            }
+
+            #endregion
+        }
+
+        private static void Example9()
+        {
+            #region Example 9
+
+            var table = new DataTable();
+
+            using (var reader = new CsvReader("PlanetaryData.csv"))
+            {
+                reader.ReadHeaderRecord();
+                table.Fill(reader);
+            }
+
+            Console.WriteLine("Table contains {0} rows.", table.Rows.Count);
+
+            #endregion
+        }
+
+        private static void Example10()
+        {
+            #region Example 10
+
+            var table = new DataTable();
+            table.Columns.Add("Name");
+            table.Columns.Add("Age");
+            table.Rows.Add("Kent", 33);
+            table.Rows.Add("Belinda", 34);
+            table.Rows.Add("Tempany", 8);
+            table.Rows.Add("Xak", 0);
+
+            using (var stringWriter = new StringWriter())
+            {
+                using (var writer = new CsvWriter(stringWriter))
+                {
+                    table.WriteCsv(writer);
+                }
+
+                Console.WriteLine("CSV: {0}", stringWriter);
+            }
+
+            #endregion
+        }
+
+        private async static Task Example11()
+        {
+            #region Example 11
+
+            var table = new DataTable();
+
+            using (var reader = new CsvReader("PlanetaryData.csv"))
+            {
+                await reader.ReadHeaderRecordAsync();
+                await table.FillAsync(reader);
+            }
+
+            using (var stringWriter = new StringWriter())
+            {
+                using (var writer = new CsvWriter(stringWriter))
+                {
+                    table.WriteCsv(writer, false, 5);
+                }
+
+                Console.WriteLine("CSV: {0}", stringWriter);
+            }
+
+            #endregion
+        }
+
+        private static void Example12()
+        {
+            #region Example 12
+
+            using (var stringWriter = new StringWriter())
+            using (var writer = new CsvWriter(stringWriter))
+            {
+                Screen.AllScreens.WriteCsv(writer);
+                writer.Flush();
+
+                Console.WriteLine(stringWriter);
+            }
+
+            #endregion
+        }
+
+        private async static void Example13()
+        {
+            #region Example 13
+
+            using (var stringWriter = new StringWriter())
+            using (var writer = new CsvWriter(stringWriter))
+            {
+                await Process.GetProcesses().WriteCsvAsync(writer, true, new string[] { "Id", "ProcessName", "WorkingSet64" });
+                await writer.FlushAsync();
+
+                Console.WriteLine(stringWriter);
             }
 
             #endregion
