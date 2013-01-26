@@ -157,6 +157,12 @@
         </CreateItem>
         <Copy SourceFiles="@(%(Framework.Identity)KBCsvExtensionFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions\lib\%(Framework.NuGetName)" />
 
+        <CreateItem Include="$(SrcDir)\**\*.*" Exclude="$(SrcDir)\**\*.suo;$(SrcDir)\**\*.csproj.user;$(SrcDir)\**\*.gpState;$(SrcDir)\**\bin\**;$(SrcDir)\**\obj\**;$(SrcDir)\**\.svn\**">
+            <Output ItemName="Source_Files" TaskParameter="Include" />
+        </CreateItem>
+        <Copy SourceFiles="@(Source_Files)" DestinationFolder="$(GenDir)\NuGet\KBCsv\src\%(RecursiveDir)"/>
+        <Copy SourceFiles="@(Source_Files)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions\src\%(RecursiveDir)"/>
+
         <!-- pack the nugets -->
         <Exec Command='"$(LibDir)\NuGet\NuGet.exe" pack -symbols "$(GenDir)\NuGet\KBCsv\Kent.Boogaart.KBCsv.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
         <Exec Command='"$(LibDir)\NuGet\NuGet.exe" pack -symbols "$(GenDir)\NuGet\KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
@@ -170,7 +176,7 @@
     <Target Name="PublishNuGetPackages" DependsOnTargets="GetVersion">
         <!-- symbol packages are automatically pushed too -->
         <Exec Command='"$(LibDir)\NuGet\NuGet.exe" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.$(Version).nupkg"'/>
-        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.Extended.$(Version).nupkg"'/>
+        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.Extensions.$(Version).nupkg"'/>
     </Target>
 
     <!-- ensure the Version property is set appropriately -->
