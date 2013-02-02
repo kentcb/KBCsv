@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 
 // this is used to version artifacts. AssemblyInformationalVersion should use semantic versioning (http://semver.org/)
 // be sure to update the corresponding VB.NET AssemblyInfoCommon.vb
-[assembly: AssemblyInformationalVersion("2.0.0-beta")]
+[assembly: AssemblyInformationalVersion("2.0.0")]
 [assembly: AssemblyVersion("2.0.0.0")]
 
 [assembly: AssemblyCompany("Kent Boogaart")]
