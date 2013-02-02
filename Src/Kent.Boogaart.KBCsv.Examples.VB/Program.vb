@@ -4,34 +4,45 @@ Imports System.Text
 Imports System.Threading.Tasks
 Imports Kent.Boogaart.KBCsv.Extensions
 Imports System.Windows.Forms
+Imports System.Reflection
+Imports System.Runtime.CompilerServices
+Imports System.Threading
 
 Module Program
-
     Sub Main()
-        ' uncomment the example you would like to run
-        'Example1()
-        'Example2()
-        'Example3()
-        'Example4()
-        'Example5().Wait()
-        'Example6()
-        'Example7()
-        'Example8().Wait()
-        'Example9()
-        'Example10()
-        'Example11().Wait()
-        'Example12()
-        'Example13().Wait()
-        'Example14()
+        Dim examples As Dictionary(Of Char, MethodInfo) = GetType(Program).GetMethods(BindingFlags.Static Or BindingFlags.NonPublic).Where(Function(x As MethodInfo) x.Name <> "Main" AndAlso x.GetCustomAttribute(Of CompilerGeneratedAttribute)() Is Nothing).Select(Function(m As MethodInfo, i As Integer) New With {.Method = m, .Key = Chr(Asc("a") + i)}).ToDictionary(Function(e) e.Key, Function(e) e.Method)
 
-        Console.WriteLine()
-        Console.WriteLine("DONE - any key to exit")
-        Console.ReadKey()
+        While True
+            Console.Clear()
+            Console.WriteLine("Choose an example to run:")
+
+            For Each example As KeyValuePair(Of Char, MethodInfo) In examples
+                Console.WriteLine("  {0}. {1}", example.Key, example.Value.Name)
+            Next
+
+            Dim choice As ConsoleKeyInfo = Console.ReadKey()
+
+            If examples.ContainsKey(choice.KeyChar) Then
+                Console.CursorLeft = 0
+                Console.WriteLine(" ")
+
+                Dim result As Task = TryCast(examples(choice.KeyChar).Invoke(Nothing, Nothing), Task)
+
+                While result IsNot Nothing AndAlso Not result.IsCompleted
+                    Console.Write(".")
+                    Thread.Sleep(100)
+                End While
+
+                Console.WriteLine()
+                Console.WriteLine("Done - press a key to choose another example")
+                Console.ReadKey()
+            End If
+        End While
     End Sub
 
-#Region "Example 1"
+#Region "ReadCSVFromString"
 
-    Sub Example1()
+    Private Sub ReadCSVFromString()
         Dim csv As String = "Kent,33" & vbCrLf &
             "Belinda,34" & vbCrLf &
             "Tempany,8"
@@ -46,9 +57,29 @@ Module Program
 
 #End Region
 
-#Region "Example 2"
+#Region "ReadCSVFromStringPreservingWhiteSpace"
 
-    Sub Example2()
+    Private Sub ReadCSVFromStringPreservingWhiteSpace()
+        Dim csv As String = "Kent   ,33" & vbCrLf &
+            "Belinda,34" & vbCrLf &
+            "Tempany, 8"
+
+        Using reader = CsvReader.FromCsvString(csv)
+            reader.PreserveLeadingWhiteSpace = True
+            reader.PreserveTrailingWhiteSpace = True
+
+            While reader.HasMoreRecords
+                Dim dataRecord As DataRecord = reader.ReadDataRecord()
+                Console.WriteLine("{0} is {1} years old.", dataRecord.Item(0), dataRecord.Item(1))
+            End While
+        End Using
+    End Sub
+
+#End Region
+
+#Region "ReadTabDelimitedDataFromFile"
+
+    Private Sub ReadTabDelimitedDataFromFile()
         Using reader = New CsvReader("PlanetaryData.tdv")
             reader.ValueSeparator = Constants.vbTab
             reader.ValueDelimiter = "'"
@@ -62,9 +93,27 @@ Module Program
 
 #End Region
 
-#Region "Example 3"
+#Region "ReadCSVFromFile"
 
-    Sub Example3()
+    Private Sub ReadCSVFromFile()
+        Using reader = New CsvReader("PlanetaryData.csv")
+            ' the CSV file has a header record, so we read that first
+            reader.ReadHeaderRecord()
+
+            While reader.HasMoreRecords
+                Dim dataRecord As DataRecord = reader.ReadDataRecord()
+
+                ' since the reader has a header record, we can access data by column names as well as by index
+                Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item("Name"), dataRecord.Item("Nickname"))
+            End While
+        End Using
+    End Sub
+
+#End Region
+
+#Region "ReadCSVFromStream"
+
+    Private Sub ReadCSVFromStream()
         Using stream = New FileStream("PlanetaryData.csv", FileMode.Open)
             Using reader = New CsvReader(stream, Encoding.UTF8)
                 reader.ReadHeaderRecord()
@@ -79,9 +128,9 @@ Module Program
 
 #End Region
 
-#Region "Example 4"
+#Region "ReadCSVFromFileWithExplicitHeader"
 
-    Sub Example4()
+    Private Sub ReadCSVFromFileWithExplicitHeader()
         Using reader = New CsvReader("PlanetaryData_NoHeader.csv")
             reader.HeaderRecord = New HeaderRecord("OfficialName", "NickName")
 
@@ -95,9 +144,9 @@ Module Program
 
 #End Region
 
-#Region "Example 5"
+#Region "ReadCSVFromFileAsynchronously"
 
-    Async Function Example5() As Task
+    Private Async Function ReadCSVFromFileAsynchronously() As Task
         Using textReader = New StreamReader("PlanetaryData.csv")
             Using reader = New CsvReader(textReader, True)
                 Await reader.ReadHeaderRecordAsync()
@@ -118,9 +167,9 @@ Module Program
 
 #End Region
 
-#Region "Example 6"
+#Region "WriteCSVToString"
 
-    Sub Example6()
+    Private Sub WriteCSVToString()
         Using stringWriter = New StringWriter()
             Using writer = New CsvWriter(stringWriter)
                 writer.WriteRecord("Name", "Age")
@@ -135,9 +184,26 @@ Module Program
 
 #End Region
 
-#Region "Example 7"
+#Region "WriteCSVToFile"
 
-    Sub Example7()
+    Private Sub WriteCSVToFile()
+        Using writer = New CsvWriter("Output.csv")
+            writer.ForceDelimit = True
+
+            writer.WriteRecord("Name", "Age")
+            writer.WriteRecord("Kent", "33")
+            writer.WriteRecord("Belinda", "34")
+            writer.WriteRecord("Tempany", "8")
+
+            Console.WriteLine("{0} records written", writer.RecordNumber)
+        End Using
+    End Sub
+
+#End Region
+
+#Region "WriteCSVToStreamWithForcedDelimiting"
+
+    Private Sub WriteCSVToStreamWithForcedDelimiting()
         Using memoryStream = New MemoryStream()
             Using writer = New CsvWriter(memoryStream, Encoding.ASCII, True)
                 writer.ForceDelimit = True
@@ -154,9 +220,9 @@ Module Program
 
 #End Region
 
-#Region "Example 8"
+#Region "ReadCSVFromFileAndWriteToTabDelimitedFile"
 
-    Async Function Example8() As Task
+    Private Async Function ReadCSVFromFileAndWriteToTabDelimitedFile() As Task
         Using reader = New CsvReader("PlanetaryData.csv")
             Using writer = New CsvWriter("PlanetaryData_Modified.csv")
                 writer.ValueSeparator = Constants.vbTab
@@ -175,9 +241,9 @@ Module Program
 
 #End Region
 
-#Region "Example 9"
+#Region "FillDataTableFromCSVFile"
 
-    Sub Example9()
+    Private Sub FillDataTableFromCSVFile()
         Dim table As New DataTable()
 
         Using reader = New CsvReader("PlanetaryData.csv")
@@ -190,9 +256,9 @@ Module Program
 
 #End Region
 
-#Region "Example 10"
+#Region "WriteDataTableToCSV"
 
-    Sub Example10()
+    Private Sub WriteDataTableToCSV()
         Dim table As New DataTable()
         table.Columns.Add("Name")
         table.Columns.Add("Age")
@@ -212,9 +278,9 @@ Module Program
 
 #End Region
 
-#Region "Example 11"
+#Region "FillDataTableFromCSVFileThenWriteSomeToStringAsynchronously"
 
-    Async Function Example11() As Task
+    Private Async Function FillDataTableFromCSVFileThenWriteSomeToStringAsynchronously() As Task
         Dim table As New DataTable()
 
         Using reader = New CsvReader("PlanetaryData.csv")
@@ -233,9 +299,9 @@ Module Program
 
 #End Region
 
-#Region "Example 12"
+#Region "WriteScreenInformationToCSV"
 
-    Sub Example12()
+    Private Sub WriteScreenInformationToCSV()
         Using stringWriter = New StringWriter()
             Using writer = New CsvWriter(stringWriter)
                 Screen.AllScreens.WriteCsv(writer)
@@ -248,9 +314,9 @@ Module Program
 
 #End Region
 
-#Region "Example 13"
+#Region "WriteSelectedProcessInformationCSVAsynchronously"
 
-    Async Function Example13() As Task
+    Private Async Function WriteSelectedProcessInformationCSVAsynchronously() As Task
         Using stringWriter = New StringWriter()
             Using writer = New CsvWriter(stringWriter)
                 Await Process.GetProcesses().WriteCsvAsync(writer, True, {"Id", "ProcessName", "WorkingSet64"})
@@ -263,9 +329,9 @@ Module Program
 
 #End Region
 
-#Region "Example 14"
+#Region "CopyCSVFileToStringWriter"
 
-    Sub Example14()
+    Private Sub CopyCSVFileToStringWriter()
         Using stringWriter = New StringWriter()
             Using reader = New CsvReader("PlanetaryData.csv")
                 Using writer = New CsvWriter(stringWriter)

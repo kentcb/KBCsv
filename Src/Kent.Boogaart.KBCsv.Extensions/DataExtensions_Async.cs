@@ -33,7 +33,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
         /// </returns>
         public async static Task<int> FillAsync(this DataSet @this, CsvReader csvReader)
         {
-            return await @this.FillAsync(csvReader, DefaultTableName);
+            return await @this.FillAsync(csvReader, DefaultTableName).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
         /// </returns>
         public async static Task<int> FillAsync(this DataSet @this, CsvReader csvReader, string tableName)
         {
-            return await @this.FillAsync(csvReader, tableName, null);
+            return await @this.FillAsync(csvReader, tableName, null).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
             tableName.AssertNotNull("tableName");
 
             var table = @this.Tables.Add(tableName);
-            return await table.FillAsync(csvReader, maximumRecords);
+            return await table.FillAsync(csvReader, maximumRecords).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
         /// </returns>
         public async static Task<int> FillAsync(this DataTable @this, CsvReader csvReader)
         {
-            return await @this.FillAsync(csvReader, null);
+            return await @this.FillAsync(csvReader, null).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -167,7 +167,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
 
             while (remaining > 0)
             {
-                var read = await csvReader.ReadDataRecordsAsync(buffer, 0, Math.Min(buffer.Length, remaining));
+                var read = await csvReader.ReadDataRecordsAsync(buffer, 0, Math.Min(buffer.Length, remaining)).ConfigureAwait(false);
 
                 if (read == 0)
                 {
@@ -211,7 +211,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
         /// </returns>
         public async static Task<int> WriteCsvAsync(this DataTable @this, CsvWriter csvWriter)
         {
-            return await @this.WriteCsvAsync(csvWriter, true);
+            return await @this.WriteCsvAsync(csvWriter, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
         /// </returns>
         public async static Task<int> WriteCsvAsync(this DataTable @this, CsvWriter csvWriter, bool writeHeaderRecord)
         {
-            return await @this.WriteCsvAsync(csvWriter, writeHeaderRecord, null);
+            return await @this.WriteCsvAsync(csvWriter, writeHeaderRecord, null).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -261,7 +261,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
         /// </returns>
         public async static Task<int> WriteCsvAsync(this DataTable @this, CsvWriter csvWriter, bool writeHeaderRecord, int? maximumRows)
         {
-            return await @this.WriteCsvAsync(csvWriter, writeHeaderRecord, maximumRows, o => o == null ? string.Empty : o.ToString());
+            return await @this.WriteCsvAsync(csvWriter, writeHeaderRecord, maximumRows, o => o == null ? string.Empty : o.ToString()).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -304,7 +304,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
                     columnNames[i] = @this.Columns[i].ColumnName;
                 }
 
-                await csvWriter.WriteRecordAsync(columnNames);
+                await csvWriter.WriteRecordAsync(columnNames).ConfigureAwait(false);
             }
 
             var maximum = maximumRows.GetValueOrDefault(int.MaxValue);
@@ -325,7 +325,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
                 if (bufferOffset == buffer.Length)
                 {
                     // buffer full
-                    await csvWriter.WriteRecordsAsync(buffer, 0, buffer.Length);
+                    await csvWriter.WriteRecordsAsync(buffer, 0, buffer.Length).ConfigureAwait(false);
                     bufferOffset = 0;
                 }
 
@@ -336,7 +336,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
             }
 
             // write any outstanding data in buffer
-            await csvWriter.WriteRecordsAsync(buffer, 0, bufferOffset);
+            await csvWriter.WriteRecordsAsync(buffer, 0, bufferOffset).ConfigureAwait(false);
 
             return num;
         }

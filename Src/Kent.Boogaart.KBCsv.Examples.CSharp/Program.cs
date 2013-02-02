@@ -5,6 +5,8 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Reflection;
+    using System.Runtime.CompilerServices;
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
@@ -14,34 +16,50 @@
     {
         static void Main(string[] args)
         {
-            // uncomment the example you would like to run
-            //Example1();
-            //Example2();
-            //Example3();
-            //Example4();
-            //Example5().Wait();
-            //Example6();
-            //Example7();
-            //Example8().Wait();
-            //Example9();
-            //Example10();
-            //Example11().Wait();
-            //Example12();
-            //Example13();
-            //Example14();
+            var examples = typeof(Program)
+                .GetMethods(BindingFlags.NonPublic | BindingFlags.Static)
+                .Where(x => x.Name != "Main" && x.GetCustomAttribute<CompilerGeneratedAttribute>() == null)
+                .Select((m, i) => new { Method = m, Key = (char)('a' + i) })
+                .ToDictionary(e => e.Key, e => e.Method);
 
-            Console.WriteLine();
-            Console.WriteLine("DONE - any key to exit");
-            Console.ReadKey();
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Choose an example to run:");
+
+                foreach (var example in examples)
+                {
+                    Console.WriteLine("  {0}. {1}", example.Key, example.Value.Name);
+                }
+
+                var choice = Console.ReadKey();
+
+                if (examples.ContainsKey(choice.KeyChar))
+                {
+                    Console.CursorLeft = 0;
+                    Console.WriteLine(" ");
+
+                    var result = examples[choice.KeyChar].Invoke(null, null) as Task;
+
+                    while (result != null)
+                    {
+                        result.Wait();
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("Done - press a key to choose another example");
+                    Console.ReadKey();
+                }
+            }
         }
 
-        private static void Example1()
+        private static void ReadCSVFromString()
         {
-            #region Example 1
+            #region ReadCSVFromString
 
             var csv = @"Kent,33
-            Belinda,34
-            Tempany,8";
+Belinda,34
+Tempany,8";
 
             using (var reader = CsvReader.FromCsvString(csv))
             {
@@ -55,9 +73,32 @@
             #endregion
         }
 
-        private static void Example2()
+        private static void ReadCSVFromStringPreservingWhiteSpace()
         {
-            #region Example 2
+            #region ReadCSVFromStringPreservingWhiteSpace
+
+            var csv = @"Kent   ,33
+Belinda,34
+Tempany, 8";
+
+            using (var reader = CsvReader.FromCsvString(csv))
+            {
+                reader.PreserveLeadingWhiteSpace = true;
+                reader.PreserveTrailingWhiteSpace = true;
+
+                while (reader.HasMoreRecords)
+                {
+                    var dataRecord = reader.ReadDataRecord();
+                    Console.WriteLine("{0} is {1} years old.", dataRecord[0], dataRecord[1]);
+                }
+            }
+
+            #endregion
+        }
+
+        private static void ReadTabDelimitedDataFromFile()
+        {
+            #region ReadTabDelimitedDataFromFile
 
             using (var reader = new CsvReader("PlanetaryData.tdv"))
             {
@@ -74,9 +115,30 @@
             #endregion
         }
 
-        private static void Example3()
+        private static void ReadCSVFromFile()
         {
-            #region Example 3
+            #region ReadCSVFromFile
+
+            using (var reader = new CsvReader("PlanetaryData.csv"))
+            {
+                // the CSV file has a header record, so we read that first
+                reader.ReadHeaderRecord();
+
+                while (reader.HasMoreRecords)
+                {
+                    var dataRecord = reader.ReadDataRecord();
+
+                    // since the reader has a header record, we can access data by column names as well as by index
+                    Console.WriteLine("{0} is nicknamed {1}.", dataRecord[0], dataRecord["Nickname"]);
+                }
+            }
+
+            #endregion
+        }
+
+        private static void ReadCSVFromStream()
+        {
+            #region ReadCSVFromStream
 
             using (var stream = new FileStream("PlanetaryData.csv", FileMode.Open))
             using (var reader = new CsvReader(stream, Encoding.UTF8))
@@ -93,9 +155,9 @@
             #endregion
         }
 
-        private static void Example4()
+        private static void ReadCSVFromFileWithExplicitHeader()
         {
-            #region Example 4
+            #region ReadCSVFromFileWithExplicitHeader
 
             using (var reader = new CsvReader("PlanetaryData_NoHeader.csv"))
             {
@@ -112,9 +174,9 @@
             #endregion
         }
 
-        private async static Task Example5()
+        private async static Task ReadCSVFromFileAsynchronously()
         {
-            #region Example 5
+            #region ReadCSVFromFileAsynchronously
 
             using (var textReader = new StreamReader("PlanetaryData.csv"))
             using (var reader = new CsvReader(textReader, true))
@@ -138,9 +200,9 @@
             #endregion
         }
 
-        private static void Example6()
+        private static void WriteCSVToString()
         {
-            #region Example 6
+            #region WriteCSVToString
 
             using (var stringWriter = new StringWriter())
             {
@@ -158,9 +220,28 @@
             #endregion
         }
 
-        private static void Example7()
+        private static void WriteCSVToFile()
         {
-            #region Example 7
+            #region WriteCSVToFile
+
+            using (var writer = new CsvWriter("Output.csv"))
+            {
+                writer.ForceDelimit = true;
+
+                writer.WriteRecord("Name", "Age");
+                writer.WriteRecord("Kent", "33");
+                writer.WriteRecord("Belinda", "34");
+                writer.WriteRecord("Tempany", "8");
+
+                Console.WriteLine("{0} records written", writer.RecordNumber);
+            }
+
+            #endregion
+        }
+
+        private static void WriteCSVToStreamWithForcedDelimiting()
+        {
+            #region WriteCSVToStreamWithForcedDelimiting
 
             using (var memoryStream = new MemoryStream())
             {
@@ -180,9 +261,9 @@
             #endregion
         }
 
-        private async static Task Example8()
+        private async static Task ReadCSVFromFileAndWriteToTabDelimitedFile()
         {
-            #region Example 8
+            #region ReadCSVFromFileAndWriteToTabDelimitedFile
 
             using (var reader = new CsvReader("PlanetaryData.csv"))
             using (var writer = new CsvWriter("PlanetaryData_Modified.csv"))
@@ -203,9 +284,9 @@
             #endregion
         }
 
-        private static void Example9()
+        private static void FillDataTableFromCSVFile()
         {
-            #region Example 9
+            #region FillDataTableFromCSVFile
 
             var table = new DataTable();
 
@@ -220,9 +301,9 @@
             #endregion
         }
 
-        private static void Example10()
+        private static void WriteDataTableToCSV()
         {
-            #region Example 10
+            #region WriteDataTableToCSV
 
             var table = new DataTable();
             table.Columns.Add("Name");
@@ -245,9 +326,9 @@
             #endregion
         }
 
-        private async static Task Example11()
+        private async static Task FillDataTableFromCSVFileThenWriteSomeToStringAsynchronously()
         {
-            #region Example 11
+            #region FillDataTableFromCSVFileThenWriteSomeToStringAsynchronously
 
             var table = new DataTable();
 
@@ -261,7 +342,7 @@
             {
                 using (var writer = new CsvWriter(stringWriter))
                 {
-                    table.WriteCsv(writer, false, 5);
+                    await table.WriteCsvAsync(writer, false, 5);
                 }
 
                 Console.WriteLine("CSV: {0}", stringWriter);
@@ -270,9 +351,9 @@
             #endregion
         }
 
-        private static void Example12()
+        private static void WriteScreenInformationToCSV()
         {
-            #region Example 12
+            #region WriteScreenInformationToCSV
 
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -286,9 +367,9 @@
             #endregion
         }
 
-        private async static void Example13()
+        private async static void WriteSelectedProcessInformationCSVAsynchronously()
         {
-            #region Example 13
+            #region WriteSelectedProcessInformationCSVAsynchronously
 
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -302,9 +383,9 @@
             #endregion
         }
 
-        private static void Example14()
+        private static void CopyCSVFileToStringWriter()
         {
-            #region Example 14
+            #region CopyCSVFileToStringWriter
 
             using (var stringWriter = new StringWriter())
             {

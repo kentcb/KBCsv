@@ -20,15 +20,15 @@
     /// <para>
     /// The following example uses <see cref="WriteCsv{T}(IEnumerable{T}, CsvWriter)"/> to dump CSV describing all screens on the host system:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 12" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 12" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="WriteScreenInformationToCSV" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="WriteScreenInformationToCSV" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example uses <see cref="WriteCsvAsync{T}(IEnumerable{T}, CsvWriter, bool, string[])"/> to asynchronously dump to CSV the ID, name, and working set of all processes running on the host system:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 13" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 13" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="WriteSelectedProcessInformationCSVAsynchronously" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="WriteSelectedProcessInformationCSVAsynchronously" lang="vb"/>
     /// </example>
     public static partial class EnumerableExtensions
     {

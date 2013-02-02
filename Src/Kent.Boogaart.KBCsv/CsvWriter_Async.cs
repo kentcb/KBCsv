@@ -28,7 +28,7 @@ namespace Kent.Boogaart.KBCsv
             this.EnsureNotDisposed();
             record.AssertNotNull("record");
             this.WriteRecordToBuffer(record);
-            await this.FlushBufferToTextWriterAsync();
+            await this.FlushBufferToTextWriterAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace Kent.Boogaart.KBCsv
             this.EnsureNotDisposed();
             values.AssertNotNull("values");
             this.WriteRecordToBuffer(values);
-            await this.FlushBufferToTextWriterAsync();
+            await this.FlushBufferToTextWriterAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Kent.Boogaart.KBCsv
             this.EnsureNotDisposed();
             values.AssertNotNull("values");
             this.WriteRecordToBuffer(values);
-            await this.FlushBufferToTextWriterAsync();
+            await this.FlushBufferToTextWriterAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -110,7 +110,7 @@ namespace Kent.Boogaart.KBCsv
             }
 
             // we only flush once, when all records have been written
-            await this.FlushBufferToTextWriterAsync();
+            await this.FlushBufferToTextWriterAsync().ConfigureAwait(false);
         }
 
         /// <summary>
@@ -127,13 +127,13 @@ namespace Kent.Boogaart.KBCsv
             Debug.Assert(this.bufferBuilder.Length == 0, "Expecting buffer to be empty.");
 
             this.EnsureNotDisposed();
-            await this.textWriter.FlushAsync();
+            await this.textWriter.FlushAsync().ConfigureAwait(false);
         }
 
         // asynchronously push whatever's in the buffer to the text writer and reset the buffer
         private async Task FlushBufferToTextWriterAsync()
         {
-            await this.textWriter.WriteAsync(this.bufferBuilder.ToString());
+            await this.textWriter.WriteAsync(this.bufferBuilder.ToString()).ConfigureAwait(false);
             this.bufferBuilder.Length = 0;
         }
     }

@@ -30,9 +30,9 @@ namespace Kent.Boogaart.KBCsv.Extensions
             var buffer = new DataRecord[16];
             var read = 0;
 
-            while ((read = await @this.ReadDataRecordsAsync(buffer, 0, buffer.Length)) != 0)
+            while ((read = await @this.ReadDataRecordsAsync(buffer, 0, buffer.Length).ConfigureAwait(false)) != 0)
             {
-                await destination.WriteRecordsAsync(buffer, 0, read);
+                await destination.WriteRecordsAsync(buffer, 0, read).ConfigureAwait(false);
                 num += read;
             }
 

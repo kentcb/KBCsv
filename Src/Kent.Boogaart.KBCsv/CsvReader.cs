@@ -51,30 +51,37 @@
     /// <para>
     /// The following example uses <see cref="FromCsvString"/> to parse data in a <see cref="String"/>. Values in data records are accessed via an index:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 1" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 1" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="ReadCSVFromString" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="ReadCSVFromString" lang="vb"/>
+    /// </example>
+    /// <example>
+    /// <para>
+    /// The following example uses <see cref="FromCsvString"/> to parse data in a <see cref="String"/>. White space is preserved:
+    /// </para>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="ReadCSVFromStringPreservingWhiteSpace" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="ReadCSVFromStringPreservingWhiteSpace" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example reads data from a file, where values are tab-separated and delimited with single quotes:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 2" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 2" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="ReadTabDelimitedDataFromFile" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="ReadTabDelimitedDataFromFile" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example reads data from an underlying UTF-8 encoded <see cref="Stream"/>. It treats the first record as a <see cref="Kent.Boogaart.KBCsv.HeaderRecord"/>, thus enabling
     /// the data to be accessed via column names.
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 3" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 3" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="ReadCSVFromStream" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="ReadCSVFromStream" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example reads data from a file. It explicitly assigns a <see cref="HeaderRecord"/> and skips every other record:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 4" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 4" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="ReadCSVFromFileWithExplicitHeader" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="ReadCSVFromFileWithExplicitHeader" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
@@ -82,8 +89,8 @@
     /// <see cref="ReadDataRecordAsync"/> to avoid creating too fine-grained tasks. It also requests that the <see cref="TextReader"/> be left open when disposing
     /// the <c>CsvReader</c>. All data records are dumped to the console:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 5" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 5" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="ReadCSVFromFileAsynchronously" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="ReadCSVFromFileAsynchronously" lang="vb"/>
     /// </example>
     public partial class CsvReader : IDisposable
     {

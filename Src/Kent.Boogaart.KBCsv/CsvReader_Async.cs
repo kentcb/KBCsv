@@ -2,7 +2,8 @@
 
 namespace Kent.Boogaart.KBCsv
 {
-    using System.Threading.Tasks;
+    using System.Security;
+using System.Threading.Tasks;
 
     // async equivalents to relevant methods in the reader
     // NOTE: changes should be made to the synchronous variants first, then ported here
@@ -16,7 +17,7 @@ namespace Kent.Boogaart.KBCsv
         /// </returns>
         public async Task<bool> SkipRecordAsync()
         {
-            return await this.SkipRecordsAsync(1, true) == 1;
+            return await this.SkipRecordsAsync(1, true).ConfigureAwait(false) == 1;
         }
 
         /// <summary>
@@ -30,7 +31,7 @@ namespace Kent.Boogaart.KBCsv
         /// </returns>
         public async Task<bool> SkipRecordAsync(bool incrementRecordNumber)
         {
-            return await this.SkipRecordsAsync(1, incrementRecordNumber) == 1;
+            return await this.SkipRecordsAsync(1, incrementRecordNumber).ConfigureAwait(false) == 1;
         }
 
         /// <summary>
@@ -47,7 +48,7 @@ namespace Kent.Boogaart.KBCsv
         /// </returns>
         public async Task<int> SkipRecordsAsync(int count)
         {
-            return await this.SkipRecordsAsync(count, true);
+            return await this.SkipRecordsAsync(count, true).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Kent.Boogaart.KBCsv
         public async Task<int> SkipRecordsAsync(int count, bool incrementRecordNumber)
         {
             this.EnsureNotDisposed();
-            var skipped = await this.parser.SkipRecordsAsync(count);
+            var skipped = await this.parser.SkipRecordsAsync(count).ConfigureAwait(false);
 
             if (incrementRecordNumber)
             {
@@ -97,7 +98,7 @@ namespace Kent.Boogaart.KBCsv
             this.EnsureNotDisposed();
             this.EnsureNotPassedFirstRecord();
 
-            if (await this.parser.ParseRecordsAsync(null, this.buffer, 0, 1) == 1)
+            if (await this.parser.ParseRecordsAsync(null, this.buffer, 0, 1).ConfigureAwait(false) == 1)
             {
                 ++this.recordNumber;
                 this.headerRecord = new HeaderRecord(this.buffer[0]);
@@ -117,7 +118,7 @@ namespace Kent.Boogaart.KBCsv
         {
             this.EnsureNotDisposed();
 
-            if (await this.parser.ParseRecordsAsync(this.headerRecord, this.buffer, 0, 1) == 1)
+            if (await this.parser.ParseRecordsAsync(this.headerRecord, this.buffer, 0, 1).ConfigureAwait(false) == 1)
             {
                 ++this.recordNumber;
                 return this.buffer[0];
@@ -148,7 +149,7 @@ namespace Kent.Boogaart.KBCsv
         {
             this.EnsureNotDisposed();
 
-            var read = await this.parser.ParseRecordsAsync(this.headerRecord, buffer, offset, count);
+            var read = await this.parser.ParseRecordsAsync(this.headerRecord, buffer, offset, count).ConfigureAwait(false);
             this.recordNumber += read;
             return read;
         }

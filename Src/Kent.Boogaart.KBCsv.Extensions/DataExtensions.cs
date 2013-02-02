@@ -22,23 +22,23 @@ namespace Kent.Boogaart.KBCsv.Extensions
     /// The following example uses <see cref="Fill(DataTable, CsvReader)"/> to read data from the <see cref="CsvReader"/> and populate rows in the <see cref="DataTable"/>. The <see cref="HeaderRecord"/>
     /// read via <see cref="CsvReader.ReadHeaderRecord"/> is used to create columns in the <see cref="DataTable"/>:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 9" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 9" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="FillDataTableFromCSVFile" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="FillDataTableFromCSVFile" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example uses <see cref="WriteCsv(DataTable, CsvWriter)"/> to write the data in a <see cref="DataTable"/> out as CSV:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 10" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 10" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="WriteDataTableToCSV" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="WriteDataTableToCSV" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example uses <see cref="FillAsync(DataTable, CsvReader)"/> <see cref="WriteCsvAsync(DataTable, CsvWriter, bool, int?)"/> to asynchronously read all data from a CSV file into a
     /// <see cref="DataTable"/>, and then asynchronously write out the first 5 records (without a header) into a <see cref="String"/>:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 11" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 11" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="FillDataTableFromCSVFileThenWriteSomeToStringAsynchronously" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="FillDataTableFromCSVFileThenWriteSomeToStringAsynchronously" lang="vb"/>
     /// </example>
     public static partial class DataExtensions
     {

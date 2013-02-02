@@ -9,8 +9,8 @@
     /// <para>
     /// The following example uses <see cref="CopyTo"/> to translate CSV-formatted data into tab-delimited data:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 14" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 14" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="CopyCSVFileToStringWriter" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="CopyCSVFileToStringWriter" lang="vb"/>
     /// </example>
     public static partial class CsvReaderExtensions
     {

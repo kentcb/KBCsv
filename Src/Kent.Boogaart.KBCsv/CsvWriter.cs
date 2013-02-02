@@ -35,24 +35,24 @@
     /// <para>
     /// The following example writes CSV data to a <see cref="StringWriter"/>:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 6" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 6" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="WriteCSVToString" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="WriteCSVToString" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example writes CSV data (with delimiters forced) to a <see cref="MemoryStream"/> with ASCII encoding. The <see cref="MemoryStream"/> is left open when
     /// the <c>CsvWriter</c> is closed:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 7" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 7" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="WriteCSVToStreamWithForcedDelimiting" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="WriteCSVToStreamWithForcedDelimiting" lang="vb"/>
     /// </example>
     /// <example>
     /// <para>
     /// The following example asynchronously reads CSV from a file and asynchronously writes it to another. The data is written as tab-delimited with a single quote delimiter.
     /// A buffer is used to read and write data in blocks of records rather than one record at a time:
     /// </para>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="Example 8" lang="cs"/>
-    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="Example 8" lang="vb"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.CSharp\Program.cs" region="ReadCSVFromFileAndWriteToTabDelimitedFile" lang="cs"/>
+    /// <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="ReadCSVFromFileAndWriteToTabDelimitedFile" lang="vb"/>
     /// </example>
     public partial class CsvWriter : IDisposable
     {

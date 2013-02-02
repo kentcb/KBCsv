@@ -4,7 +4,7 @@
     <!-- The configuration and platform will be used to determine which
          assemblies to include from solution and project documentation
          sources -->
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">FX45 Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{875651eb-17e7-40c8-87bf-1ca148cec0f5}</ProjectGuid>
@@ -62,9 +62,9 @@
   </PropertyGroup>
   <!-- There are no properties for these two groups but they need to appear in
        order for Visual Studio to perform the build. -->
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'FX45 Debug|AnyCPU' ">
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'FX45 Release|AnyCPU' ">
   </PropertyGroup>
   <ItemGroup>
     <ContentLayout Include="Content Layout.content" />
@@ -73,6 +73,7 @@
     <None Include="Parser.aml" />
     <None Include="License.aml" />
     <None Include="Overview.aml" />
+    <None Include="Quickstart Guide.aml" />
   </ItemGroup>
   <ItemGroup>
     <Tokens Include="Tokens.tokens" />

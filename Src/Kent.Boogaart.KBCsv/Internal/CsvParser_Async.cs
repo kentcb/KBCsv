@@ -46,7 +46,7 @@ namespace Kent.Boogaart.KBCsv.Internal
                                 else if (ch == Constants.CR)
                                 {
                                     // we need to look at the next character, so make sure it is available
-                                    if (this.IsBufferEmpty && !(await this.FillBufferWithoutNotifyAsync()))
+                                    if (this.IsBufferEmpty && !(await this.FillBufferWithoutNotifyAsync().ConfigureAwait(false)))
                                     {
                                         // last character available was CR, so we know we're done at this point
                                         break;
@@ -68,7 +68,7 @@ namespace Kent.Boogaart.KBCsv.Internal
                             else if (ch == this.valueDelimiter)
                             {
                                 // we need to look at the next character, so make sure it is available
-                                if (this.IsBufferEmpty && !(await this.FillBufferWithoutNotifyAsync()))
+                                if (this.IsBufferEmpty && !(await this.FillBufferWithoutNotifyAsync().ConfigureAwait(false)))
                                 {
                                     break;
                                 }
@@ -86,7 +86,7 @@ namespace Kent.Boogaart.KBCsv.Internal
                                 }
                             }
                         }
-                        else if (!(await this.FillBufferWithoutNotifyAsync()))
+                        else if (!(await this.FillBufferWithoutNotifyAsync().ConfigureAwait(false)))
                         {
                             // all out of data, so we successfully skipped the final record
                             break;
@@ -144,7 +144,7 @@ namespace Kent.Boogaart.KBCsv.Internal
                             else if (ch == Constants.CR)
                             {
                                 // we need to look at the next character, so make sure it is available
-                                if (this.IsBufferEmpty && !(await this.FillBufferAsync()))
+                                if (this.IsBufferEmpty && !(await this.FillBufferAsync().ConfigureAwait(false)))
                                 {
                                     // undelimited CR indicates the end of a record, so add the existing value and then exit
                                     buffer[i] = this.values.GetDataRecordAndClear(headerRecord, this.valueBuilder.GetValueAndClear());
@@ -176,7 +176,7 @@ namespace Kent.Boogaart.KBCsv.Internal
                         else if (ch == this.valueDelimiter)
                         {
                             // we need to look at the next character, so make sure it is available
-                            if (this.IsBufferEmpty && !(await this.FillBufferAsync()))
+                            if (this.IsBufferEmpty && !(await this.FillBufferAsync().ConfigureAwait(false)))
                             {
                                 // out of data
                                 delimited = false;
@@ -206,7 +206,7 @@ namespace Kent.Boogaart.KBCsv.Internal
                             this.valueBuilder.NotifyPreviousCharIncluded(true);
                         }
                     }
-                    else if (!(await this.FillBufferAsync()))
+                    else if (!(await this.FillBufferAsync().ConfigureAwait(false)))
                     {
                         if (this.valueBuilder.HasValue)
                         {
@@ -248,7 +248,7 @@ namespace Kent.Boogaart.KBCsv.Internal
             Debug.Assert(this.IsBufferEmpty, "Buffer not empty.");
 
             this.valueBuilder.NotifyBufferRefilling();
-            this.bufferEndIndex = await this.reader.ReadAsync(this.buffer, 0, BufferSize);
+            this.bufferEndIndex = await this.reader.ReadAsync(this.buffer, 0, BufferSize).ConfigureAwait(false);
             this.bufferIndex = 0;
 
             return this.bufferEndIndex > 0;
@@ -259,7 +259,7 @@ namespace Kent.Boogaart.KBCsv.Internal
         {
             Debug.Assert(this.IsBufferEmpty, "Buffer not empty.");
 
-            this.bufferEndIndex = await this.reader.ReadAsync(this.buffer, 0, BufferSize);
+            this.bufferEndIndex = await this.reader.ReadAsync(this.buffer, 0, BufferSize).ConfigureAwait(false);
             this.bufferIndex = 0;
 
             return this.bufferEndIndex > 0;

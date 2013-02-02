@@ -19,12 +19,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Items", "Shared Item
 	ProjectSection(SolutionItems) = preProject
 		AssemblyInfoCommon.cs = AssemblyInfoCommon.cs
 		AssemblyInfoCommon.vb = AssemblyInfoCommon.vb
+		AssemblyInfoCommonSecurity.cs = AssemblyInfoCommonSecurity.cs
 		Build\Build.targets = Build\Build.targets
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Extensions", "Kent.Boogaart.KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.csproj", "{25BE0D57-FEBE-40EE-870E-4B891F25A807}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Extensions.UnitTests", "Kent.Boogaart.KBCsv.Extensions.UnitTests\Kent.Boogaart.KBCsv.Extensions.UnitTests.csproj", "{59A50581-272E-40A8-92E4-89D4BA8F0A0E}"
+EndProject
+Project("{7CF6DF6D-3B04-46F8-A40B-537D21BCA0B4}") = "KBCsv", "..\Doc\KBCsv.shfbproj", "{875651EB-17E7-40C8-87BF-1CA148CEC0F5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -140,16 +143,26 @@ Global
 		{59A50581-272E-40A8-92E4-89D4BA8F0A0E}.SL40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
 		{59A50581-272E-40A8-92E4-89D4BA8F0A0E}.SL50 Debug|Any CPU.ActiveCfg = FX45 Debug|Any CPU
 		{59A50581-272E-40A8-92E4-89D4BA8F0A0E}.SL50 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.FX35 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.FX35 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.FX40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.FX40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.FX45 Debug|Any CPU.ActiveCfg = FX45 Debug|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.FX45 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.SL40 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.SL40 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.SL50 Debug|Any CPU.ActiveCfg = FX45 Release|Any CPU
+		{875651EB-17E7-40C8-87BF-1CA148CEC0F5}.SL50 Release|Any CPU.ActiveCfg = FX45 Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{1C43651C-155C-48BA-A5FF-5C625FDD6878} = {C2DF445D-88C9-4390-907A-CB00823266C4}
+		{2373873E-6F12-425F-886F-F07978BE11CB} = {C2DF445D-88C9-4390-907A-CB00823266C4}
 		{49A50581-272E-40A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
 		{49A50581-272E-50A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
 		{59A50581-272E-40A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
-		{1C43651C-155C-48BA-A5FF-5C625FDD6878} = {C2DF445D-88C9-4390-907A-CB00823266C4}
-		{2373873E-6F12-425F-886F-F07978BE11CB} = {C2DF445D-88C9-4390-907A-CB00823266C4}
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
