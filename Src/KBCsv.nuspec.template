@@ -14,16 +14,16 @@
     <tags>.NET CSV comma separated value library mono Silverlight KBCsv</tags>
     <dependencies>
         <group>
-            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.0.0" />
+            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
         </group>
 
         <group targetFramework="net40">
-            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.0.0" />
+            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
             <dependency id="Microsoft.CompilerServices.AsyncTargetingPack" version="1.0.0"/>
         </group>
 
         <group targetFramework="sl50">
-            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.0.0" />
+            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
             <dependency id="Microsoft.CompilerServices.AsyncTargetingPack" version="1.0.0"/>
         </group>
     </dependencies>

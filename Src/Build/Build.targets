@@ -3,11 +3,11 @@
 <Project ToolsVersion="4.0" DefaultTargets="All" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <GenDir>$(MSBuildThisFileDirectory)..\..\Gen</GenDir>
-        <LibDir>$(MSBuildThisFileDirectory)..\..\Lib</LibDir>
         <DocDir>$(MSBuildThisFileDirectory)..\..\Doc</DocDir>
         <SrcDir>$(MSBuildThisFileDirectory)..\</SrcDir>
         <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
         <Configuration Condition=" $(Configuration) == '' ">Release</Configuration>
+        <NuGetExe>$(SrcDir)\packages\NuGet.Bootstrapper.2.2.1\tools\NuGet.exe</NuGetExe>
     </PropertyGroup>
 
     <ItemGroup>
@@ -37,8 +37,8 @@
         </Framework>
     </ItemGroup>
 
-    <Import Project="$(LibDir)\MSBuild Community Tasks\MSBuild.Community.Tasks.Targets" />
-    <UsingTask AssemblyFile="$(LibDir)\xUnit\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
+    <Import Project="$(SrcDir)\.build\MSBuild.Community.Tasks.Targets" />
+    <UsingTask AssemblyFile="$(SrcDir)\packages\xunit.2.0.0-alpha-build1611\lib\net45\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
 
     <!-- gets the value of AssemblyInformationVersionAttribute applied to an assembly -->
     <UsingTask
@@ -62,7 +62,7 @@
             </Code>
         </Task>
     </UsingTask>
-    
+
     <Target Name="All" DependsOnTargets="Clean;Build;UnitTests;GenerateDocumentation;CreateArchives;CreateNuGetPackages"/>
 
     <Target Name="Clean">
@@ -164,8 +164,8 @@
         <Copy SourceFiles="@(Source_Files)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions\src\%(RecursiveDir)"/>
 
         <!-- pack the nugets -->
-        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" pack -symbols "$(GenDir)\NuGet\KBCsv\Kent.Boogaart.KBCsv.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
-        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" pack -symbols "$(GenDir)\NuGet\KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
+        <Exec Command='"$(NuGetExe)" pack -symbols "$(GenDir)\NuGet\KBCsv\Kent.Boogaart.KBCsv.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
+        <Exec Command='"$(NuGetExe)" pack -symbols "$(GenDir)\NuGet\KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
 
         <Message Text="NuGet packages created but not published. Type 'msbuild Build.targets /t:PublishNuGetPackages' to publish." Importance="High"/>
     </Target>
@@ -175,8 +175,8 @@
     -->
     <Target Name="PublishNuGetPackages" DependsOnTargets="GetVersion">
         <!-- symbol packages are automatically pushed too -->
-        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.$(Version).nupkg"'/>
-        <Exec Command='"$(LibDir)\NuGet\NuGet.exe" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.Extensions.$(Version).nupkg"'/>
+        <Exec Command='"$(NuGetExe)" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.$(Version).nupkg"'/>
+        <Exec Command='"$(NuGetExe)" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.Extensions.$(Version).nupkg"'/>
     </Target>
 
     <!-- ensure the Version property is set appropriately -->
