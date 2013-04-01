@@ -1,5 +1,6 @@
 ﻿namespace Kent.Boogaart.KBCsv.Examples.CSharp
 {
+    using Kent.Boogaart.KBCsv.Extensions;
     using System;
     using System.Data;
     using System.Diagnostics;
@@ -10,7 +11,6 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
-    using Kent.Boogaart.KBCsv.Extensions;
 
     class Program
     {
@@ -41,7 +41,7 @@
 
                     var result = examples[choice.KeyChar].Invoke(null, null) as Task;
 
-                    while (result != null)
+                    if (result != null)
                     {
                         result.Wait();
                     }

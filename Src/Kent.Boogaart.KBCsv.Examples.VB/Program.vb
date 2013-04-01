@@ -28,10 +28,9 @@ Module Program
 
                 Dim result As Task = TryCast(examples(choice.KeyChar).Invoke(Nothing, Nothing), Task)
 
-                While result IsNot Nothing AndAlso Not result.IsCompleted
-                    Console.Write(".")
-                    Thread.Sleep(100)
-                End While
+                If result IsNot Nothing Then
+                    result.Wait()
+                End If
 
                 Console.WriteLine()
                 Console.WriteLine("Done - press a key to choose another example")
