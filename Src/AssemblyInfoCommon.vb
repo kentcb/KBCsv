@@ -5,8 +5,8 @@ Imports System.Runtime.InteropServices
 
 ' this is used to version artifacts. AssemblyInformationalVersion should use semantic versioning (http://semver.org/)
 ' be sure to update the corresponding C# AssemblyInfoCommon.cs
-<Assembly: AssemblyInformationalVersion("2.0.0")> 
-<Assembly: AssemblyVersion("2.0.0.0")> 
+<Assembly: AssemblyInformationalVersion("2.0.1")> 
+<Assembly: AssemblyVersion("2.0.1.0")> 
 
 <Assembly: AssemblyCompany("Kent Boogaart")> 
 <Assembly: AssemblyProduct("KBCsv")> 
