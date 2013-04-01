@@ -110,7 +110,7 @@
         <MakeDir Directories="$(GenDir)\Temp" Condition="!Exists('$(GenDir)\Temp')" />
 
         <!-- zip source -->
-        <CreateItem Include="..\..\**\*.*" Exclude="..\..\**\*.suo;..\..\**\*.csproj.user;..\..\**\*.gpState;..\..\**\bin\**;..\..\**\obj\**;..\..\**\.svn\**;..\..\Gen\**">
+        <CreateItem Include="..\..\**\*.*" Exclude="..\..\**\*.suo;..\..\**\*.csproj.user;..\..\**\*.gpState;..\..\**\bin\**;..\..\**\obj\**;..\..\**\.svn\**;..\..\Gen\**;..\..\.git\**">
             <Output ItemName="Source" TaskParameter="Include" />
         </CreateItem>
         <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-src.zip" WorkingDirectory="..\..\" ZipLevel="9" Files="@(Source)" />
