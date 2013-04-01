@@ -1,0 +1,8 @@
+[Bb]in
+[Oo]bj
+Gen
+
+*.suo
+*.user
+*.[Cc]ache
+*.shfbproj_*
