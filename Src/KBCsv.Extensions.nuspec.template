@@ -21,13 +21,13 @@
         <group targetFramework="net40">
             <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
             <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
-            <dependency id="Microsoft.CompilerServices.AsyncTargetingPack" version="1.0.0"/>
+            <dependency id="Microsoft.Bcl.Async" version="1.0.16"/>
         </group>
 
         <group targetFramework="sl50">
             <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
             <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
-            <dependency id="Microsoft.CompilerServices.AsyncTargetingPack" version="1.0.0"/>
+            <dependency id="Microsoft.Bcl.Async" version="1.0.16"/>
         </group>
     </dependencies>
   </metadata>
