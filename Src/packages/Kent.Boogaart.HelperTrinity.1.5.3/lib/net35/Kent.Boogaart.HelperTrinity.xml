@@ -276,8 +276,11 @@
             </summary>
             <remarks>
             <para>
-            The <c>EventHelper</c> class provides methods that can be used to raise events. It avoids the need for explicitly
-            checking event sinks for <see langword="null"/> before raising the event.
+            The <c>EventHelper</c> class provides methods that can be used to raise events. It avoids the need for explicitly checking event sinks for <see langword="null"/> before raising the event.
+            </para>
+            <para>
+            The <see cref="M:Kent.Boogaart.HelperTrinity.EventHelper.Raise(System.EventHandler,System.Object)"/> overloads raise an event synchronously. All handlers will be invoked one after the other on the calling thread. The <see cref="M:Kent.Boogaart.HelperTrinity.EventHelper.BeginRaise(System.EventHandler,System.Object,System.AsyncCallback,System.Object)"/> overloads raise an event asynchronously.
+            All handlers will be invoked one after the other on a background thread.
             </para>
             </remarks>
             <example>

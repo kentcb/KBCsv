@@ -16,7 +16,7 @@
             <para>
             The <see cref="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertNotNull``1(``0,System.String)"/> methods can be used to ensure that arguments are not <see langword="null"/>. The
             <see cref="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertNotNullOrEmpty(System.String,System.String)"/> overloads can be used to ensure that strings are not <see langword="null"/> or empty.
-            The <see cref="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertEnumMember``1(``0,System.String)"/> overloads can be used to assert the validity of enumeration arguments.
+            The <see cref="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertEnumMember``1(``0,System.String,``0[])"/> overloads can be used to assert the validity of enumeration arguments.
             </para>
             </remarks>
             <example>
@@ -204,36 +204,6 @@
       The name of the argument.
     </param>
         </member>
-        <member name="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertEnumMember``1(``0,System.String)">
-            <summary>
-			Ensures the specified enumeration argument is a valid member of the <typeparamref name="TEnum"/> enumeration. If it
-			is not, an <see cref="T:System.ArgumentException"/> is thrown.
-		</summary><remarks>
-			<para>
-				This method can be used to validate all publicly-supplied enumeration values. Without such an assertion, it is
-				possible to cast any <c>int</c> value to the enumeration type and pass it in.
-			</para>
-			<para>
-				This method works for both flags and non-flags enumerations. In the case of a flags enumeration, any combination of
-				values in the enumeration is accepted. In the case of a non-flags enumeration, <paramref name="enumValue"/> must
-				be equal to one of the values in the enumeration.
-			</para>
-			<para>
-				This method is generic and quite slow as a result. You should prefer using the
-				<see cref="!:AssertEnumMember&lt;TEnum&gt;(TEnum, TEnum[])"/> overload where possible. That overload is both faster and
-				safer. Faster because it does not incur reflection costs, and safer because you are able to specify the exact
-				values accepted by your method.
-			</para>
-		</remarks><typeparam name="TEnum">
-			The enumeration type.
-		</typeparam><param name="enumValue">
-			The value of the enumeration.
-		</param><param name="argName">
-			The name of the argument.
-		</param><exception cref="T:System.ArgumentException">
-			If <paramref name="enumValue"/> is not a valid member of the <typeparamref name="TEnum"/> enumeration.
-		</exception>
-        </member>
         <member name="M:Kent.Boogaart.HelperTrinity.ArgumentHelper.AssertEnumMember``1(``0,System.String,``0[])">
             <summary>
 			Ensures the specified enumeration argument is included in the values specified by <paramref name="validValues"/>. If
@@ -276,8 +246,11 @@
             </summary>
             <remarks>
             <para>
-            The <c>EventHelper</c> class provides methods that can be used to raise events. It avoids the need for explicitly
-            checking event sinks for <see langword="null"/> before raising the event.
+            The <c>EventHelper</c> class provides methods that can be used to raise events. It avoids the need for explicitly checking event sinks for <see langword="null"/> before raising the event.
+            </para>
+            <para>
+            The <see cref="M:Kent.Boogaart.HelperTrinity.EventHelper.Raise(System.EventHandler,System.Object)"/> overloads raise an event synchronously. All handlers will be invoked one after the other on the calling thread. The <see cref="M:Kent.Boogaart.HelperTrinity.EventHelper.BeginRaise(System.EventHandler,System.Object,System.AsyncCallback,System.Object)"/> overloads raise an event asynchronously.
+            All handlers will be invoked one after the other on a background thread.
             </para>
             </remarks>
             <example>
