@@ -157,7 +157,7 @@
         </CreateItem>
         <Copy SourceFiles="@(%(Framework.Identity)KBCsvExtensionFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions\lib\%(Framework.NuGetName)" />
 
-        <CreateItem Include="$(SrcDir)\**\*.*" Exclude="$(SrcDir)\**\*.suo;$(SrcDir)\**\*.csproj.user;$(SrcDir)\**\*.gpState;$(SrcDir)\**\bin\**;$(SrcDir)\**\obj\**;$(SrcDir)\**\.svn\**">
+        <CreateItem Include="$(SrcDir)\**\*.cs" Exclude="$(SrcDir)\**\obj\**\*.*">
             <Output ItemName="Source_Files" TaskParameter="Include" />
         </CreateItem>
         <Copy SourceFiles="@(Source_Files)" DestinationFolder="$(GenDir)\NuGet\KBCsv\src\%(RecursiveDir)"/>
