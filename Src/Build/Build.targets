@@ -7,7 +7,7 @@
         <SrcDir>$(MSBuildThisFileDirectory)..\</SrcDir>
         <MSBuildCommunityTasksPath>.</MSBuildCommunityTasksPath>
         <Configuration Condition=" $(Configuration) == '' ">Release</Configuration>
-        <NuGetExe>$(SrcDir)\packages\NuGet.Bootstrapper.2.2.1\tools\NuGet.exe</NuGetExe>
+        <NuGetExe>$(SrcDir)\packages\NuGet.Bootstrapper.2.6.0\tools\NuGet.exe</NuGetExe>
     </PropertyGroup>
 
     <Import Project="$(SrcDir)\.build\MSBuild.Community.Tasks.Targets" />
