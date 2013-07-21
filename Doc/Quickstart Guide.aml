@@ -41,7 +41,7 @@
                     </listItem>
                     <listItem>
                         <para>
-                            Add package <legacyBold>Kent.Boogaart.KBCsv</legacyBold> (or <legacyBold>Kent.Boogaart.KBCsv.Extensions</legacyBold> if you want extensions in addition to KBCsv)
+                            Add package <legacyBold>Kent.Boogaart.KBCsv</legacyBold> (or <legacyBold>Kent.Boogaart.KBCsv.Extensions</legacyBold>/<legacyBold>Kent.Boogaart.KBCsv.Extensions.Data</legacyBold> if you want extensions in addition to KBCsv)
                         </para>
                     </listItem>
                 </list>
@@ -81,7 +81,7 @@
                 <code source="..\Src\Kent.Boogaart.KBCsv.Examples.VB\Program.vb" region="FillDataTableFromCSVFile" lang="vb"/>
                 <alert>
                     <para>
-                        This functionality is provided by KBCsv extensions.
+                        This functionality is provided by KBCsv's data extensions.
                     </para>
                 </alert>
                 <alert>

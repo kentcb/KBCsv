@@ -3,6 +3,7 @@ Imports System.IO
 Imports System.Text
 Imports System.Threading.Tasks
 Imports Kent.Boogaart.KBCsv.Extensions
+Imports Kent.Boogaart.KBCsv.Extensions.Data
 Imports System.Windows.Forms
 Imports System.Reflection
 Imports System.Runtime.CompilerServices
@@ -79,14 +80,16 @@ Module Program
 #Region "ReadTabDelimitedDataFromFile"
 
     Private Sub ReadTabDelimitedDataFromFile()
-        Using reader = New CsvReader("PlanetaryData.tdv")
-            reader.ValueSeparator = Constants.vbTab
-            reader.ValueDelimiter = "'"
+        Using streamReader = New StreamReader("PlanetaryData.tdv")
+            Using reader = New CsvReader(streamReader)
+                reader.ValueSeparator = Constants.vbTab
+                reader.ValueDelimiter = "'"
 
-            While reader.HasMoreRecords
-                Dim dataRecord As DataRecord = reader.ReadDataRecord()
-                Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item(0), dataRecord.Item(dataRecord.Count - 1))
-            End While
+                While reader.HasMoreRecords
+                    Dim dataRecord As DataRecord = reader.ReadDataRecord()
+                    Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item(0), dataRecord.Item(dataRecord.Count - 1))
+                End While
+            End Using
         End Using
     End Sub
 
@@ -95,16 +98,18 @@ Module Program
 #Region "ReadCSVFromFile"
 
     Private Sub ReadCSVFromFile()
-        Using reader = New CsvReader("PlanetaryData.csv")
-            ' the CSV file has a header record, so we read that first
-            reader.ReadHeaderRecord()
+        Using streamReader = New StreamReader("PlanetaryData.csv")
+            Using reader = New CsvReader(streamReader)
+                ' the CSV file has a header record, so we read that first
+                reader.ReadHeaderRecord()
 
-            While reader.HasMoreRecords
-                Dim dataRecord As DataRecord = reader.ReadDataRecord()
+                While reader.HasMoreRecords
+                    Dim dataRecord As DataRecord = reader.ReadDataRecord()
 
-                ' since the reader has a header record, we can access data by column names as well as by index
-                Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item("Name"), dataRecord.Item("Nickname"))
-            End While
+                    ' since the reader has a header record, we can access data by column names as well as by index
+                    Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item("Name"), dataRecord.Item("Nickname"))
+                End While
+            End Using
         End Using
     End Sub
 
@@ -130,14 +135,16 @@ Module Program
 #Region "ReadCSVFromFileWithExplicitHeader"
 
     Private Sub ReadCSVFromFileWithExplicitHeader()
-        Using reader = New CsvReader("PlanetaryData_NoHeader.csv")
-            reader.HeaderRecord = New HeaderRecord("OfficialName", "NickName")
+        Using streamReader = New StreamReader("PlanetaryData_NoHeader.csv")
+            Using reader = New CsvReader(streamReader)
+                reader.HeaderRecord = New HeaderRecord("OfficialName", "NickName")
 
-            While reader.HasMoreRecords
-                Dim dataRecord As DataRecord = reader.ReadDataRecord()
-                Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item("OfficialName"), dataRecord.Item("NickName"))
-                reader.SkipRecord()
-            End While
+                While reader.HasMoreRecords
+                    Dim dataRecord As DataRecord = reader.ReadDataRecord()
+                    Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item("OfficialName"), dataRecord.Item("NickName"))
+                    reader.SkipRecord()
+                End While
+            End Using
         End Using
     End Sub
 
@@ -186,15 +193,17 @@ Module Program
 #Region "WriteCSVToFile"
 
     Private Sub WriteCSVToFile()
-        Using writer = New CsvWriter("Output.csv")
-            writer.ForceDelimit = True
+        Using streamWriter = New StreamWriter("Output.csv")
+            Using writer = New CsvWriter(streamWriter)
+                writer.ForceDelimit = True
 
-            writer.WriteRecord("Name", "Age")
-            writer.WriteRecord("Kent", "33")
-            writer.WriteRecord("Belinda", "34")
-            writer.WriteRecord("Tempany", "8")
+                writer.WriteRecord("Name", "Age")
+                writer.WriteRecord("Kent", "33")
+                writer.WriteRecord("Belinda", "34")
+                writer.WriteRecord("Tempany", "8")
 
-            Console.WriteLine("{0} records written", writer.RecordNumber)
+                Console.WriteLine("{0} records written", writer.RecordNumber)
+            End Using
         End Using
     End Sub
 
@@ -222,18 +231,22 @@ Module Program
 #Region "ReadCSVFromFileAndWriteToTabDelimitedFile"
 
     Private Async Function ReadCSVFromFileAndWriteToTabDelimitedFile() As Task
-        Using reader = New CsvReader("PlanetaryData.csv")
-            Using writer = New CsvWriter("PlanetaryData_Modified.csv")
-                writer.ValueSeparator = Constants.vbTab
-                writer.ValueDelimiter = "'"
+        Using streamReader = New StreamReader("PlanetaryData.tdv")
+            Using reader = New CsvReader(streamReader)
+                Using streamWriter = New StreamWriter("PlanetaryData_Modified.csv")
+                    Using writer = New CsvWriter(streamWriter)
+                        writer.ValueSeparator = Constants.vbTab
+                        writer.ValueDelimiter = "'"
 
-                ' realistically, you'll probably want a larger buffer, but this suffices for demonstration purposes
-                Dim buffer(4) As DataRecord
+                        ' realistically, you'll probably want a larger buffer, but this suffices for demonstration purposes
+                        Dim buffer(4) As DataRecord
 
-                While reader.HasMoreRecords
-                    Dim read As Integer = Await reader.ReadDataRecordsAsync(buffer, 0, buffer.Length)
-                    Await writer.WriteRecordsAsync(buffer, 0, read)
-                End While
+                        While reader.HasMoreRecords
+                            Dim read As Integer = Await reader.ReadDataRecordsAsync(buffer, 0, buffer.Length)
+                            Await writer.WriteRecordsAsync(buffer, 0, read)
+                        End While
+                    End Using
+                End Using
             End Using
         End Using
     End Function
@@ -245,9 +258,11 @@ Module Program
     Private Sub FillDataTableFromCSVFile()
         Dim table As New DataTable()
 
-        Using reader = New CsvReader("PlanetaryData.csv")
-            reader.ReadHeaderRecord()
-            table.Fill(reader)
+        Using textReader = New StreamReader("PlanetaryData.csv")
+            Using reader = New CsvReader(textReader, True)
+                reader.ReadHeaderRecord()
+                table.Fill(reader)
+            End Using
         End Using
 
         Console.WriteLine("Table contains {0} rows.", table.Rows.Count)
@@ -282,9 +297,11 @@ Module Program
     Private Async Function FillDataTableFromCSVFileThenWriteSomeToStringAsynchronously() As Task
         Dim table As New DataTable()
 
-        Using reader = New CsvReader("PlanetaryData.csv")
-            Await reader.ReadHeaderRecordAsync()
-            Await table.FillAsync(reader)
+        Using textReader = New StreamReader("PlanetaryData.csv")
+            Using reader = New CsvReader(textReader, True)
+                Await reader.ReadHeaderRecordAsync()
+                Await table.FillAsync(reader)
+            End Using
         End Using
 
         Using stringWriter = New StringWriter()
@@ -332,12 +349,14 @@ Module Program
 
     Private Sub CopyCSVFileToStringWriter()
         Using stringWriter = New StringWriter()
-            Using reader = New CsvReader("PlanetaryData.csv")
-                Using writer = New CsvWriter(stringWriter)
-                    writer.ValueSeparator = Constants.vbTab
-                    writer.ValueDelimiter = "'"
+            Using textReader = New StreamReader("PlanetaryData.csv")
+                Using reader = New CsvReader(textReader, True)
+                    Using writer = New CsvWriter(stringWriter)
+                        writer.ValueSeparator = Constants.vbTab
+                        writer.ValueDelimiter = "'"
 
-                    reader.CopyTo(writer)
+                        reader.CopyTo(writer)
+                    End Using
                 End Using
             End Using
 

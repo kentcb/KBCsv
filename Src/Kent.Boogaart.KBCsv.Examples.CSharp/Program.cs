@@ -1,6 +1,7 @@
 ﻿namespace Kent.Boogaart.KBCsv.Examples.CSharp
 {
     using Kent.Boogaart.KBCsv.Extensions;
+    using Kent.Boogaart.KBCsv.Extensions.Data;
     using System;
     using System.Data;
     using System.Diagnostics;
@@ -100,7 +101,8 @@ Tempany, 8";
         {
             #region ReadTabDelimitedDataFromFile
 
-            using (var reader = new CsvReader("PlanetaryData.tdv"))
+            using (var streamReader = new StreamReader("PlanetaryData.tdv"))
+            using (var reader = new CsvReader(streamReader))
             {
                 reader.ValueSeparator = '\t';
                 reader.ValueDelimiter = '\'';
@@ -119,7 +121,8 @@ Tempany, 8";
         {
             #region ReadCSVFromFile
 
-            using (var reader = new CsvReader("PlanetaryData.csv"))
+            using (var streamReader = new StreamReader("PlanetaryData.csv"))
+            using (var reader = new CsvReader(streamReader))
             {
                 // the CSV file has a header record, so we read that first
                 reader.ReadHeaderRecord();
@@ -159,7 +162,8 @@ Tempany, 8";
         {
             #region ReadCSVFromFileWithExplicitHeader
 
-            using (var reader = new CsvReader("PlanetaryData_NoHeader.csv"))
+            using (var streamReader = new StreamReader("PlanetaryData_NoHeader.csv"))
+            using (var reader = new CsvReader(streamReader))
             {
                 reader.HeaderRecord = new HeaderRecord("OfficialName", "NickName");
 
@@ -224,7 +228,8 @@ Tempany, 8";
         {
             #region WriteCSVToFile
 
-            using (var writer = new CsvWriter("Output.csv"))
+            using (var streamWriter = new StreamWriter("Output.csv"))
+            using (var writer = new CsvWriter(streamWriter))
             {
                 writer.ForceDelimit = true;
 
@@ -265,8 +270,10 @@ Tempany, 8";
         {
             #region ReadCSVFromFileAndWriteToTabDelimitedFile
 
-            using (var reader = new CsvReader("PlanetaryData.csv"))
-            using (var writer = new CsvWriter("PlanetaryData_Modified.csv"))
+            using (var streamReader = new StreamReader("PlanetaryData.csv"))
+            using (var reader = new CsvReader(streamReader))
+            using (var streamWriter = new StreamWriter("PlanetaryData_Modified.csv"))
+            using (var writer = new CsvWriter(streamWriter))
             {
                 writer.ValueSeparator = '\t';
                 writer.ValueDelimiter = '\'';
@@ -290,7 +297,8 @@ Tempany, 8";
 
             var table = new DataTable();
 
-            using (var reader = new CsvReader("PlanetaryData.csv"))
+            using (var streamReader = new StreamReader("PlanetaryData.csv"))
+            using (var reader = new CsvReader(streamReader))
             {
                 reader.ReadHeaderRecord();
                 table.Fill(reader);
@@ -332,7 +340,8 @@ Tempany, 8";
 
             var table = new DataTable();
 
-            using (var reader = new CsvReader("PlanetaryData.csv"))
+            using (var streamReader = new StreamReader("PlanetaryData.csv"))
+            using (var reader = new CsvReader(streamReader))
             {
                 await reader.ReadHeaderRecordAsync();
                 await table.FillAsync(reader);
@@ -389,7 +398,8 @@ Tempany, 8";
 
             using (var stringWriter = new StringWriter())
             {
-                using (var reader = new CsvReader("PlanetaryData.csv"))
+                using (var streamReader = new StreamReader("PlanetaryData.csv"))
+                using (var reader = new CsvReader(streamReader))
                 using (var writer = new CsvWriter(stringWriter))
                 {
                     writer.ValueSeparator = '\t';

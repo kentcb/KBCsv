@@ -1,12 +1,12 @@
 ﻿namespace Kent.Boogaart.KBCsv.UnitTests
 {
+    using Moq;
+    using Moq.Protected;
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Text;
     using System.Threading.Tasks;
-    using Moq;
-    using Moq.Protected;
     using Xunit;
 
     public sealed class CsvWriterFixture
@@ -21,18 +21,6 @@
         public void constructor_stream_throws_if_encoding_is_null()
         {
             Assert.Throws<ArgumentNullException>(() => new CsvWriter(new MemoryStream(), null));
-        }
-
-        [Fact]
-        public void constructor_path_throws_if_path_is_null()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CsvWriter((string)null));
-        }
-
-        [Fact]
-        public void constructor_path_throws_if_encoding_is_null()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CsvWriter("path", null));
         }
 
         [Fact]

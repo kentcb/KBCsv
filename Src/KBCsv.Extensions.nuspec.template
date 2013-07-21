@@ -9,26 +9,12 @@
     <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-        Provides extensions to KBCsv. Online at http://kbcsv.codeplex.com/.
+        Provides generally useful extensions to KBCsv as a Portable Class Library. Online at http://kbcsv.codeplex.com/.
     </description>
-    <tags>.NET CSV comma separated value library mono Silverlight KBCsv extensions</tags>
+    <tags>.NET CSV comma separated value library mono portable pcl KBCsv extensions</tags>
     <dependencies>
-        <group>
-            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
-            <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
-        </group>
-
-        <group targetFramework="net40">
-            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
-            <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
-            <dependency id="Microsoft.Bcl.Async" version="1.0.16"/>
-        </group>
-
-        <group targetFramework="sl50">
-            <dependency id="Kent.Boogaart.HelperTrinity" version="1.5.2" />
-            <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
-            <dependency id="Microsoft.Bcl.Async" version="1.0.16"/>
-        </group>
+        <dependency id="Kent.Boogaart.HelperTrinity" version="2.0.2-beta" />
+        <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
     </dependencies>
   </metadata>
 </package>

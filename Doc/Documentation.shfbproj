@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <!-- The configuration and platform will be used to determine which
+         assemblies to include from solution and project documentation
+         sources -->
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{875651eb-17e7-40c8-87bf-1ca148cec0f5}</ProjectGuid>
+    <SHFBSchemaVersion>1.9.5.0</SHFBSchemaVersion>
+    <!-- AssemblyName, Name, and RootNamespace are not used by SHFB but Visual
+         Studio adds them anyway -->
+    <AssemblyName>Documentation</AssemblyName>
+    <RootNamespace>Documentation</RootNamespace>
+    <Name>Documentation</Name>
+    <!-- SHFB properties -->
+    <OutputPath>..\Gen\Documentation\</OutputPath>
+    <HtmlHelpName>KBCsv</HtmlHelpName>
+    <DocumentationSources>
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\Release\Kent.Boogaart.KBCsv.dll" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv\bin\Release\Kent.Boogaart.KBCsv.xml" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\Release\Kent.Boogaart.KBCsv.Extensions.dll" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions\bin\Release\Kent.Boogaart.KBCsv.Extensions.xml" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions.Data\bin\Release\Kent.Boogaart.KBCsv.Extensions.Data.dll" />
+      <DocumentationSource sourceFile="..\Src\Kent.Boogaart.KBCsv.Extensions.Data\bin\Release\Kent.Boogaart.KBCsv.Extensions.Data.xml" />
+    </DocumentationSources>
+    <FrameworkVersion>.NET Framework 4.5</FrameworkVersion>
+    <HelpTitle>KBCsv</HelpTitle>
+    <RootNamespaceContainer>True</RootNamespaceContainer>
+    <RootNamespaceTitle>API Documentation</RootNamespaceTitle>
+    <MissingTags>Summary, Parameter, Returns, Namespace, TypeParameter, IncludeTargets</MissingTags>
+    <NamespaceSummaries>
+      <NamespaceSummaryItem name="(global)" isDocumented="False" />
+<NamespaceSummaryItem name="Kent.Boogaart.KBCsv" isDocumented="True">Contains KBCsv types that facilitate the reading and writing of CSV data.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Kent.Boogaart.KBCsv.Extensions" isDocumented="True">Contains types that extend core KBCsv functionality.</NamespaceSummaryItem>
+<NamespaceSummaryItem name="Kent.Boogaart.KBCsv.Extensions.Data" isDocumented="True">Contains types that extend core KBCsv functionality to work with System.Data types.</NamespaceSummaryItem></NamespaceSummaries>
+    <VisibleItems>Attributes, ExplicitInterfaceImplementations, InheritedMembers, InheritedFrameworkMembers, Protected, SealedProtected</VisibleItems>
+    <Preliminary>False</Preliminary>
+    <SdkLinkTarget>Self</SdkLinkTarget>
+    <ComponentConfigurations>
+      <ComponentConfig id="Code Block Component" enabled="True">
+        <component id="Code Block Component" type="SandcastleBuilder.Components.CodeBlockComponent" assembly="{@SHFBFolder}SandcastleBuilder.Components.dll">
+          <basePath value="{@HtmlEncProjectFolder}" />
+          <outputPaths>{@HelpFormatOutputPaths}</outputPaths>
+          <allowMissingSource value="false" />
+          <removeRegionMarkers value="false" />
+          <colorizer syntaxFile="{@SHFBFolder}Colorizer\highlight.xml" styleFile="{@SHFBFolder}Colorizer\highlight.xsl" stylesheet="{@SHFBFolder}Colorizer\highlight.css" scriptFile="{@SHFBFolder}Colorizer\highlight.js" language="cs" tabSize="4" numberLines="false" outlining="false" keepSeeTags="false" defaultTitle="true" />
+        </component>
+      </ComponentConfig>
+    </ComponentConfigurations>
+    <SyntaxFilters>CSharp, VisualBasic, CPlusPlus, FSharp</SyntaxFilters>
+    <PresentationStyle>VS2010</PresentationStyle>
+    <NamingMethod>MemberName</NamingMethod>
+    <Language>en-US</Language>
+    <ContentPlacement>AboveNamespaces</ContentPlacement>
+    <BuildAssemblerVerbosity>OnlyWarningsAndErrors</BuildAssemblerVerbosity>
+    <HelpFileFormat>HtmlHelp1</HelpFileFormat>
+    <IndentHtml>False</IndentHtml>
+    <KeepLogFile>True</KeepLogFile>
+    <DisableCodeBlockComponent>False</DisableCodeBlockComponent>
+    <CppCommentsFixup>False</CppCommentsFixup>
+    <CleanIntermediates>True</CleanIntermediates>
+  </PropertyGroup>
+  <!-- There are no properties for these two groups but they need to appear in
+       order for Visual Studio to perform the build. -->
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  </PropertyGroup>
+  <ItemGroup>
+    <ContentLayout Include="Content Layout.content" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Parser.aml" />
+    <None Include="License.aml" />
+    <None Include="Overview.aml" />
+    <None Include="Quickstart Guide.aml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Tokens Include="Tokens.tokens" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  </ItemGroup>
+  <!-- Import the SHFB build targets -->
+  <Import Project="$(SHFBROOT)\SandcastleHelpFileBuilder.targets" />
+</Project>

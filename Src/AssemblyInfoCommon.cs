@@ -1,12 +1,11 @@
 using System;
 using System.Reflection;
 using System.Resources;
-using System.Runtime.InteropServices;
 
 // this is used to version artifacts. AssemblyInformationalVersion should use semantic versioning (http://semver.org/)
 // be sure to update the corresponding VB.NET AssemblyInfoCommon.vb
-[assembly: AssemblyInformationalVersion("2.0.2")]
-[assembly: AssemblyVersion("2.0.2.0")]
+[assembly: AssemblyInformationalVersion("3.0.0-beta")]
+[assembly: AssemblyVersion("3.0.0.0")]
 
 [assembly: AssemblyCompany("Kent Boogaart")]
 [assembly: AssemblyProduct("KBCsv")]
@@ -14,7 +13,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: CLSCompliant(true)]
-[assembly: ComVisible(false)]
 [assembly: NeutralResourcesLanguage("en-US")]
 
 #if DEBUG

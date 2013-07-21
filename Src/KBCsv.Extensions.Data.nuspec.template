@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>Kent.Boogaart.KBCsv.Extensions.Data</id>
+    <version>${VERSION}</version>
+    <authors>Kent Boogaart</authors>
+    <owners>Kent Boogaart</owners>
+    <licenseUrl>http://kbcsv.codeplex.com/license</licenseUrl>
+    <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>
+        Provides extensions to use KBCsv with types in System.Data. Online at http://kbcsv.codeplex.com/.
+    </description>
+    <tags>.NET CSV comma separated value library mono KBCsv extensions data</tags>
+    <dependencies>
+        <dependency id="Kent.Boogaart.HelperTrinity" version="2.0.2-beta" />
+        <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
+    </dependencies>
+  </metadata>
+</package>

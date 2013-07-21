@@ -29,10 +29,11 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FX45 Debug|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\FX45 Debug\</OutputPath>
-    <DefineConstants>ASYNC</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
@@ -41,9 +42,10 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FX45 Release|AnyCPU'">
-    <OutputPath>bin\FX45 Release\</OutputPath>
-    <DefineConstants>ASYNC</DefineConstants>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>
+    </DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -110,16 +112,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kent.Boogaart.KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.csproj">
-      <Project>{25be0d57-febe-40ee-870e-4b891f25a807}</Project>
-      <Name>Kent.Boogaart.KBCsv.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Kent.Boogaart.KBCsv\Kent.Boogaart.KBCsv.csproj">
-      <Project>{15be0d57-febe-40ee-870e-4b891f25a807}</Project>
-      <Name>Kent.Boogaart.KBCsv</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
       <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
@@ -135,6 +127,20 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kent.Boogaart.KBCsv.Extensions.Data\Kent.Boogaart.KBCsv.Extensions.Data.csproj">
+      <Project>{2a101a18-d972-4c37-a092-2e82515faf7f}</Project>
+      <Name>Kent.Boogaart.KBCsv.Extensions.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kent.Boogaart.KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.csproj">
+      <Project>{d2ebb055-f466-41e0-af39-9a1e97eff11f}</Project>
+      <Name>Kent.Boogaart.KBCsv.Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Kent.Boogaart.KBCsv\Kent.Boogaart.KBCsv.csproj">
+      <Project>{4e89dcb7-60ec-4c53-a8dd-1cbaa1a1a8bb}</Project>
+      <Name>Kent.Boogaart.KBCsv</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

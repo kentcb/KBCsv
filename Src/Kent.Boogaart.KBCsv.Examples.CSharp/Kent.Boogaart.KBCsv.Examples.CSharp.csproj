@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">FX45 Debug</Configuration>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{1C43651C-155C-48BA-A5FF-5C625FDD6878}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -12,19 +12,19 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FX45 Debug|AnyCPU'">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>bin\FX45 Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;ASYNC</DefineConstants>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'FX45 Release|AnyCPU'">
-    <OutputPath>bin\FX45 Release\</OutputPath>
-    <DefineConstants>TRACE;ASYNC</DefineConstants>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -58,12 +58,16 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Kent.Boogaart.KBCsv.Extensions.Data\Kent.Boogaart.KBCsv.Extensions.Data.csproj">
+      <Project>{2a101a18-d972-4c37-a092-2e82515faf7f}</Project>
+      <Name>Kent.Boogaart.KBCsv.Extensions.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Kent.Boogaart.KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.csproj">
-      <Project>{25be0d57-febe-40ee-870e-4b891f25a807}</Project>
+      <Project>{d2ebb055-f466-41e0-af39-9a1e97eff11f}</Project>
       <Name>Kent.Boogaart.KBCsv.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Kent.Boogaart.KBCsv\Kent.Boogaart.KBCsv.csproj">
-      <Project>{15be0d57-febe-40ee-870e-4b891f25a807}</Project>
+      <Project>{4e89dcb7-60ec-4c53-a8dd-1cbaa1a1a8bb}</Project>
       <Name>Kent.Boogaart.KBCsv</Name>
     </ProjectReference>
   </ItemGroup>

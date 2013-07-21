@@ -1,11 +1,11 @@
 ﻿namespace Kent.Boogaart.KBCsv
 {
-    using System;
-    using System.IO;
-    using System.Text;
     using Kent.Boogaart.HelperTrinity;
     using Kent.Boogaart.HelperTrinity.Extensions;
     using Kent.Boogaart.KBCsv.Internal;
+    using System;
+    using System.IO;
+    using System.Text;
 
     /// <summary>
     /// Provides a means of reading CSV data.
@@ -106,7 +106,7 @@
         /// Initializes a new instance of the CsvReader class.
         /// </summary>
         /// <remarks>
-        /// <paramref name="stream"/> is assumed to be encoded with <see cref="Encoding.Default"/>, and will be disposed when this <c>CsvReader</c> is disposed.
+        /// <paramref name="stream"/> is assumed to be encoded with <see cref="Encoding.UTF8"/>, and will be disposed when this <c>CsvReader</c> is disposed.
         /// </remarks>
         /// <param name="stream">
         /// A stream from which CSV data will be read.
@@ -147,34 +147,6 @@
         /// </param>
         public CsvReader(Stream stream, Encoding encoding, bool leaveOpen)
             : this(new StreamReader(stream, encoding), leaveOpen)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvReader class.
-        /// </summary>
-        /// <remarks>
-        /// The file at <paramref name="path"/> is assumed to be encoded with <see cref="Encoding.Default"/>.
-        /// </remarks>
-        /// <param name="path">
-        /// The path of the file to read.
-        /// </param>
-        public CsvReader(string path)
-            : this(path, Constants.DefaultEncoding)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvReader class.
-        /// </summary>
-        /// <param name="path">
-        /// The path of the file to read.
-        /// </param>
-        /// <param name="encoding">
-        /// The encoding of CSV data within the file.
-        /// </param>
-        public CsvReader(string path, Encoding encoding)
-            : this(new StreamReader(path, encoding), false)
         {
         }
 

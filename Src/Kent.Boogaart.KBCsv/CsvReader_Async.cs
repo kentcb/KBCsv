@@ -1,9 +1,7 @@
-﻿#if ASYNC
-
-namespace Kent.Boogaart.KBCsv
+﻿namespace Kent.Boogaart.KBCsv
 {
     using System.Security;
-using System.Threading.Tasks;
+    using System.Threading.Tasks;
 
     // async equivalents to relevant methods in the reader
     // NOTE: changes should be made to the synchronous variants first, then ported here
@@ -155,5 +153,3 @@ using System.Threading.Tasks;
         }
     }
 }
-
-#endif

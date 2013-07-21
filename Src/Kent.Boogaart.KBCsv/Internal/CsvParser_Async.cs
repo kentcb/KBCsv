@@ -1,6 +1,4 @@
-﻿#if ASYNC
-
-namespace Kent.Boogaart.KBCsv.Internal
+﻿namespace Kent.Boogaart.KBCsv.Internal
 {
     using System.Diagnostics;
     using System.Threading.Tasks;
@@ -266,5 +264,3 @@ namespace Kent.Boogaart.KBCsv.Internal
         }
     }
 }
-
-#endif

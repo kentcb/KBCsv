@@ -1,9 +1,7 @@
-﻿#if ASYNC
-
-namespace Kent.Boogaart.KBCsv.Extensions
+﻿namespace Kent.Boogaart.KBCsv.Extensions
 {
-    using System.Threading.Tasks;
     using Kent.Boogaart.HelperTrinity.Extensions;
+    using System.Threading.Tasks;
 
     // async equivalents to csv reader extension methods
     // NOTE: changes should be made to the synchronous variants first, then ported here
@@ -40,5 +38,3 @@ namespace Kent.Boogaart.KBCsv.Extensions
         }
     }
 }
-
-#endif

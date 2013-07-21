@@ -1,9 +1,9 @@
 ﻿namespace Kent.Boogaart.KBCsv.UnitTests
 {
-    using System;
-    using System.IO;
     using Moq;
     using Moq.Protected;
+    using System;
+    using System.IO;
     using Xunit;
 
     public sealed class CsvReaderFixture
@@ -18,18 +18,6 @@
         public void constructor_taking_stream_and_encoding_throws_if_encoding_is_null()
         {
             Assert.Throws<ArgumentNullException>(() => new CsvReader(new MemoryStream(), null));
-        }
-
-        [Fact]
-        public void constructor_taking_path_throws_if_path_is_null()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CsvReader((string)null));
-        }
-
-        [Fact]
-        public void constructor_taking_path_and_encoding_throws_if_encoding_is_null()
-        {
-            Assert.Throws<ArgumentNullException>(() => new CsvReader("somepath.csv", null));
         }
 
         [Fact]

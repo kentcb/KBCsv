@@ -1,12 +1,12 @@
 ﻿namespace Kent.Boogaart.KBCsv.Extensions
 {
+    using Kent.Boogaart.HelperTrinity;
+    using Kent.Boogaart.HelperTrinity.Extensions;
+    using Kent.Boogaart.KBCsv;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
-    using Kent.Boogaart.HelperTrinity;
-    using Kent.Boogaart.HelperTrinity.Extensions;
-    using Kent.Boogaart.KBCsv;
 
     /// <summary>
     /// Provides CSV extensions to <see cref="IEnumerable{T}"/>.
@@ -84,7 +84,7 @@
         /// </returns>
         public static int WriteCsv<T>(this IEnumerable<T> @this, CsvWriter csvWriter, bool writeHeaderRecord)
         {
-            return @this.WriteCsv(csvWriter, writeHeaderRecord, typeof(T).GetProperties().Select(x => x.Name).ToArray());
+            return @this.WriteCsv(csvWriter, writeHeaderRecord, typeof(T).GetRuntimeProperties().Where(x => x.CanRead && x.GetMethod.IsPublic).Select(x => x.Name).ToArray());
         }
 
         /// <summary>
@@ -158,7 +158,7 @@
             for (var i = 0; i < propertyNames.Length; ++i)
             {
                 exceptionHelper.ResolveAndThrowIf(propertyNames[i] == null, "nullPropertyName");
-                var propertyInfo = typeof(T).GetProperty(propertyNames[i]);
+                var propertyInfo = typeof(T).GetRuntimeProperty(propertyNames[i]);
                 exceptionHelper.ResolveAndThrowIf(propertyInfo == null, "propertyNotFound", propertyNames[i], typeof(T).FullName);
                 propertyInfos[i] = propertyInfo;
             }

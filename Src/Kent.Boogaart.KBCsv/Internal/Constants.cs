@@ -11,10 +11,6 @@
         public const char CR = (char)0x0d;
         public const char LF = (char)0x0a;
 
-#if SILVERLIGHT
         public static readonly Encoding DefaultEncoding = Encoding.UTF8;
-#else
-        public static readonly Encoding DefaultEncoding = Encoding.Default;
-#endif
     }
 }

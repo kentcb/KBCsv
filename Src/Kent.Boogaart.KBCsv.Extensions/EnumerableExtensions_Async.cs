@@ -1,13 +1,11 @@
-﻿#if ASYNC
-
-namespace Kent.Boogaart.KBCsv.Extensions
+﻿namespace Kent.Boogaart.KBCsv.Extensions
 {
+    using Kent.Boogaart.HelperTrinity.Extensions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
-    using Kent.Boogaart.HelperTrinity.Extensions;
 
     // async equivalents to enumerable extension methods
     // NOTE: changes should be made to the synchronous variants first, then ported here
@@ -63,7 +61,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
         /// </returns>
         public async static Task<int> WriteCsvAsync<T>(this IEnumerable<T> @this, CsvWriter csvWriter, bool writeHeaderRecord)
         {
-            return await @this.WriteCsvAsync(csvWriter, writeHeaderRecord, typeof(T).GetProperties().Select(x => x.Name).ToArray()).ConfigureAwait(false);
+            return await @this.WriteCsvAsync(csvWriter, writeHeaderRecord, typeof(T).GetRuntimeProperties().Where(x => x.CanRead && x.GetMethod.IsPublic).Select(x => x.Name).ToArray()).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -137,7 +135,7 @@ namespace Kent.Boogaart.KBCsv.Extensions
             for (var i = 0; i < propertyNames.Length; ++i)
             {
                 exceptionHelper.ResolveAndThrowIf(propertyNames[i] == null, "nullPropertyName");
-                var propertyInfo = typeof(T).GetProperty(propertyNames[i]);
+                var propertyInfo = typeof(T).GetRuntimeProperty(propertyNames[i]);
                 exceptionHelper.ResolveAndThrowIf(propertyInfo == null, "propertyNotFound", propertyNames[i], typeof(T).FullName);
                 propertyInfos[i] = propertyInfo;
             }
@@ -227,5 +225,3 @@ namespace Kent.Boogaart.KBCsv.Extensions
         }
     }
 }
-
-#endif

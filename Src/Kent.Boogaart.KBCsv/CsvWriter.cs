@@ -1,13 +1,13 @@
 ﻿namespace Kent.Boogaart.KBCsv
 {
+    using Kent.Boogaart.HelperTrinity;
+    using Kent.Boogaart.HelperTrinity.Extensions;
+    using Kent.Boogaart.KBCsv.Internal;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Text;
-    using Kent.Boogaart.HelperTrinity;
-    using Kent.Boogaart.HelperTrinity.Extensions;
-    using Kent.Boogaart.KBCsv.Internal;
 
     /// <summary>
     /// Provides a means of writing CSV data.
@@ -71,7 +71,7 @@
         /// Initializes a new instance of the CsvWriter class.
         /// </summary>
         /// <remarks>
-        /// <paramref name="stream"/> will be encoded with <see cref="System.Text.Encoding.Default"/>, and will be disposed when this <c>CsvWriter</c> is disposed.
+        /// <paramref name="stream"/> will be encoded with <see cref="System.Text.Encoding.UTF8"/>, and will be disposed when this <c>CsvWriter</c> is disposed.
         /// </remarks>
         /// <param name="stream">
         /// A stream to which CSV data will be written.
@@ -101,6 +101,9 @@
         /// <summary>
         /// Initializes a new instance of the CsvWriter class.
         /// </summary>
+        /// <remarks>
+        /// <paramref name="stream"/> will be disposed when this <c>CsvWriter</c> is disposed.
+        /// </remarks>
         /// <param name="stream">
         /// A stream to which CSV data will be written.
         /// </param>
@@ -112,68 +115,6 @@
         /// </param>
         public CsvWriter(Stream stream, Encoding encoding, bool leaveOpen)
             : this(new StreamWriter(stream, encoding), leaveOpen)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvWriter class.
-        /// </summary>
-        /// <remarks>
-        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="System.Text.Encoding.Default"/>.
-        /// </remarks>
-        /// <param name="path">
-        /// The path of the file to write.
-        /// </param>
-        public CsvWriter(string path)
-            : this(path, Constants.DefaultEncoding)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvWriter class.
-        /// </summary>
-        /// <param name="path">
-        /// The path of the file to write.
-        /// </param>
-        /// <param name="encoding">
-        /// The encoding to use when writing CSV data to the file.
-        /// </param>
-        public CsvWriter(string path, Encoding encoding)
-            : this(path, false, encoding)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvWriter class.
-        /// </summary>
-        /// <remarks>
-        /// Data written to the file at <paramref name="path"/> will be encoded with <see cref="System.Text.Encoding.Default"/>.
-        /// </remarks>
-        /// <param name="path">
-        /// The path of the file to write.
-        /// </param>
-        /// <param name="append">
-        /// If <see langword="true"/>, data will be appended to the end of the file rather than truncating.
-        /// </param>
-        public CsvWriter(string path, bool append)
-            : this(path, append, Constants.DefaultEncoding)
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the CsvWriter class.
-        /// </summary>
-        /// <param name="path">
-        /// The path of the file to write.
-        /// </param>
-        /// <param name="encoding">
-        /// The encoding to use when writing CSV data to the file.
-        /// </param>
-        /// <param name="append">
-        /// If <see langword="true"/>, data will be appended to the end of the file rather than truncating.
-        /// </param>
-        public CsvWriter(string path, bool append, Encoding encoding)
-            : this(new StreamWriter(path, append, encoding))
         {
         }
 

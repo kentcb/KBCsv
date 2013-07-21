@@ -1,11 +1,9 @@
-﻿#if ASYNC
-
-namespace Kent.Boogaart.KBCsv
+﻿namespace Kent.Boogaart.KBCsv
 {
+    using Kent.Boogaart.HelperTrinity.Extensions;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading.Tasks;
-    using Kent.Boogaart.HelperTrinity.Extensions;
 
     public partial class CsvWriter
     {
@@ -137,7 +135,4 @@ namespace Kent.Boogaart.KBCsv
             this.bufferBuilder.Length = 0;
         }
     }
-
 }
-
-#endif

@@ -10,33 +10,6 @@
         <NuGetExe>$(SrcDir)\packages\NuGet.Bootstrapper.2.2.1\tools\NuGet.exe</NuGetExe>
     </PropertyGroup>
 
-    <ItemGroup>
-        <!--
-        order is very important here, for reasons I haven't investigated fully. If the Silverlight solutions are built second, invalid binaries
-        are produced. It seems that building the standard solution results in some properties being set that then affect the Silverlight build.
-        -->
-        <Framework Include="SL40">
-            <NuGetName>sl40</NuGetName>
-            <FriendlyName>Silverlight 4</FriendlyName>
-        </Framework>
-        <Framework Include="SL50">
-            <NuGetName>sl50</NuGetName>
-            <FriendlyName>Silverlight 5</FriendlyName>
-        </Framework>
-        <Framework Include="FX35">
-            <NuGetName>net35</NuGetName>
-            <FriendlyName>.NET 3.5</FriendlyName>
-        </Framework>
-        <Framework Include="FX40">
-            <NuGetName>net40</NuGetName>
-            <FriendlyName>.NET 4.0</FriendlyName>
-        </Framework>
-        <Framework Include="FX45">
-            <NuGetName>net45</NuGetName>
-            <FriendlyName>.NET 4.5</FriendlyName>
-        </Framework>
-    </ItemGroup>
-
     <Import Project="$(SrcDir)\.build\MSBuild.Community.Tasks.Targets" />
     <UsingTask AssemblyFile="$(SrcDir)\packages\xunit.2.0.0-alpha-build1611\lib\net45\xunit.runner.msbuild.dll" TaskName="Xunit.Runner.MSBuild.xunit" />
 
@@ -66,25 +39,25 @@
     <Target Name="All" DependsOnTargets="Clean;Build;UnitTests;GenerateDocumentation;CreateArchives;CreateNuGetPackages"/>
 
     <Target Name="Clean">
-        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=%(Framework.Identity) $(Configuration)" Targets="Clean" BuildInParallel="True"/>
+        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Clean" BuildInParallel="True"/>
         <RemoveDir Directories="$(GenDir)" />
     </Target>
 
     <Target Name="Build">
-        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=%(Framework.Identity) $(Configuration)" Targets="Build" BuildInParallel="True"/>
+        <MSBuild Projects="$(SrcDir)\KBCsv.sln" Properties="Configuration=$(Configuration)" Targets="Build" BuildInParallel="True"/>
     </Target>
 
     <Target Name="UnitTests">
         <MakeDir Directories="$(GenDir)\Tests" />
         
-        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.UnitTests\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.UnitTests.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.UnitTests.xml" />
-        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions.UnitTests\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.Extensions.UnitTests.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.Extensions.UnitTests.xml" />
+        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.UnitTests\bin\$(Configuration)\Kent.Boogaart.KBCsv.UnitTests.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.UnitTests.xml" />
+        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions.UnitTests\bin\$(Configuration)\Kent.Boogaart.KBCsv.Extensions.UnitTests.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.Extensions.UnitTests.xml" />
     </Target>
 
     <Target Name="PerformanceTests">
         <MakeDir Directories="$(GenDir)\Tests" />
         
-        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.PerformanceTests\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.PerformanceTests.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.PerformanceTests.xml" />
+        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.PerformanceTests\bin\$(Configuration)\Kent.Boogaart.KBCsv.PerformanceTests.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.PerformanceTests.xml" />
     </Target>
     
     <Target Name="GenerateDocumentation">
@@ -96,7 +69,7 @@
          - Latest Sandcastle Help File Builder (http://shfb.codeplex.com/)
          - Any relevant updates to styles from Sandcastle Styles (http://sandcastlestyles.codeplex.com/)
         -->
-        <MSBuild Projects="$(DocDir)\KBCsv.shfbproj"/>
+        <MSBuild Projects="$(DocDir)\Documentation.shfbproj"/>
         <OnError ExecuteTargets="GenerateDocumentationFailed"/>
     </Target>
 
@@ -122,19 +95,23 @@
         <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-doc.zip" WorkingDirectory="$(GenDir)\Documentation\" ZipLevel="9" Files="@(DocFiles)" />
 
         <!-- zip binaries -->
-        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions\bin\%(Framework.Identity) $(Configuration)\*.*">
-            <Output ItemName="BinFiles%(Framework.Identity)" TaskParameter="Include" />
+        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions\bin\$(Configuration)\*.*">
+            <Output ItemName="BinFiles" TaskParameter="Include" />
         </CreateItem>
-        <Copy SourceFiles="@(BinFiles%(Framework.Identity))" DestinationFolder="$(GenDir)\Temp\%(Framework.Identity)" />
-        <CreateItem Include="$(GenDir)\Temp\%(Framework.Identity)\*.*">
-            <Output ItemName="BinFilesCopy%(Framework.Identity)" TaskParameter="Include" />
+        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions.Data\bin\$(Configuration)\*.*">
+            <Output ItemName="BinFiles" TaskParameter="Include" />
         </CreateItem>
-        <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-%(Framework.Identity)-bin.zip" WorkingDirectory="$(GenDir)\Temp\%(Framework.Identity)\" ZipLevel="9" Files="@(BinFilesCopy%(Framework.Identity))" />
+        <Copy SourceFiles="@(BinFiles)" DestinationFolder="$(GenDir)\Temp\" />
+        <CreateItem Include="$(GenDir)\Temp\*.*">
+            <Output ItemName="BinFilesCopy" TaskParameter="Include" />
+        </CreateItem>
+        <Zip ZipFileName="$(GenDir)\KBCsv-$(Version)-bin.zip" WorkingDirectory="$(GenDir)\Temp\" ZipLevel="9" Files="@(BinFilesCopy)" />
     </Target>
 
     <Target Name="CreateNuGetPackages" DependsOnTargets="GetVersion">
         <MakeDir Directories="$(GenDir)\NuGet\KBCsv"/>
         <MakeDir Directories="$(GenDir)\NuGet\KBCsv.Extensions"/>
+        <MakeDir Directories="$(GenDir)\NuGet\KBCsv.Extensions.Data"/>
 
         <ItemGroup>
             <Tokens Include="Version">
@@ -145,27 +122,35 @@
         <!-- generate nuspec files from templates -->
         <TemplateFile Template="$(SrcDir)\KBCsv.nuspec.template" OutputFileName="$(GenDir)\NuGet\KBCsv\Kent.Boogaart.KBCsv.nuspec" Tokens="@(Tokens)"/>
         <TemplateFile Template="$(SrcDir)\KBCsv.Extensions.nuspec.template" OutputFileName="$(GenDir)\NuGet\KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.nuspec" Tokens="@(Tokens)"/>
+        <TemplateFile Template="$(SrcDir)\KBCsv.Extensions.Data.nuspec.template" OutputFileName="$(GenDir)\NuGet\KBCsv.Extensions.Data\Kent.Boogaart.KBCsv.Extensions.Data.nuspec" Tokens="@(Tokens)"/>
 
         <!-- copy files into the appropriate locations -->
-        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv\bin\%(Framework.Identity) $(Configuration)\Kent.Boogaart.KBCsv.*">
-            <Output ItemName="%(Framework.Identity)KBCsvFiles" TaskParameter="Include" />
+        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv\bin\$(Configuration)\Kent.Boogaart.KBCsv.*">
+            <Output ItemName="KBCsvFiles" TaskParameter="Include" />
         </CreateItem>
-        <Copy SourceFiles="@(%(Framework.Identity)KBCsvFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv\lib\%(Framework.NuGetName)" />
+        <Copy SourceFiles="@(KBCsvFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv\lib\portable-windows8+net45+windowsphone8" />
         
-        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions\bin\%(Framework.Identity) $(Configuration)\Kent.Boogaart.KBCsv.Extensions.*">
-            <Output ItemName="%(Framework.Identity)KBCsvExtensionFiles" TaskParameter="Include" />
+        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions\bin\$(Configuration)\Kent.Boogaart.KBCsv.Extensions.*">
+            <Output ItemName="KBCsvExtensionFiles" TaskParameter="Include" />
         </CreateItem>
-        <Copy SourceFiles="@(%(Framework.Identity)KBCsvExtensionFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions\lib\%(Framework.NuGetName)" />
+        <Copy SourceFiles="@(KBCsvExtensionFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions\lib\portable-windows8+net45+windowsphone8" />
+        
+        <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions.Data\bin\$(Configuration)\Kent.Boogaart.KBCsv.Extensions.Data.*">
+            <Output ItemName="KBCsvExtensionDataFiles" TaskParameter="Include" />
+        </CreateItem>
+        <Copy SourceFiles="@(KBCsvExtensionDataFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions.Data\lib\net45" />
 
         <CreateItem Include="$(SrcDir)\**\*.cs" Exclude="$(SrcDir)\**\obj\**\*.*">
             <Output ItemName="Source_Files" TaskParameter="Include" />
         </CreateItem>
         <Copy SourceFiles="@(Source_Files)" DestinationFolder="$(GenDir)\NuGet\KBCsv\src\%(RecursiveDir)"/>
         <Copy SourceFiles="@(Source_Files)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions\src\%(RecursiveDir)"/>
+        <Copy SourceFiles="@(Source_Files)" DestinationFolder="$(GenDir)\NuGet\KBCsv.Extensions.Data\src\%(RecursiveDir)"/>
 
         <!-- pack the nugets -->
         <Exec Command='"$(NuGetExe)" pack -symbols "$(GenDir)\NuGet\KBCsv\Kent.Boogaart.KBCsv.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
         <Exec Command='"$(NuGetExe)" pack -symbols "$(GenDir)\NuGet\KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
+        <Exec Command='"$(NuGetExe)" pack -symbols "$(GenDir)\NuGet\KBCsv.Extensions.Data\Kent.Boogaart.KBCsv.Extensions.Data.nuspec"' WorkingDirectory="$(GenDir)\NuGet"/>
 
         <Message Text="NuGet packages created but not published. Type 'msbuild Build.targets /t:PublishNuGetPackages' to publish." Importance="High"/>
     </Target>
@@ -177,11 +162,12 @@
         <!-- symbol packages are automatically pushed too -->
         <Exec Command='"$(NuGetExe)" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.$(Version).nupkg"'/>
         <Exec Command='"$(NuGetExe)" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.Extensions.$(Version).nupkg"'/>
+        <Exec Command='"$(NuGetExe)" push "$(GenDir)\NuGet\Kent.Boogaart.KBCsv.Extensions.Data.$(Version).nupkg"'/>
     </Target>
 
     <!-- ensure the Version property is set appropriately -->
     <Target Name="GetVersion">
-        <GetAssemblyInformationalVersion AssemblyFile="$(SrcDir)\Kent.Boogaart.KBCsv\bin\FX45 $(Configuration)\Kent.Boogaart.KBCsv.dll">
+        <GetAssemblyInformationalVersion AssemblyFile="$(SrcDir)\Kent.Boogaart.KBCsv\bin\$(Configuration)\Kent.Boogaart.KBCsv.dll">
             <Output TaskParameter="Version" PropertyName="AssemblyInformationalVersion" />
         </GetAssemblyInformationalVersion>
         <CreateProperty Condition="$(Version) == ''" Value="$(AssemblyInformationalVersion)">
