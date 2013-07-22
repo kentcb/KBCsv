@@ -247,13 +247,14 @@
         /// </summary>
         /// <remarks>
         /// <para>
-        /// This property specifies what character is used to delimit values within the CSV. The default value delimiter is a double quote (<c>"</c>).
+        /// This property specifies what character is used to delimit values within the CSV. The default value delimiter is a double quote (<c>"</c>). If set to <see langword="null"/>, no character will
+        /// be treated as a delimiter.
         /// </para>
         /// <para>
         /// Note that values within the CSV are not required to be delimited. However, delimiting a value allows it to contain the delimiter character itself, along with new line characters (ie. a multi-line value).
         /// </para>
         /// </remarks>
-        public char ValueDelimiter
+        public char? ValueDelimiter
         {
             get
             {

@@ -57,7 +57,7 @@
     <Target Name="PerformanceTests">
         <MakeDir Directories="$(GenDir)\Tests" />
         
-        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.PerformanceTests\bin\$(Configuration)\Kent.Boogaart.KBCsv.PerformanceTests.dll" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.PerformanceTests.xml" />
+        <xunit Assembly="$(SrcDir)\Kent.Boogaart.KBCsv.PerformanceTests\bin\$(Configuration)\Kent.Boogaart.KBCsv.PerformanceTests.exe" Xml="$(GenDir)\Tests\Kent.Boogaart.KBCsv.PerformanceTests.xml" />
     </Target>
     
     <Target Name="GenerateDocumentation">

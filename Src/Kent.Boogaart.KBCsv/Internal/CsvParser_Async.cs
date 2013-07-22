@@ -39,7 +39,7 @@
                                     delimited = true;
 
                                     // since we're in a delimited area, the only special character is the value delimiter
-                                    this.activeSpecialCharacterMask = this.valueDelimiter;
+                                    this.activeSpecialCharacterMask = this.valueDelimiter.Value;
                                 }
                                 else if (ch == Constants.CR)
                                 {
@@ -137,7 +137,7 @@
                                 delimited = true;
 
                                 // since we're in a delimited area, the only special character is the value delimiter
-                                this.activeSpecialCharacterMask = this.valueDelimiter;
+                                this.activeSpecialCharacterMask = this.valueDelimiter.Value;
                             }
                             else if (ch == Constants.CR)
                             {

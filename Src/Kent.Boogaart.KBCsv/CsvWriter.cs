@@ -63,7 +63,7 @@
         private readonly StringBuilder bufferBuilder;
         private bool forceDelimit;
         private bool disposed;
-        private char valueDelimiter;
+        private char? valueDelimiter;
         private char valueSeparator;
         private long recordNumber;
 
@@ -184,8 +184,13 @@
         /// Gets or sets a value indicating whether delimiters should always be written.
         /// </summary>
         /// <remarks>
+        /// <para>
         /// If this property is set to <see langword="true"/>, values will always be wrapped in <see cref="ValueDelimiter"/>s, even if they're not actually required. If <see langword="false"/>,
         /// values will only be delimited where necessary. That is, when they contain characters that require delimiting.
+        /// </para>
+        /// <para>
+        /// Note that you cannot set this property to <see langword="true"/> if <see cref="ValueDelimiter"/> has been set to <see langword="null"/>.
+        /// </para>
         /// </remarks>
         public bool ForceDelimit
         {
@@ -198,6 +203,7 @@
             set
             {
                 this.EnsureNotDisposed();
+                exceptionHelper.ResolveAndThrowIf(!this.valueDelimiter.HasValue && value, "valueDelimiterRequiredIfForceDelimitIsTrue");
                 this.forceDelimit = value;
             }
         }
@@ -230,10 +236,15 @@
         /// <remarks>
         /// <para>
         /// This property specifies what character is used to delimit values within the CSV. The default value delimiter is a double quote (<c>"</c>).
-        /// If <see cref="ForceDelimit"/> is <see langword="false"/>, delimiters will only be written where necessary.
+        /// If set to <see langword="null"/>, values will never be delimited. Should they require delimiting in order to be valid CSV, an exception will
+        /// be thrown instead.
+        /// </para>
+        /// <para>
+        /// If <see cref="ForceDelimit"/> is <see langword="false"/>, delimiters will only be written where necessary. Note that <see cref="ForceDelimit"/>
+        /// cannot be <see langword="true"/> if <see cref="ValueDelimiter"/> is <see langword="null"/>.
         /// </para>
         /// </remarks>
-        public char ValueDelimiter
+        public char? ValueDelimiter
         {
             get
             {
@@ -245,6 +256,7 @@
             {
                 this.EnsureNotDisposed();
                 exceptionHelper.ResolveAndThrowIf(value == this.valueSeparator, "valueSeparatorAndDelimiterCannotMatch");
+                exceptionHelper.ResolveAndThrowIf(!value.HasValue && this.forceDelimit, "valueDelimiterRequiredIfForceDelimitIsTrue");
                 this.valueDelimiter = value;
             }
         }
@@ -517,6 +529,7 @@
 
             if (delimit)
             {
+                exceptionHelper.ResolveAndThrowIf(!this.valueDelimiter.HasValue, "valueRequiresDelimiting", this.valueBuilder.ToString());
                 this.bufferBuilder.Append(this.valueDelimiter).Append(this.valueBuilder).Append(this.valueDelimiter);
             }
             else

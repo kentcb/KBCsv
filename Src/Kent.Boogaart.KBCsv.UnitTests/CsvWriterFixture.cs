@@ -72,6 +72,17 @@
         }
 
         [Fact]
+        public void force_delimit_throws_if_set_to_true_when_value_delimiter_is_null()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<ArgumentException>(() => writer.ForceDelimit = true);
+                Assert.Equal("Value delimiter cannot be null when ForceDelimit is true.", ex.Message);
+            }
+        }
+
+        [Fact]
         public void force_delimit_is_false_by_default()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
@@ -93,7 +104,7 @@
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
-                var ex = Assert.Throws<ArgumentException>(() => writer.ValueSeparator = writer.ValueDelimiter);
+                var ex = Assert.Throws<ArgumentException>(() => writer.ValueSeparator = writer.ValueDelimiter.Value);
                 Assert.Equal("Value separator and delimiter cannot be the same.", ex.Message);
             }
         }
@@ -136,6 +147,17 @@
         }
 
         [Fact]
+        public void value_delimiter_throws_if_set_to_null_and_force_delimit_is_true()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ForceDelimit = true;
+                var ex = Assert.Throws<ArgumentException>(() => writer.ValueDelimiter = null);
+                Assert.Equal("Value delimiter cannot be null when ForceDelimit is true.", ex.Message);
+            }
+        }
+
+        [Fact]
         public void value_delimiter_is_double_quote_by_default()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
@@ -151,6 +173,16 @@
             {
                 writer.ValueDelimiter = '\'';
                 Assert.Equal('\'', writer.ValueDelimiter);
+            }
+        }
+
+        [Fact]
+        public void value_delimiter_can_be_set_to_null()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                Assert.Null(writer.ValueDelimiter);
             }
         }
 
@@ -199,6 +231,39 @@
         }
 
         [Fact]
+        public void write_record_record_throws_if_value_delimiter_is_null_and_value_contains_whitespace()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<InvalidOperationException>(() => writer.WriteRecord(new DataRecord(null, new string[] { " a value with leading and trailing whitespace " })));
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is:  a value with leading and trailing whitespace ", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_record_throws_if_value_delimiter_is_null_and_value_contains_value_separator()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<InvalidOperationException>(() => writer.WriteRecord(new DataRecord(null, new string[] { "a value, with a comma" })));
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value, with a comma", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_record_throws_if_value_delimiter_is_null_and_value_contains_carriage_return()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<InvalidOperationException>(() => writer.WriteRecord(new DataRecord(null, new string[] { "a value\r\nwith a carriage return" })));
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value\r\nwith a carriage return", ex.Message);
+            }
+        }
+
+        [Fact]
         public void write_record_record_writes_values_in_the_record_to_the_text_writer()
         {
             using (var stringWriter = new StringWriter())
@@ -236,6 +301,39 @@
             using (var writer = new CsvWriter(new MemoryStream()))
             {
                 Assert.Throws<ArgumentNullException>(() => writer.WriteRecord((string[])null));
+            }
+        }
+
+        [Fact]
+        public void write_record_values_throws_if_value_delimiter_is_null_and_value_contains_whitespace()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<InvalidOperationException>(() => writer.WriteRecord(new string[] { " a value with leading and trailing whitespace " }));
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is:  a value with leading and trailing whitespace ", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_values_throws_if_value_delimiter_is_null_and_value_contains_value_separator()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<InvalidOperationException>(() => writer.WriteRecord(new string[] { "a value, with a comma" }));
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value, with a comma", ex.Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_values_throws_if_value_delimiter_is_null_and_value_contains_carriage_return()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<InvalidOperationException>(() => writer.WriteRecord(new string[] { "a value\r\nwith a carriage return" }));
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value\r\nwith a carriage return", ex.Message);
             }
         }
 
@@ -371,6 +469,45 @@
         }
 
         [Fact]
+        public void write_record_async_record_throws_if_value_delimiter_is_null_and_value_contains_whitespace()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new DataRecord(null, new string[] { " a value with leading and trailing whitespace " })).Wait());
+                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is:  a value with leading and trailing whitespace ", ex.InnerExceptions[0].Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_async_record_throws_if_value_delimiter_is_null_and_value_contains_value_separator()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new DataRecord(null, new string[] { "a value, with a comma" })).Wait());
+                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value, with a comma", ex.InnerExceptions[0].Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_async_record_throws_if_value_delimiter_is_null_and_value_contains_carriage_return()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new DataRecord(null, new string[] { "a value\r\nwith a carriage return" })).Wait());
+                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value\r\nwith a carriage return", ex.InnerExceptions[0].Message);
+            }
+        }
+
+        [Fact]
         public async void write_record_async_record_writes_values_in_the_record_to_the_text_writer()
         {
             using (var stringWriter = new StringWriter())
@@ -408,6 +545,45 @@
             using (var writer = new CsvWriter(new MemoryStream()))
             {
                 Assert.Throws<ArgumentNullException>(writer.WriteRecordAsync((string[])null));
+            }
+        }
+
+        [Fact]
+        public void write_record_async_values_throws_if_value_delimiter_is_null_and_value_contains_whitespace()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new string[] { " a value with leading and trailing whitespace " }).Wait());
+                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is:  a value with leading and trailing whitespace ", ex.InnerExceptions[0].Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_async_values_throws_if_value_delimiter_is_null_and_value_contains_value_separator()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new string[] { "a value, with a comma" }).Wait());
+                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value, with a comma", ex.InnerExceptions[0].Message);
+            }
+        }
+
+        [Fact]
+        public void write_record_async_values_throws_if_value_delimiter_is_null_and_value_contains_carriage_return()
+        {
+            using (var writer = new CsvWriter(new MemoryStream()))
+            {
+                writer.ValueDelimiter = null;
+                var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new string[] { "a value\r\nwith a carriage return" }).Wait());
+                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
+                Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value\r\nwith a carriage return", ex.InnerExceptions[0].Message);
             }
         }
 

@@ -1,10 +1,10 @@
 ﻿namespace Kent.Boogaart.KBCsv.Internal
 {
+    using Kent.Boogaart.HelperTrinity;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
-    using Kent.Boogaart.HelperTrinity;
 
     // implements the actual parsing logic, given a TextReader from which to read characters.
     internal sealed partial class CsvParser
@@ -22,7 +22,7 @@
         private bool preserveLeadingWhiteSpace;
         private bool preserveTrailingWhiteSpace;
         private char valueSeparator;
-        private char valueDelimiter;
+        private char? valueDelimiter;
 
         public CsvParser(TextReader reader)
         {
@@ -67,7 +67,7 @@
             }
         }
 
-        public char ValueDelimiter
+        public char? ValueDelimiter
         {
             get { return this.valueDelimiter; }
             set
@@ -131,7 +131,7 @@
                                     delimited = true;
 
                                     // since we're in a delimited area, the only special character is the value delimiter
-                                    this.activeSpecialCharacterMask = this.valueDelimiter;
+                                    this.activeSpecialCharacterMask = this.valueDelimiter.Value;
                                 }
                                 else if (ch == Constants.CR)
                                 {
@@ -229,7 +229,7 @@
                                 delimited = true;
 
                                 // since we're in a delimited area, the only special character is the value delimiter
-                                this.activeSpecialCharacterMask = this.valueDelimiter;
+                                this.activeSpecialCharacterMask = this.valueDelimiter.Value;
                             }
                             else if (ch == Constants.CR)
                             {
@@ -341,7 +341,7 @@
         // we have two copies of the mask so that it can be swapped around during parsing to speed things up
         private void UpdateSpecialCharacterMask()
         {
-            this.specialCharacterMask = this.valueSeparator | this.valueDelimiter | Constants.CR | Constants.LF;
+            this.specialCharacterMask = this.valueSeparator | this.valueDelimiter.GetValueOrDefault() | Constants.CR | Constants.LF;
             this.activeSpecialCharacterMask = this.specialCharacterMask;
         }
 
@@ -570,7 +570,7 @@
                     {
                         var stripWhiteSpaceUpToIndex = this.delimitedStartIndex.GetValueOrDefault(endIndex);
 
-                        while (startIndex < stripWhiteSpaceUpToIndex  && IsWhiteSpace(buffer[startIndex]))
+                        while (startIndex < stripWhiteSpaceUpToIndex && IsWhiteSpace(buffer[startIndex]))
                         {
                             ++startIndex;
                         }

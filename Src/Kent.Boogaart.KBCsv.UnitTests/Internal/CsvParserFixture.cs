@@ -1,9 +1,9 @@
 namespace Kent.Boogaart.KBCsv.UnitTests.Internal
 {
+    using Kent.Boogaart.KBCsv.Internal;
     using System;
     using System.IO;
     using System.Text;
-    using Kent.Boogaart.KBCsv.Internal;
     using Xunit;
 
     // NOTE: you may want View White Space turned on, so you can differentiate spaces and tabs in the CSV
@@ -186,6 +186,24 @@ value4,   value5   ,	value6	";
             Assert.Equal("   value1  ", records[0][0]);
             Assert.Equal("value2'", records[0][1]);
             Assert.Equal("value	3	", records[0][2]);
+        }
+
+        [Fact]
+        public void value_delimiter_can_be_set_to_null_to_disable_value_delimiting()
+        {
+            var csv = @"""   value1  "", ""value2"""""",""value	3	"",""value
+4""";
+            var parser = this.CreateParserFromString(csv);
+            parser.ValueDelimiter = null;
+            var records = new DataRecord[2];
+
+            Assert.Equal(2, parser.ParseRecords(null, records, 0, records.Length));
+
+            Assert.Equal(@"""   value1  """, records[0][0]);
+            Assert.Equal(@"""value2""""""", records[0][1]);
+            Assert.Equal(@"""value	3	""", records[0][2]);
+            Assert.Equal(@"""value", records[0][3]);
+            Assert.Equal(@"4""", records[1][0]);
         }
 
         [Fact]

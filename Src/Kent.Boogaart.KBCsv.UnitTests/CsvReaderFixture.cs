@@ -149,7 +149,7 @@
             var ignore = ' ';
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(() => ignore = reader.ValueDelimiter);
+            Assert.Throws<ObjectDisposedException>(() => ignore = reader.ValueDelimiter.Value);
         }
 
         [Fact]
@@ -159,6 +159,16 @@
             {
                 reader.ValueDelimiter = '\'';
                 Assert.Equal('\'', reader.ValueDelimiter);
+            }
+        }
+
+        [Fact]
+        public void value_delimiter_can_be_set_to_null()
+        {
+            using (var reader = CsvReader.FromCsvString(string.Empty))
+            {
+                reader.ValueDelimiter = null;
+                Assert.Null(reader.ValueDelimiter);
             }
         }
 

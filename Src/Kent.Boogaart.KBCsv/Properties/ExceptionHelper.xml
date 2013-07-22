@@ -28,6 +28,9 @@
         <exception key="valueSeparatorAndDelimiterCannotMatch" type="System.ArgumentException">
             Value separator and delimiter cannot be the same.
         </exception>
+        <exception key="valueDelimiterRequiredIfForceDelimitIsTrue" type="System.ArgumentException">
+            Value delimiter cannot be null when ForceDelimit is true.
+        </exception>
         <exception key="invalidOffset" type="System.ArgumentException">
             Invalid offset.
         </exception>
@@ -36,6 +39,9 @@
         </exception>
         <exception key="recordNull" type="System.ArgumentException">
             Records within the buffer cannot be null.
+        </exception>
+        <exception key="valueRequiresDelimiting" type="System.InvalidOperationException">
+            A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: {0}
         </exception>
     </exceptionGroup>
 
