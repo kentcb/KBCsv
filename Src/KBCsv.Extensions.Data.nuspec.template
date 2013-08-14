@@ -13,7 +13,7 @@
     </description>
     <tags>.NET CSV comma separated value library mono KBCsv extensions data</tags>
     <dependencies>
-        <dependency id="Kent.Boogaart.HelperTrinity" version="2.0.2-beta" />
+        <dependency id="Kent.Boogaart.HelperTrinity" version="2.0.1" />
         <dependency id="Kent.Boogaart.KBCsv" version="${VERSION}" />
     </dependencies>
   </metadata>

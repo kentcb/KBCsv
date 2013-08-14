@@ -128,7 +128,7 @@
         <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv\bin\$(Configuration)\Kent.Boogaart.KBCsv.*">
             <Output ItemName="KBCsvFiles" TaskParameter="Include" />
         </CreateItem>
-        <Copy SourceFiles="@(KBCsvFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv\lib\portable-windows8+net45+windowsphone8" />
+        <Copy SourceFiles="@(KBCsvFiles)" DestinationFolder="$(GenDir)\NuGet\KBCsv\lib\portable-win+net45+wp8" />
         
         <CreateItem Include="$(SrcDir)\Kent.Boogaart.KBCsv.Extensions\bin\$(Configuration)\Kent.Boogaart.KBCsv.Extensions.*">
             <Output ItemName="KBCsvExtensionFiles" TaskParameter="Include" />
