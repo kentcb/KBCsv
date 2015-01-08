@@ -40,8 +40,9 @@
     <DocumentationFile>bin\Release\Kent.Boogaart.KBCsv.Extensions.Data.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Kent.Boogaart.HelperTrinity">
-      <HintPath>..\packages\Kent.Boogaart.HelperTrinity.2.0.1-beta\lib\portable-win+net403+sl40+wp+xbox40\Kent.Boogaart.HelperTrinity.dll</HintPath>
+    <Reference Include="Kent.Boogaart.HelperTrinity, Version=2.0.1.0, Culture=neutral, PublicKeyToken=cc96fa93a217f7a1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Kent.Boogaart.HelperTrinity.2.0.1\lib\portable-win8+net403+sl40+wp+xbox40\Kent.Boogaart.HelperTrinity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -57,9 +58,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Kent.Boogaart.KBCsv\Kent.Boogaart.KBCsv.csproj">
       <Project>{4e89dcb7-60ec-4c53-a8dd-1cbaa1a1a8bb}</Project>
       <Name>Kent.Boogaart.KBCsv</Name>
@@ -67,6 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Properties\ExceptionHelper.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

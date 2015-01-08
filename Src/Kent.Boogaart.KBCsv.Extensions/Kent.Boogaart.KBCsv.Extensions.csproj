@@ -69,7 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Kent.Boogaart.HelperTrinity">
-      <HintPath>..\packages\Kent.Boogaart.HelperTrinity.2.0.1-beta\lib\portable-win+net403+sl40+wp+xbox40\Kent.Boogaart.HelperTrinity.dll</HintPath>
+      <HintPath>..\packages\Kent.Boogaart.HelperTrinity.2.0.1\lib\portable-win8+net403+sl40+wp+xbox40\Kent.Boogaart.HelperTrinity.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
