@@ -1,0 +1,17 @@
+# Parser Rules
+
+This section describes the rules that the KBCsv parser conforms to. The rules are based on the following documents: 
+
+* [RFC 4180](http://www.ietf.org/rfc/rfc4180.txt)
+* [http://www.creativyst.com/Doc/Articles/CSV/CSV01.htm](http://www.creativyst.com/Doc/Articles/CSV/CSV01.htm)
+
+|Rule ID|Description|Examples|
+|-------|-----------|--------|
+|RS|Records are separated by CR (Macintosh), LF (Linux) or CRLF (Windows).|<pre>Kent,25,M{CR}<br />Belinda,26,F{CR}</pre>OR<br /><br /><pre>Kent,25,M{LF}<br />Belinda,26,F{LF}</pre>OR<br /><br /><pre>Kent,25,M{CRLF}<br />Belinda,26,F{CRLF}</pre>|
+|RL|The last record in the CSV data may or may not end with a line break (as per rule RS).|<pre>Kent,25,M{LF}<br />Belinda,26,F{LF}<br />{EOF}</pre>OR<br /><br /><pre>Kent,25,M{LF}<br />Belinda,26,F{EOF}</pre>|
+|VS|Records may contain any number of values separated by a comma (,). Each record may or may not contain the same number of values.<br /><br />The value separator character must be customisable. The parser may place reasonable restrictions on valid separator characters for efficiency and simplicity reasons.|<pre>Kent,25,{LF}<br />Belinda,26,F{LF}</pre>OR<br /><br /><pre>Kent,25,M{LF}<br />Belinda,26,F,Another field{LF}</pre>|
+|VD|Values may or may not be delimited by double quotes ("). Any value may contain zero to infinity delimited parts. When a delimited area of a value ends, the value does not necessarily also end.<br /><br />The value delimiter character must be customisable. The parser may place reasonable restrictions on valid delimiter characters for efficiency and simplicity reasons.|<pre>"Kent Boogaart",25,M{LF}<br />"Belinda" "Boogaart",26,F{LF}</pre>OR<br /><br /><pre>"Kent" "Boogaart",25,M{LF}<br />"Belinda" "Boogaart",26,F{LF}</pre>|
+|VCW|Values that contain leading or trailing white-space must be delimited as described in rule VD. By default, the parser will discard leading and trailing white-space that isn’t delimited.<br /><br />White-space is defined as either the space character or the tab character (assuming the chosen separator character isn’t itself the tab character).<br /><br />The parser must define options that allow leading and / or trailing white-space to be retained regardless of whether values are delimited.<br /><br />If a value consists only of white-space, that white-space is considered to be both leading and trailing white-space. That is, the white-space will be discarded unless the parser is explicitly instructed to retain both leading and trailing white-space.|<pre>"  Kent  ",25,M{LF}<br />"Belinda  ",26,F{LF}</pre>|
+|VCD|Values that include the value delimiter character (by default, a double quote) must be delimited as described in rule VD. The delimiter characters must be escaped by repeating them.|<pre>"Kent ""booga"" Boogaart"{LF}<br />"Belinda ""B"""{LF}</pre>|
+|VCS|Values that include the value separator character (by default, a comma) must be delimited as described in rule VD.|<pre>MUSE,"October, 2004"{LF}<br />Pearl Jam,"February, 2003"</pre>|
+|VCB|Values that include any line break character (as defined by rule RS) must be delimited as described in rule VD.|<pre>Kent,A description of Kent{LF}<br />Belinda,"A description{LF}<br />of Belinda over two lines"{LF}</pre>OR<br /><br /><pre>Kent,A description of Kent{LF}<br />Belinda,"A description{CR}<br />of Belinda over two lines"{LF}</pre>OR<br /><br /><pre>Kent,A description of Kent{LF}<br />Belinda,"A description{CRLF}<br />of Belinda over two lines"{LF}</pre>

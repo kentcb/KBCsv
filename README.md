@@ -44,7 +44,7 @@ using (var reader = new CsvReader("data.csv"))
 }
 ```
 
-Please download the documentation and source for more examples in both C# and VB.NET.
+Please see [the documentation](Doc/overview.md) for more details.
 
 ## Who?
 
