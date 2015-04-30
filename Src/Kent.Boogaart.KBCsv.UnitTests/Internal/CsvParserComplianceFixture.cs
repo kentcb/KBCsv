@@ -75,16 +75,16 @@
         [Fact]
         public void parser_complies_with_rule_VS()
         {
-            var csv = "Kent{0}25{0}M{1}Belinda{0}26{0}F{0}Description{1}Tempany{0}0{0}F{0}Description{0}Something else{1}";
+            var csv = "Kent{0}25{0}M{1}Belinda{0}26{0}F{0}Description{1}Tempany{0}10{0}F{0}Description{0}Something else{1}Xak{0}2{0}M{0}{1}";
             char[] separators = { ',', '\t', ':', '.' };
 
             foreach (var separator in separators)
             {
                 var parser = this.CreateParserFromString(string.Format(csv, separator, Environment.NewLine));
-                var records = new DataRecord[3];
+                var records = new DataRecord[5];
                 parser.ValueSeparator = separator;
 
-                Assert.Equal(3, parser.ParseRecords(null, records, 0, records.Length));
+                Assert.Equal(4, parser.ParseRecords(null, records, 0, records.Length));
 
                 Assert.Equal("Kent", records[0][0]);
                 Assert.Equal("25", records[0][1]);
@@ -96,10 +96,15 @@
                 Assert.Equal("Description", records[1][3]);
 
                 Assert.Equal("Tempany", records[2][0]);
-                Assert.Equal("0", records[2][1]);
+                Assert.Equal("10", records[2][1]);
                 Assert.Equal("F", records[2][2]);
                 Assert.Equal("Description", records[2][3]);
                 Assert.Equal("Something else", records[2][4]);
+
+                Assert.Equal("Xak", records[3][0]);
+                Assert.Equal("2", records[3][1]);
+                Assert.Equal("M", records[3][2]);
+                Assert.Equal("", records[3][3]);
 
                 Assert.False(parser.HasMoreRecords);
             }

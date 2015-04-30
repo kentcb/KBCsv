@@ -308,7 +308,7 @@
                         {
                             // special case: last character is a separator, which means there should be an empty value after it. eg. "foo," results in ["foo", ""]
                             buffer[i] = this.values.GetDataRecordAndClear(headerRecord, string.Empty);
-                            break;
+                            ++recordsParsed;
                         }
                         else
                         {
