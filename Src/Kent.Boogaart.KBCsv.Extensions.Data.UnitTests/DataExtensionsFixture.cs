@@ -6,6 +6,7 @@
     using System.Data;
     using System.IO;
     using Xunit;
+    using System.Threading.Tasks;
 
     public sealed class DataExtensionsFixture
     {
@@ -225,33 +226,33 @@
         }
 
         [Fact]
-        public void fill_data_set_async_throws_if_data_set_is_null()
+        public async Task fill_data_set_async_throws_if_data_set_is_null()
         {
-            Assert.Throws<ArgumentNullException>(((DataSet)null).FillAsync(CsvReader.FromCsvString(string.Empty)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ((DataSet)null).FillAsync(CsvReader.FromCsvString(string.Empty)));
         }
 
         [Fact]
-        public void fill_data_set_async_throws_if_table_name_is_null()
+        public async Task fill_data_set_async_throws_if_table_name_is_null()
         {
-            Assert.Throws<ArgumentNullException>(new DataSet().FillAsync(CsvReader.FromCsvString(string.Empty), null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => new DataSet().FillAsync(CsvReader.FromCsvString(string.Empty), null));
         }
 
         [Fact]
-        public void fill_data_set_async_throws_if_csv_reader_is_null()
+        public async Task fill_data_set_async_throws_if_csv_reader_is_null()
         {
-            Assert.Throws<ArgumentNullException>(new DataSet().FillAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => new DataSet().FillAsync(null));
         }
 
         [Fact]
-        public void fill_data_set_async_throws_if_csv_reader_is_disposed()
+        public async Task fill_data_set_async_throws_if_csv_reader_is_disposed()
         {
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(new DataSet().FillAsync(reader));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => new DataSet().FillAsync(reader));
         }
 
         [Fact]
-        public async void fill_data_set_async_uses_default_table_name_if_unspecified()
+        public async Task fill_data_set_async_uses_default_table_name_if_unspecified()
         {
             var dataSet = new DataSet();
 
@@ -266,35 +267,35 @@
         }
 
         [Fact]
-        public void fill_data_table_async_throws_if_data_table_is_null()
+        public async Task fill_data_table_async_throws_if_data_table_is_null()
         {
-            Assert.Throws<ArgumentNullException>(((DataTable)null).FillAsync(CsvReader.FromCsvString(string.Empty)));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ((DataTable)null).FillAsync(CsvReader.FromCsvString(string.Empty)));
         }
 
         [Fact]
-        public void fill_data_table_async_throws_if_csv_reader_is_disposed()
+        public async Task fill_data_table_async_throws_if_csv_reader_is_disposed()
         {
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(new DataTable().FillAsync(reader));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => new DataTable().FillAsync(reader));
         }
 
         [Fact]
-        public void fill_data_table_async_throws_if_maximum_records_is_negative()
+        public async Task fill_data_table_async_throws_if_maximum_records_is_negative()
         {
-            var ex = Assert.Throws<ArgumentException>(new DataTable().FillAsync(CsvReader.FromCsvString(string.Empty), -1));
+            var ex = await Assert.ThrowsAsync<ArgumentException>(() => new DataTable().FillAsync(CsvReader.FromCsvString(string.Empty), -1));
             Assert.Equal("maximumRecords cannot be negative.", ex.Message);
         }
 
         [Fact]
-        public void fill_data_table_async_throws_if_table_has_no_columns_and_csv_reader_has_no_header_record()
+        public async Task fill_data_table_async_throws_if_table_has_no_columns_and_csv_reader_has_no_header_record()
         {
-            var ex = Assert.Throws<InvalidOperationException>(new DataTable().FillAsync(CsvReader.FromCsvString(string.Empty)));
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => new DataTable().FillAsync(CsvReader.FromCsvString(string.Empty)));
             Assert.Equal("If the DataTable has no columns, the CsvReader must have a HeaderRecord from which columns will be constructed.", ex.Message);
         }
 
         [Fact]
-        public void fill_data_table_async_throws_if_the_number_of_values_in_a_record_exceeds_the_number_of_columns_in_the_data_table()
+        public async Task fill_data_table_async_throws_if_the_number_of_values_in_a_record_exceeds_the_number_of_columns_in_the_data_table()
         {
             var table = new DataTable();
             table.Columns.Add("First");
@@ -302,13 +303,13 @@
 
             using (var reader = CsvReader.FromCsvString("first,second,third"))
             {
-                var ex = Assert.Throws<InvalidOperationException>(table.FillAsync(reader));
+                var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => table.FillAsync(reader));
                 Assert.Equal("DataTable has 2 columns, but a DataRecord had 3. The number of columns in the DataTable must match or exceed the number of values in each DataRecord.", ex.Message);
             }
         }
 
         [Fact]
-        public async void fill_data_table_async_uses_table_columns_if_specified()
+        public async Task fill_data_table_async_uses_table_columns_if_specified()
         {
             var table = new DataTable();
             table.Columns.Add("First");
@@ -330,7 +331,7 @@
         }
 
         [Fact]
-        public async void fill_data_table_async_uses_header_record_if_columns_are_not_specified()
+        public async Task fill_data_table_async_uses_header_record_if_columns_are_not_specified()
         {
             var table = new DataTable();
             var csv = @"Header1,Header2
@@ -350,7 +351,7 @@
         }
 
         [Fact]
-        public async void fill_data_table_async_stops_short_of_maximum_records_if_it_runs_out_of_data()
+        public async Task fill_data_table_async_stops_short_of_maximum_records_if_it_runs_out_of_data()
         {
             var table = new DataTable();
             var csv = @"Header1,Header2
@@ -367,7 +368,7 @@
         }
 
         [Fact]
-        public async void fill_data_table_async_stops_if_it_reaches_maximum_records()
+        public async Task fill_data_table_async_stops_if_it_reaches_maximum_records()
         {
             var table = new DataTable();
             var csv = @"Header1,Header2
@@ -387,7 +388,7 @@
         }
 
         [Fact]
-        public async void fill_data_table_async_works_with_large_csv_input()
+        public async Task fill_data_table_async_works_with_large_csv_input()
         {
             var csv = string.Empty;
 
@@ -619,39 +620,39 @@
         }
 
         [Fact]
-        public void write_csv_async_throws_if_data_table_is_null()
+        public async Task write_csv_async_throws_if_data_table_is_null()
         {
             using (var writer = new CsvWriter(new StringWriter()))
             {
-                Assert.Throws<ArgumentNullException>(((DataTable)null).WriteCsvAsync(writer));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => ((DataTable)null).WriteCsvAsync(writer));
             }
         }
 
         [Fact]
-        public void write_csv_async_throws_if_csv_writer_is_null()
+        public async Task write_csv_async_throws_if_csv_writer_is_null()
         {
-            Assert.Throws<ArgumentNullException>(new DataTable().WriteCsvAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => new DataTable().WriteCsvAsync(null));
         }
 
         [Fact]
-        public void write_csv_async_throws_if_object_to_string_converter_is_null()
+        public async Task write_csv_async_throws_if_object_to_string_converter_is_null()
         {
             using (var writer = new CsvWriter(new StringWriter()))
             {
-                Assert.Throws<ArgumentNullException>(new DataTable().WriteCsvAsync(writer, false, null, null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => new DataTable().WriteCsvAsync(writer, false, null, null));
             }
         }
 
         [Fact]
-        public void write_csv_async_throws_if_csv_reader_is_disposed()
+        public async Task write_csv_async_throws_if_csv_reader_is_disposed()
         {
             var writer = new CsvWriter(new StringWriter());
             writer.Dispose();
-            Assert.Throws<ObjectDisposedException>(new DataTable().WriteCsvAsync(writer));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => new DataTable().WriteCsvAsync(writer));
         }
 
         [Fact]
-        public async void write_csv_async_writes_a_header_record_based_on_data_table_column_names_if_requested()
+        public async Task write_csv_async_writes_a_header_record_based_on_data_table_column_names_if_requested()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -668,7 +669,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_writes_all_rows_as_data_records()
+        public async Task write_csv_async_writes_all_rows_as_data_records()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -688,7 +689,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_stops_if_it_reaches_maximum_rows()
+        public async Task write_csv_async_stops_if_it_reaches_maximum_rows()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -708,7 +709,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_uses_object_to_string_converter_to_convert_objects_in_data_row_to_string()
+        public async Task write_csv_async_uses_object_to_string_converter_to_convert_objects_in_data_row_to_string()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -728,7 +729,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_object_to_string_converter_converts_nulls_to_empty_string()
+        public async Task write_csv_async_object_to_string_converter_converts_nulls_to_empty_string()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -748,7 +749,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_returns_number_of_records_written()
+        public async Task write_csv_async_returns_number_of_records_written()
         {
             using (var writer = new CsvWriter(new StringWriter()))
             {
@@ -767,7 +768,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_works_with_large_data_table_input()
+        public async Task write_csv_async_works_with_large_data_table_input()
         {
             var dataTable = new DataTable();
             dataTable.Columns.Add("First");

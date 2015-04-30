@@ -4,6 +4,7 @@
     using System.IO;
     using Xunit;
     using Kent.Boogaart.KBCsv.Extensions;
+    using System.Threading.Tasks;
 
     public sealed class CsvReaderExtensionsFixture
     {
@@ -85,22 +86,22 @@
         }
         
         [Fact]
-        public void copy_to_async_throws_if_csv_reader_is_null()
+        public async Task copy_to_async_throws_if_csv_reader_is_null()
         {
-            Assert.Throws<ArgumentNullException>(((CsvReader)null).CopyToAsync(new CsvWriter(new StringWriter())));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ((CsvReader)null).CopyToAsync(new CsvWriter(new StringWriter())));
         }
 
         [Fact]
-        public void copy_to_async_throws_if_csv_writer_is_null()
+        public async Task copy_to_async_throws_if_csv_writer_is_null()
         {
             using (var reader = CsvReader.FromCsvString(string.Empty))
             {
-                Assert.Throws<ArgumentNullException>(reader.CopyToAsync(null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => reader.CopyToAsync(null));
             }
         }
 
         [Fact]
-        public async void copy_to_async_returns_number_of_records_copied()
+        public async Task copy_to_async_returns_number_of_records_copied()
         {
             var csv = @"First,Second
 1,2
@@ -115,7 +116,7 @@
         }
 
         [Fact]
-        public async void copy_to_async_copies_records()
+        public async Task copy_to_async_copies_records()
         {
             var csv = @"First,Second
 1,2
@@ -136,7 +137,7 @@
         }
 
         [Fact]
-        public async void copy_to_async_works_with_large_input()
+        public async Task copy_to_async_works_with_large_input()
         {
             var csv = string.Empty;
 

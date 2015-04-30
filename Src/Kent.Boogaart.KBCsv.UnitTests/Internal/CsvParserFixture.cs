@@ -5,6 +5,8 @@ namespace Kent.Boogaart.KBCsv.UnitTests.Internal
     using System.IO;
     using System.Text;
     using Xunit;
+    using System.Threading.Tasks;
+
 
     // NOTE: you may want View White Space turned on, so you can differentiate spaces and tabs in the CSV
     public sealed class CsvParserFixture
@@ -322,7 +324,7 @@ fourth";
         }
 
         [Fact]
-        public async void skip_records_async_returns_zero_if_there_are_no_records_to_skip()
+        public async Task skip_records_async_returns_zero_if_there_are_no_records_to_skip()
         {
             var parser = this.CreateParserFromString(string.Empty);
             Assert.Equal(0, await parser.SkipRecordsAsync(1));
@@ -330,7 +332,7 @@ fourth";
         }
 
         [Fact]
-        public async void skip_records_async_returns_zero_if_there_is_no_more_data_left()
+        public async Task skip_records_async_returns_zero_if_there_is_no_more_data_left()
         {
             var csv = @"first
 second";
@@ -342,7 +344,7 @@ second";
         }
 
         [Fact]
-        public async void skip_records_async_skips_the_specified_number_of_records()
+        public async Task skip_records_async_skips_the_specified_number_of_records()
         {
             var csv = @"first
 second
@@ -356,7 +358,7 @@ fourth";
         }
 
         [Fact]
-        public async void skip_records_async_stops_skipping_if_it_cannot_skip_any_more_records()
+        public async Task skip_records_async_stops_skipping_if_it_cannot_skip_any_more_records()
         {
             var csv = @"first
 second
@@ -367,7 +369,7 @@ fourth";
         }
 
         [Fact]
-        public async void skip_records_async_works_with_complex_data()
+        public async Task skip_records_async_works_with_complex_data()
         {
             var csv = @"value0,  value1   ,		value2	   	,'   value3  	 ''something in value3
 over two lines''', value4 !23*&(#$@#*&#$)&][}{}{;.<>/?, value5
@@ -630,7 +632,7 @@ over two lines'", records[0][3]);
         }
 
         [Fact]
-        public async void parse_records_async_returns_zero_if_there_are_no_more_records_to_parse()
+        public async Task parse_records_async_returns_zero_if_there_are_no_more_records_to_parse()
         {
             var parser = this.CreateParserFromString(string.Empty);
             Assert.Equal(0, await parser.ParseRecordsAsync(null, new DataRecord[1], 0, 1));
@@ -638,7 +640,7 @@ over two lines'", records[0][3]);
         }
 
         [Fact]
-        public async void parse_records_async_returns_zero_if_there_is_no_more_data_left()
+        public async Task parse_records_async_returns_zero_if_there_is_no_more_data_left()
         {
             var csv = @"first
 second";
@@ -649,7 +651,7 @@ second";
         }
 
         [Fact]
-        public async void parse_records_async_parses_only_the_specified_number_of_records()
+        public async Task parse_records_async_parses_only_the_specified_number_of_records()
         {
             var csv = @"first
 second
@@ -666,7 +668,7 @@ fourth";
         }
 
         [Fact]
-        public async void parse_records_async_populates_the_buffer_from_the_specified_offset()
+        public async Task parse_records_async_populates_the_buffer_from_the_specified_offset()
         {
             var csv = @"first
 second
@@ -684,7 +686,7 @@ fourth";
         }
 
         [Fact]
-        public async void parse_records_async_uses_the_specified_header_record()
+        public async Task parse_records_async_uses_the_specified_header_record()
         {
             var headerRecord = new HeaderRecord(true, "Name", "Age");
             var csv = @"Kent,33
@@ -701,7 +703,7 @@ Xak,0";
         }
 
         [Fact]
-        public async void parse_records_async_stops_parsing_if_it_cannot_parse_any_more_records()
+        public async Task parse_records_async_stops_parsing_if_it_cannot_parse_any_more_records()
         {
             var csv = @"first
 second
@@ -712,7 +714,7 @@ fourth";
         }
 
         [Fact]
-        public async void parse_records_async_works_with_complex_data()
+        public async Task parse_records_async_works_with_complex_data()
         {
             var csv = @"value0,  value1   ,		value2	   	,'   value3  	 ''something in value3
 over two lines''', value4 !23*&(#$@#*&#$)&][}{}{;.<>/?, value5
@@ -748,7 +750,7 @@ over two lines'", records[0][3]);
         }
 
         [Fact]
-        public async void parse_records_async_can_handle_large_complex_data_set()
+        public async Task parse_records_async_can_handle_large_complex_data_set()
         {
             // the idea of this test is really just to exercise as many code paths as possible
             // it's too hard to assert the actual results - that is left for more specific tests

@@ -1,4 +1,4 @@
-﻿#I "Src/packages/FAKE.3.13.3/tools"
+﻿#I "Src/packages/FAKE.3.30.1/tools"
 #r "FakeLib.dll"
 
 open Fake
@@ -6,7 +6,7 @@ open Fake.AssemblyInfoFile
 open Fake.EnvironmentHelper
 open Fake.MSBuildHelper
 open Fake.NuGetHelper
-open Fake.XUnitHelper
+open Fake.XUnit2Helper
 
 // properties
 let semanticVersion = "3.0.0"
@@ -65,16 +65,31 @@ Target "Build" (fun _ ->
 )
 
 Target "ExecuteUnitTests" (fun _ ->
-    xUnit (fun p ->
+    xUnit2 (fun p ->
         { p with
             ShadowCopy = false;
             HtmlOutput = true;
             XmlOutput = true;
-            OutputDir = testDir
+            OutputDir = testDir;
         })
         [
             srcDir @@ "Kent.Boogaart.KBCsv.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.UnitTests.dll"
+            srcDir @@ "Kent.Boogaart.KBCsv.Extensions.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.UnitTests.dll"
             srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests.dll"
+        ]
+)
+
+Target "ExecutePerformanceTests" (fun _ ->
+    xUnit2 (fun p ->
+        { p with
+            ShadowCopy = false;
+            HtmlOutput = true;
+            XmlOutput = true;
+            OutputDir = testDir;
+            Parallel = ParallelOption.None;
+        })
+        [
+            srcDir @@ "Kent.Boogaart.KBCsv.PerformanceTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.PerformanceTests.exe"
         ]
 )
 
@@ -114,12 +129,12 @@ Target "CreateNuGetPackages" (fun _ ->
 
     // copy source
     let sourceFiles = [!! (srcDir @@ "**/*.*")
-        -- (srcDir @@ "packages/**/*")
-        -- (srcDir @@ "**/*.suo")
-        -- (srcDir @@ "**/*.csproj.user")
-        -- (srcDir @@ "**/*.gpState")
-        -- (srcDir @@ "**/bin/**")
-        -- (srcDir @@ "**/obj/**")]
+                    -- (srcDir @@ "packages/**/*")
+                    -- (srcDir @@ "**/*.suo")
+                    -- (srcDir @@ "**/*.csproj.user")
+                    -- (srcDir @@ "**/*.gpState")
+                    -- (srcDir @@ "**/bin/**")
+                    -- (srcDir @@ "**/obj/**")]
 
     sourceFiles
         |> CopyWithSubfoldersTo (nugetDir @@ "KBCsv")
@@ -171,5 +186,9 @@ Target "CreateNuGetPackages" (fun _ ->
     ==> "ExecuteUnitTests"
     ==> "CreateArchives"
     ==> "CreateNuGetPackages"
+
+"Clean"
+    ==> "Build"
+    ==> "ExecutePerformanceTests"
 
 RunTargetOrDefault "CreateNuGetPackages"

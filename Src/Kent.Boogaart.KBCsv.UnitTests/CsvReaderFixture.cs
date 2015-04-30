@@ -5,6 +5,7 @@
     using System;
     using System.IO;
     using Xunit;
+    using System.Threading.Tasks;
 
     public sealed class CsvReaderFixture
     {
@@ -392,15 +393,15 @@ third";
         }
 
         [Fact]
-        public void skip_record_async_throws_if_disposed()
+        public async Task skip_record_async_throws_if_disposed()
         {
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(reader.SkipRecordAsync());
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => reader.SkipRecordAsync());
         }
 
         [Fact]
-        public async void skip_record_async_returns_false_if_there_is_no_record_to_skip()
+        public async Task skip_record_async_returns_false_if_there_is_no_record_to_skip()
         {
             using (var reader = CsvReader.FromCsvString(string.Empty))
             {
@@ -415,7 +416,7 @@ third";
         }
 
         [Fact]
-        public async void skip_record_async_returns_true_if_record_is_skipped()
+        public async Task skip_record_async_returns_true_if_record_is_skipped()
         {
             using (var reader = CsvReader.FromCsvString("Header"))
             {
@@ -425,7 +426,7 @@ third";
         }
 
         [Fact]
-        public async void skip_record_async_increments_record_number()
+        public async Task skip_record_async_increments_record_number()
         {
             var csv = @"first
 second
@@ -444,7 +445,7 @@ third";
         }
 
         [Fact]
-        public async void skip_record_async_can_optionally_increment_record_number()
+        public async Task skip_record_async_can_optionally_increment_record_number()
         {
             var csv = @"first
 second
@@ -570,15 +571,15 @@ tenth";
         }
 
         [Fact]
-        public void skip_records_async_throws_if_disposed()
+        public async Task skip_records_async_throws_if_disposed()
         {
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(reader.SkipRecordsAsync(100));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => reader.SkipRecordsAsync(100));
         }
 
         [Fact]
-        public async void skip_records_async_returns_zero_if_there_are_no_records_to_skip()
+        public async Task skip_records_async_returns_zero_if_there_are_no_records_to_skip()
         {
             using (var reader = CsvReader.FromCsvString(string.Empty))
             {
@@ -593,7 +594,7 @@ tenth";
         }
 
         [Fact]
-        public async void skip_records_async_returns_requested_skip_count_if_all_requested_records_are_skipped()
+        public async Task skip_records_async_returns_requested_skip_count_if_all_requested_records_are_skipped()
         {
             var csv = @"first
 second
@@ -615,7 +616,7 @@ tenth";
         }
 
         [Fact]
-        public async void skip_records_async_returns_actual_skip_count_if_all_requested_records_are_not_skipped()
+        public async Task skip_records_async_returns_actual_skip_count_if_all_requested_records_are_not_skipped()
         {
             var csv = @"first
 second
@@ -636,7 +637,7 @@ tenth";
         }
 
         [Fact]
-        public async void skip_records_async_increments_record_number()
+        public async Task skip_records_async_increments_record_number()
         {
             var csv = @"first
 second
@@ -651,7 +652,7 @@ third";
         }
 
         [Fact]
-        public async void skip_records_async_can_optionally_increment_record_number()
+        public async Task skip_records_async_can_optionally_increment_record_number()
         {
             var csv = @"first
 second
@@ -760,28 +761,28 @@ tenth";
         }
 
         [Fact]
-        public void read_header_record_async_throws_if_disposed()
+        public async Task read_header_record_async_throws_if_disposed()
         {
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(reader.ReadHeaderRecordAsync());
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => reader.ReadHeaderRecordAsync());
         }
 
         [Fact]
-        public async void read_header_record_async_throws_if_passed_first_record()
+        public async Task read_header_record_async_throws_if_passed_first_record()
         {
             var csv = "Kent,33";
 
             using (var reader = CsvReader.FromCsvString(csv))
             {
                 await reader.ReadDataRecordAsync();
-                var ex = Assert.Throws<InvalidOperationException>(reader.ReadHeaderRecordAsync());
+                var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => reader.ReadHeaderRecordAsync());
                 Assert.Equal("The CsvReader has already passed the first record, so this operation is not permitted.", ex.Message);
             }
         }
 
         [Fact]
-        public async void read_header_record_async_returns_null_if_there_is_no_record_to_read()
+        public async Task read_header_record_async_returns_null_if_there_is_no_record_to_read()
         {
             using (var reader = CsvReader.FromCsvString(string.Empty))
             {
@@ -790,7 +791,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_header_record_async_assigns_returned_record_as_header_record()
+        public async Task read_header_record_async_assigns_returned_record_as_header_record()
         {
             var csv = "Name,Age";
 
@@ -803,7 +804,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_header_record_async_increments_record_number()
+        public async Task read_header_record_async_increments_record_number()
         {
             var csv = "Kent,33";
 
@@ -816,7 +817,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_header_record_async_correctly_parses_header()
+        public async Task read_header_record_async_correctly_parses_header()
         {
             var csv = "Name,Age";
 
@@ -830,7 +831,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_header_record_async_returns_read_only_record()
+        public async Task read_header_record_async_returns_read_only_record()
         {
             var csv = "Name,Age";
 
@@ -916,15 +917,15 @@ tenth";
         }
 
         [Fact]
-        public void read_data_record_async_throws_if_disposed()
+        public async Task read_data_record_async_throws_if_disposed()
         {
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(reader.ReadDataRecordAsync());
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => reader.ReadDataRecordAsync());
         }
 
         [Fact]
-        public async void read_data_record_async_returns_null_if_there_is_no_record_to_read()
+        public async Task read_data_record_async_returns_null_if_there_is_no_record_to_read()
         {
             using (var reader = CsvReader.FromCsvString(string.Empty))
             {
@@ -933,7 +934,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_record_async_returns_data_record()
+        public async Task read_data_record_async_returns_data_record()
         {
             var csv = "Kent,33";
 
@@ -948,7 +949,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_record_async_assigns_any_header_record()
+        public async Task read_data_record_async_assigns_any_header_record()
         {
             var csv = "Kent,33";
 
@@ -963,7 +964,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_record_async_returns_read_only_record()
+        public async Task read_data_record_async_returns_read_only_record()
         {
             var csv = "Kent,33";
 
@@ -976,7 +977,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_record_async_increments_record_number()
+        public async Task read_data_record_async_increments_record_number()
         {
             var csv = "Kent,33";
 
@@ -1152,15 +1153,15 @@ third";
         }
 
         [Fact]
-        public void read_data_records_async_throws_if_disposed()
+        public async Task read_data_records_async_throws_if_disposed()
         {
             var reader = CsvReader.FromCsvString(string.Empty);
             reader.Dispose();
-            Assert.Throws<ObjectDisposedException>(reader.ReadDataRecordsAsync(new DataRecord[1], 0, 1));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => reader.ReadDataRecordsAsync(new DataRecord[1], 0, 1));
         }
 
         [Fact]
-        public async void read_data_records_async_returns_zero_if_there_are_no_records_to_read()
+        public async Task read_data_records_async_returns_zero_if_there_are_no_records_to_read()
         {
             using (var reader = CsvReader.FromCsvString(string.Empty))
             {
@@ -1169,7 +1170,7 @@ third";
         }
 
         [Fact]
-        public async void read_data_records_async_returns_requested_read_count_if_all_requested_records_are_read()
+        public async Task read_data_records_async_returns_requested_read_count_if_all_requested_records_are_read()
         {
             var csv = @"first
 second
@@ -1190,7 +1191,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_records_async_returns_actual_read_count_if_all_requested_records_are_not_read()
+        public async Task read_data_records_async_returns_actual_read_count_if_all_requested_records_are_not_read()
         {
             var csv = @"first
 second
@@ -1211,7 +1212,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_records_async_increments_record_number()
+        public async Task read_data_records_async_increments_record_number()
         {
             var csv = @"first
 second
@@ -1232,7 +1233,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_records_async_assigns_any_header_record()
+        public async Task read_data_records_async_assigns_any_header_record()
         {
             var csv = @"first
 second
@@ -1261,7 +1262,7 @@ tenth";
         }
 
         [Fact]
-        public async void read_data_records_async_populates_buffer_starting_at_specified_index()
+        public async Task read_data_records_async_populates_buffer_starting_at_specified_index()
         {
             var csv = @"first
 second
@@ -1278,7 +1279,7 @@ third";
         }
 
         [Fact]
-        public async void read_data_records_async_populates_buffer_ending_with_specified_count()
+        public async Task read_data_records_async_populates_buffer_ending_with_specified_count()
         {
             var csv = @"first
 second
@@ -1295,7 +1296,7 @@ third";
         }
 
         [Fact]
-        public async void read_data_records_async_returns_read_only_records()
+        public async Task read_data_records_async_returns_read_only_records()
         {
             var csv = @"first
 second

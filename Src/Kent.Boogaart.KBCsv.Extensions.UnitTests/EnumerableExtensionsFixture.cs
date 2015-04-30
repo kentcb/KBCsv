@@ -4,6 +4,7 @@
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
+    using System.Threading.Tasks;
     using Kent.Boogaart.KBCsv;
     using Xunit;
 
@@ -296,58 +297,58 @@
         }
 
         [Fact]
-        public void write_csv_async_throws_if_enumerable_is_null()
+        public async Task write_csv_async_throws_if_enumerable_is_null()
         {
             var writer = new CsvWriter(new StringWriter());
-            Assert.Throws<ArgumentNullException>(((IEnumerable<DateTime>)null).WriteCsvAsync(writer));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => ((IEnumerable<DateTime>)null).WriteCsvAsync(writer));
         }
 
         [Fact]
-        public void write_csv_async_throws_if_csv_writer_is_null()
+        public async Task write_csv_async_throws_if_csv_writer_is_null()
         {
-            Assert.Throws<ArgumentNullException>(new List<DateTime>().WriteCsvAsync(null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => new List<DateTime>().WriteCsvAsync(null));
         }
 
         [Fact]
-        public void write_csv_async_throws_if_property_names_is_null()
+        public async Task write_csv_async_throws_if_property_names_is_null()
         {
             var writer = new CsvWriter(new StringWriter());
-            Assert.Throws<ArgumentNullException>(new List<DateTime>().WriteCsvAsync(writer, true, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => new List<DateTime>().WriteCsvAsync(writer, true, null));
         }
 
         [Fact]
-        public void write_csv_async_throws_if_any_property_name_is_null()
+        public async Task write_csv_async_throws_if_any_property_name_is_null()
         {
             var writer = new CsvWriter(new StringWriter());
-            var ex = Assert.Throws<ArgumentException>(new List<DateTime>().WriteCsvAsync(writer, true, new string[] { "Date", null }));
+            var ex = await Assert.ThrowsAsync<ArgumentException>(() => new List<DateTime>().WriteCsvAsync(writer, true, new string[] { "Date", null }));
             Assert.Equal("A property name is null.", ex.Message);
         }
 
         [Fact]
-        public void write_csv_async_throws_if_any_property_cannot_be_resolved()
+        public async Task write_csv_async_throws_if_any_property_cannot_be_resolved()
         {
             var writer = new CsvWriter(new StringWriter());
-            var ex = Assert.Throws<InvalidOperationException>(new List<DateTime>().WriteCsvAsync(writer, true, new string[] { "Date", "Foo" }));
+            var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => new List<DateTime>().WriteCsvAsync(writer, true, new string[] { "Date", "Foo" }));
             Assert.Equal("Property 'Foo' was not found on type 'System.DateTime'.", ex.Message);
         }
 
         [Fact]
-        public void write_csv_async_throws_if_object_to_string_converter_is_null()
+        public async Task write_csv_async_throws_if_object_to_string_converter_is_null()
         {
             var writer = new CsvWriter(new StringWriter());
-            Assert.Throws<ArgumentNullException>(new List<DateTime>().WriteCsvAsync(writer, true, new string[] { "Date" }, null));
+            await Assert.ThrowsAsync<ArgumentNullException>(() => new List<DateTime>().WriteCsvAsync(writer, true, new string[] { "Date" }, null));
         }
 
         [Fact]
-        public void write_csv_async_throws_if_csv_writer_is_disposed()
+        public async Task write_csv_async_throws_if_csv_writer_is_disposed()
         {
             var writer = new CsvWriter(new StringWriter());
             writer.Dispose();
-            Assert.Throws<ObjectDisposedException>(new DateTime[0].WriteCsvAsync(writer));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => new DateTime[0].WriteCsvAsync(writer));
         }
 
         [Fact]
-        public async void write_csv_async_writes_header_record_by_default()
+        public async Task write_csv_async_writes_header_record_by_default()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -364,7 +365,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_writes_all_public_properties_by_default()
+        public async Task write_csv_async_writes_all_public_properties_by_default()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -401,7 +402,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_writes_only_requested_properties_if_specified()
+        public async Task write_csv_async_writes_only_requested_properties_if_specified()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -430,7 +431,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_writes_converts_property_values_to_strings()
+        public async Task write_csv_async_writes_converts_property_values_to_strings()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -461,7 +462,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_writes_converts_null_property_values_to_empty_strings()
+        public async Task write_csv_async_writes_converts_null_property_values_to_empty_strings()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -492,7 +493,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_uses_object_to_string_converter_if_specified()
+        public async Task write_csv_async_uses_object_to_string_converter_if_specified()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))
@@ -523,7 +524,7 @@
         }
 
         [Fact]
-        public async void write_csv_async_returns_number_of_items_written()
+        public async Task write_csv_async_returns_number_of_items_written()
         {
             using (var writer = new CsvWriter(new StringWriter()))
             {
@@ -551,17 +552,17 @@
         }
 
         [Fact]
-        public void write_csv_async_non_reflection_throws_if_object_to_record_converter_is_null()
+        public async Task write_csv_async_non_reflection_throws_if_object_to_record_converter_is_null()
         {
             using (var writer = new CsvWriter(new StringWriter()))
             {
                 var header = new string[] { "The Year", "Even Year?" };
-                Assert.Throws<ArgumentNullException>(new DateTime[0].WriteCsvAsync(writer, header, null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => new DateTime[0].WriteCsvAsync(writer, header, null));
             }
         }
 
         [Fact]
-        public async void write_csv_async_non_reflection_overload_allows_arbitrary_conversion_of_objects_to_csv()
+        public async Task write_csv_async_non_reflection_overload_allows_arbitrary_conversion_of_objects_to_csv()
         {
             using (var stringWriter = new StringWriter())
             using (var writer = new CsvWriter(stringWriter))

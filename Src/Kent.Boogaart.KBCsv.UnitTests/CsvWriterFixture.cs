@@ -452,19 +452,19 @@
         }
 
         [Fact]
-        public void write_record_async_record_throws_if_disposed()
+        public async Task write_record_async_record_throws_if_disposed()
         {
             var writer = new CsvWriter(new MemoryStream());
             writer.Dispose();
-            Assert.Throws<ObjectDisposedException>(writer.WriteRecordAsync(new HeaderRecord()));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => writer.WriteRecordAsync(new HeaderRecord()));
         }
 
         [Fact]
-        public void write_record_async_record_throws_if_record_is_null()
+        public async Task write_record_async_record_throws_if_record_is_null()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
-                Assert.Throws<ArgumentNullException>(writer.WriteRecordAsync((RecordBase)null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => writer.WriteRecordAsync((RecordBase)null));
             }
         }
 
@@ -508,7 +508,7 @@
         }
 
         [Fact]
-        public async void write_record_async_record_writes_values_in_the_record_to_the_text_writer()
+        public async Task write_record_async_record_writes_values_in_the_record_to_the_text_writer()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -522,7 +522,7 @@
         }
 
         [Fact]
-        public async void write_record_async_record_increments_the_record_number()
+        public async Task write_record_async_record_increments_the_record_number()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
@@ -532,19 +532,19 @@
         }
 
         [Fact]
-        public void write_record_async_values_throws_if_disposed()
+        public async Task write_record_async_values_throws_if_disposed()
         {
             var writer = new CsvWriter(new MemoryStream());
             writer.Dispose();
-            Assert.Throws<ObjectDisposedException>(writer.WriteRecordAsync("one", "two", "three"));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => writer.WriteRecordAsync("one", "two", "three"));
         }
 
         [Fact]
-        public void write_record_async_values_throws_if_values_is_null()
+        public async Task write_record_async_values_throws_if_values_is_null()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
-                Assert.Throws<ArgumentNullException>(writer.WriteRecordAsync((string[])null));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => writer.WriteRecordAsync((string[])null));
             }
         }
 
@@ -588,7 +588,7 @@
         }
 
         [Fact]
-        public async void write_record_async_values_writes_values_to_the_text_writer()
+        public async Task write_record_async_values_writes_values_to_the_text_writer()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -602,7 +602,7 @@
         }
 
         [Fact]
-        public async void write_record_async_values_null_values_are_encoded_as_empty_strings()
+        public async Task write_record_async_values_null_values_are_encoded_as_empty_strings()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -616,7 +616,7 @@
         }
 
         [Fact]
-        public async void write_record_async_values_increments_the_record_number()
+        public async Task write_record_async_values_increments_the_record_number()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
@@ -626,7 +626,7 @@
         }
 
         [Fact]
-        public async void write_record_async_uses_value_separator()
+        public async Task write_record_async_uses_value_separator()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -641,7 +641,7 @@
         }
 
         [Fact]
-        public async void write_record_async_uses_value_delimiter_where_necessary()
+        public async Task write_record_async_uses_value_delimiter_where_necessary()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -656,7 +656,7 @@
         }
 
         [Fact]
-        public async void write_record_async_uses_value_delimiter_always_if_force_is_true()
+        public async Task write_record_async_uses_value_delimiter_always_if_force_is_true()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -672,7 +672,7 @@
         }
 
         [Fact]
-        public async void write_record_async_uses_new_line()
+        public async Task write_record_async_uses_new_line()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -688,7 +688,7 @@
         }
 
         [Fact]
-        public async void write_record_async_values_can_be_an_enumerable()
+        public async Task write_record_async_values_can_be_an_enumerable()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -828,44 +828,44 @@ seven,eight,nine
         }
 
         [Fact]
-        public void write_records_async_throws_if_disposed()
+        public async Task write_records_async_throws_if_disposed()
         {
             var writer = new CsvWriter(new MemoryStream());
             writer.Dispose();
-            Assert.Throws<ObjectDisposedException>(writer.WriteRecordsAsync(new RecordBase[1], 0, 1));
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => writer.WriteRecordsAsync(new RecordBase[1], 0, 1));
         }
 
         [Fact]
-        public void write_records_async_throws_if_buffer_is_null()
+        public async Task write_records_async_throws_if_buffer_is_null()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
-                Assert.Throws<ArgumentNullException>(writer.WriteRecordsAsync(null, 0, 1));
+                await Assert.ThrowsAsync<ArgumentNullException>(() => writer.WriteRecordsAsync(null, 0, 1));
             }
         }
 
         [Fact]
-        public void write_records_async_throws_if_offset_is_invalid()
+        public async Task write_records_async_throws_if_offset_is_invalid()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
-                Assert.Throws<ArgumentException>(writer.WriteRecordsAsync(new RecordBase[100], -1, 1));
-                Assert.Throws<ArgumentException>(writer.WriteRecordsAsync(new RecordBase[100], 100, 1));
+                await Assert.ThrowsAsync<ArgumentException>(() => writer.WriteRecordsAsync(new RecordBase[100], -1, 1));
+                await Assert.ThrowsAsync<ArgumentException>(() => writer.WriteRecordsAsync(new RecordBase[100], 100, 1));
             }
         }
 
         [Fact]
-        public void write_records_async_throws_if_length_is_invalid()
+        public async Task write_records_async_throws_if_length_is_invalid()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
-                Assert.Throws<ArgumentException>(writer.WriteRecordsAsync(new RecordBase[100], 0, 101));
-                Assert.Throws<ArgumentException>(writer.WriteRecordsAsync(new RecordBase[100], 90, 20));
+                await Assert.ThrowsAsync<ArgumentException>(() => writer.WriteRecordsAsync(new RecordBase[100], 0, 101));
+                await Assert.ThrowsAsync<ArgumentException>(() => writer.WriteRecordsAsync(new RecordBase[100], 90, 20));
             }
         }
 
         [Fact]
-        public void write_records_async_throws_if_any_included_record_within_the_buffer_is_null()
+        public async Task write_records_async_throws_if_any_included_record_within_the_buffer_is_null()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
@@ -880,12 +880,12 @@ seven,eight,nine
 
                 writer.WriteRecords(buffer, 0, 3);
 
-                Assert.Throws<ArgumentException>(writer.WriteRecordsAsync(buffer, 0, 4));
+                await Assert.ThrowsAsync<ArgumentException>(() => writer.WriteRecordsAsync(buffer, 0, 4));
             }
         }
 
         [Fact]
-        public async void write_records_async_writes_records_to_text_writer()
+        public async Task write_records_async_writes_records_to_text_writer()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -911,7 +911,7 @@ seven,eight,nine,ten
         }
 
         [Fact]
-        public async void write_records_async_writes_only_specified_records_to_text_writer()
+        public async Task write_records_async_writes_only_specified_records_to_text_writer()
         {
             using (var stringWriter = new StringWriter())
             {
@@ -937,7 +937,7 @@ seven,eight,nine
         }
 
         [Fact]
-        public async void write_records_async_increments_record_number()
+        public async Task write_records_async_increments_record_number()
         {
             using (var writer = new CsvWriter(new MemoryStream()))
             {
@@ -990,15 +990,15 @@ seven,eight,nine
         }
 
         [Fact]
-        public void flush_async_throws_if_disposed()
+        public async Task flush_async_throws_if_disposed()
         {
             var writer = new CsvWriter(new MemoryStream());
             writer.Dispose();
-            Assert.Throws<ObjectDisposedException>(writer.FlushAsync());
+            await Assert.ThrowsAsync<ObjectDisposedException>(() => writer.FlushAsync());
         }
 
         [Fact]
-        public async void flush_async_calls_flush_on_underlying_text_writer()
+        public async Task flush_async_calls_flush_on_underlying_text_writer()
         {
             var textWriter = new Mock<TextWriter>();
             var successTask = new TaskCompletionSource<bool>();
