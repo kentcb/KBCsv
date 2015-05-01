@@ -9,7 +9,7 @@
     <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-        Provides generally useful extensions to KBCsv as a Portable Class Library. Online at http://kbcsv.codeplex.com/.
+        Provides generally useful extensions to KBCsv as a Portable Class Library. Online at https://github.com/kentcb/KBCsv.
     </description>
     <tags>.NET CSV comma separated value library mono portable pcl KBCsv extensions</tags>
     <dependencies>

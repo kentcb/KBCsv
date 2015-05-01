@@ -9,7 +9,7 @@
     <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-        KBCsv is an efficient, easy to use .NET parsing and writing library for the CSV (comma-separated values) format, delivered as a Portable Class Library. Online at http://kbcsv.codeplex.com/.
+        KBCsv is an efficient, easy to use .NET parsing and writing library for the CSV (comma-separated values) format, delivered as a Portable Class Library. Online at https://github.com/kentcb/KBCsv.
     </description>
     <tags>.NET CSV comma separated value library mono portable pcl KBCsv</tags>
     <dependencies>

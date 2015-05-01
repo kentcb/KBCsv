@@ -9,7 +9,7 @@
     <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-        Provides extensions to use KBCsv with types in System.Data. Online at http://kbcsv.codeplex.com/.
+        Provides extensions to use KBCsv with types in System.Data. Online at https://github.com/kentcb/KBCsv.
     </description>
     <tags>.NET CSV comma separated value library mono KBCsv extensions data</tags>
     <dependencies>
