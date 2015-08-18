@@ -119,10 +119,10 @@ Target "CreateArchives" (fun _ ->
 Target "CreateNuGetPackages" (fun _ ->
     // copy binaries
     !! (srcDir @@ "Kent.Boogaart.KBCsv/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.*")
-        |> CopyFiles (nugetDir @@ "KBCsv/lib/portable-win+net45+wp8")
+        |> CopyFiles (nugetDir @@ "KBCsv/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
 
     !! (srcDir @@ "Kent.Boogaart.KBCsv.Extensions/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.*")
-        |> CopyFiles (nugetDir @@ "KBCsv.Extensions/lib/portable-win+net45+wp8")
+        |> CopyFiles (nugetDir @@ "KBCsv.Extensions/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
 
     !! (srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.*")
         |> CopyFiles (nugetDir @@ "KBCsv.Extensions.Data/lib/net45")
