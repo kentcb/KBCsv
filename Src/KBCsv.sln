@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{C2DF445D-88C9-4390-907A-CB00823266C4}"
 EndProject
@@ -14,16 +14,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.UnitTests", "Kent.Boogaart.KBCsv.UnitTests\Kent.Boogaart.KBCsv.UnitTests.csproj", "{49A50581-272E-40A8-92E4-89D4BA8F0A0E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.PerformanceTests", "Kent.Boogaart.KBCsv.PerformanceTests\Kent.Boogaart.KBCsv.PerformanceTests.csproj", "{49A50581-272E-50A8-92E4-89D4BA8F0A0E}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared Items", "Shared Items", "{39EBCE4B-478D-489C-9140-637530545F27}"
-	ProjectSection(SolutionItems) = preProject
-		AssemblyInfoCommon.cs = AssemblyInfoCommon.cs
-		AssemblyInfoCommon.vb = AssemblyInfoCommon.vb
-		AssemblyInfoCommonSecurity.cs = AssemblyInfoCommonSecurity.cs
-		Build\Build.targets = Build\Build.targets
-		KBCsv.Extensions.nuspec.template = KBCsv.Extensions.nuspec.template
-		KBCsv.nuspec.template = KBCsv.nuspec.template
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Extensions.UnitTests", "Kent.Boogaart.KBCsv.Extensions.UnitTests\Kent.Boogaart.KBCsv.Extensions.UnitTests.csproj", "{59A50581-272E-40A8-92E4-89D4BA8F0A0E}"
 EndProject
@@ -44,6 +34,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{B09DAF
 	ProjectSection(SolutionItems) = preProject
 		..\build.bat = ..\build.bat
 		..\build.fsx = ..\build.fsx
+		KBCsv.Extensions.Data.nuspec = KBCsv.Extensions.Data.nuspec
+		KBCsv.Extensions.nuspec = KBCsv.Extensions.nuspec
+		KBCsv.nuspec = KBCsv.nuspec
 	EndProjectSection
 EndProject
 Global
