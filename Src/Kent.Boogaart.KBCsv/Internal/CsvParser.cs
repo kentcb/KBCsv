@@ -1,6 +1,5 @@
 ﻿namespace Kent.Boogaart.KBCsv.Internal
 {
-    using Kent.Boogaart.HelperTrinity;
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;

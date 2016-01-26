@@ -1,11 +1,11 @@
 ﻿namespace Kent.Boogaart.KBCsv.Extensions
 {
-    using Kent.Boogaart.HelperTrinity.Extensions;
     using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Threading.Tasks;
+    using Kent.Boogaart.KBCsv.Internal;
 
     // async equivalents to enumerable extension methods
     // NOTE: changes should be made to the synchronous variants first, then ported here

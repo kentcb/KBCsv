@@ -4,8 +4,6 @@ namespace Kent.Boogaart.KBCsv
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
-    using Kent.Boogaart.HelperTrinity;
-    using Kent.Boogaart.HelperTrinity.Extensions;
     using Kent.Boogaart.KBCsv.Internal;
 
     /// <summary>

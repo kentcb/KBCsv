@@ -1,6 +1,6 @@
 ﻿namespace Kent.Boogaart.KBCsv.Extensions
 {
-    using Kent.Boogaart.HelperTrinity.Extensions;
+    using Kent.Boogaart.KBCsv.Internal;
 
     /// <summary>
     /// Provides extensions against <see cref="CsvReader"/>.

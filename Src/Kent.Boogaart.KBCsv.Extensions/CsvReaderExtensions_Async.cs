@@ -1,7 +1,7 @@
 ﻿namespace Kent.Boogaart.KBCsv.Extensions
 {
-    using Kent.Boogaart.HelperTrinity.Extensions;
     using System.Threading.Tasks;
+    using Kent.Boogaart.KBCsv.Internal;
 
     // async equivalents to csv reader extension methods
     // NOTE: changes should be made to the synchronous variants first, then ported here

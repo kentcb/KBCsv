@@ -1,9 +1,9 @@
 ﻿namespace Kent.Boogaart.KBCsv
 {
-    using Kent.Boogaart.HelperTrinity.Extensions;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.Threading.Tasks;
+    using Internal;
 
     public partial class CsvWriter
     {

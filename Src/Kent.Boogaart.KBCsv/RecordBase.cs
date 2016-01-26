@@ -5,7 +5,7 @@ namespace Kent.Boogaart.KBCsv
     using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Text;
-    using Kent.Boogaart.HelperTrinity.Extensions;
+    using Internal;
 
     /// <summary>
     /// A base class for CSV records.

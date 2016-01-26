@@ -1,7 +1,5 @@
 ﻿namespace Kent.Boogaart.KBCsv
 {
-    using Kent.Boogaart.HelperTrinity;
-    using Kent.Boogaart.HelperTrinity.Extensions;
     using Kent.Boogaart.KBCsv.Internal;
     using System;
     using System.IO;

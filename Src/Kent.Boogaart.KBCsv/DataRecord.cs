@@ -2,8 +2,7 @@ namespace Kent.Boogaart.KBCsv
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using Kent.Boogaart.HelperTrinity;
+    using Internal;
 
     /// <summary>
     /// Represents a data record in a CSV file.

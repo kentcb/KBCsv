@@ -1,9 +1,9 @@
 ﻿namespace Kent.Boogaart.KBCsv.Extensions.Data
 {
-    using Kent.Boogaart.HelperTrinity.Extensions;
     using System;
     using System.Data;
     using System.Threading.Tasks;
+    using Kent.Boogaart.KBCsv.Internal;
 
     // async equivalents to data extension methods
     // NOTE: changes should be made to the synchronous variants first, then ported here

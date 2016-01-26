@@ -1,10 +1,9 @@
 ﻿namespace Kent.Boogaart.KBCsv.Extensions.Data
 {
-    using Kent.Boogaart.HelperTrinity;
-    using Kent.Boogaart.HelperTrinity.Extensions;
-    using Kent.Boogaart.KBCsv;
     using System;
     using System.Data;
+    using Kent.Boogaart.KBCsv;
+    using Kent.Boogaart.KBCsv.Internal;
 
     /// <summary>
     /// Provides CSV extensions to <see cref="DataSet"/> and <see cref="DataTable"/>.
