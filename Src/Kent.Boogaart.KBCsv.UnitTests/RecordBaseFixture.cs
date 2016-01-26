@@ -432,7 +432,7 @@ namespace Kent.Boogaart.KBCsv.UnitTests
             }
 
             public ConcreteRecordBase(IList<string> values)
-                : base(values)
+                : base(false, values)
             {
             }
         }
