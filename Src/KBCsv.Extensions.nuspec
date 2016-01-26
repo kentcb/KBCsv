@@ -7,6 +7,7 @@
     <owners>Kent Boogaart</owners>
     <licenseUrl>http://kbcsv.codeplex.com/license</licenseUrl>
     <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
+    <iconUrl>https://raw.githubusercontent.com/kentcb/KBCsv/master/Art/Logo150x150.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
         Provides generally useful extensions to KBCsv as a Portable Class Library. Online at https://github.com/kentcb/KBCsv.
