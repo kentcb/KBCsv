@@ -50,7 +50,7 @@ Please see [the documentation](Doc/overview.md) for more details.
 
 ## Who?
 
-*KBCsv* is currently developed solely by [Kent Boogaart](http://kent-boogaart.com/).
+KBCsv is created and maintained by [Kent Boogaart](http://kent-boogaart.com).
 
 ## Primary Features
 
