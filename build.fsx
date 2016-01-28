@@ -9,7 +9,7 @@ open Fake.NuGetHelper
 open Fake.XUnit2Helper
 
 // properties
-let semanticVersion = "3.0.2"
+let semanticVersion = "3.0.3"
 let version = (>=>) @"(?<major>\d*)\.(?<minor>\d*)\.(?<build>\d*).*?" "${major}.${minor}.${build}.0" semanticVersion
 let configuration = getBuildParamOrDefault "configuration" "Release"
 let deployToNuGet = getBuildParamOrDefault "deployToNuGet" "false"
