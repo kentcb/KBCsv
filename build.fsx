@@ -6,7 +6,7 @@ open Fake.AssemblyInfoFile
 open Fake.EnvironmentHelper
 open Fake.MSBuildHelper
 open Fake.NuGetHelper
-open Fake.XUnit2Helper
+open Fake.Testing
 
 // properties
 let semanticVersion = "3.0.2"
@@ -19,6 +19,8 @@ let srcDir = "Src/"
 let testDir = genDir @@ "Test"
 let nugetDir = genDir @@ "NuGet"
 let tempDir = genDir @@ "Temp"
+
+RestorePackages()
 
 Target "Clean" (fun _ ->
     CleanDirs[genDir; testDir; nugetDir; tempDir]
@@ -68,14 +70,13 @@ Target "ExecuteUnitTests" (fun _ ->
     xUnit2 (fun p ->
         { p with
             ShadowCopy = false;
-            HtmlOutput = true;
-            XmlOutput = true;
-            OutputDir = testDir;
+//            HtmlOutputPath = Some testDir;
+//            XmlOutputPath = Some testDir;
         })
         [
-            srcDir @@ "Kent.Boogaart.KBCsv.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.UnitTests.dll"
-            srcDir @@ "Kent.Boogaart.KBCsv.Extensions.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.UnitTests.dll"
-            srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests.dll"
+            srcDir @@ "KBCsv.UnitTests/bin" @@ configuration @@ "KBCsv.UnitTests.dll"
+            srcDir @@ "KBCsv.Extensions.UnitTests/bin" @@ configuration @@ "KBCsv.Extensions.UnitTests.dll"
+            srcDir @@ "KBCsv.Extensions.Data.UnitTests/bin" @@ configuration @@ "KBCsv.Extensions.Data.UnitTests.dll"
         ]
 )
 
@@ -83,13 +84,11 @@ Target "ExecutePerformanceTests" (fun _ ->
     xUnit2 (fun p ->
         { p with
             ShadowCopy = false;
-            HtmlOutput = true;
-            XmlOutput = true;
-            OutputDir = testDir;
-            Parallel = ParallelOption.None;
+//            HtmlOutputPath = Some testDir;
+//            XmlOutputPath = Some testDir;
         })
         [
-            srcDir @@ "Kent.Boogaart.KBCsv.PerformanceTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.PerformanceTests.exe"
+            srcDir @@ "KBCsv.PerformanceTests/bin" @@ configuration @@ "KBCsv.PerformanceTests.exe"
         ]
 )
 
@@ -107,9 +106,9 @@ Target "CreateArchives" (fun _ ->
         |> Zip "." (genDir @@ "KBCsv-" + semanticVersion + "-src.zip")
 
     // binary archive
-    !! (srcDir @@ "Kent.Boogaart.KBCsv/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.*")
-        ++ (srcDir @@ "Kent.Boogaart.KBCsv.Extensions/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.*")
-        ++ (srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.*")
+    !! (srcDir @@ "KBCsv/bin" @@ configuration @@ "KBCsv.*")
+        ++ (srcDir @@ "KBCsv.Extensions/bin" @@ configuration @@ "KBCsv.Extensions.*")
+        ++ (srcDir @@ "KBCsv.Extensions.Data/bin" @@ configuration @@ "KBCsv.Extensions.Data.*")
         |> CopyFiles tempDir
 
     !! (tempDir @@ "**")
@@ -118,13 +117,13 @@ Target "CreateArchives" (fun _ ->
 
 Target "CreateNuGetPackages" (fun _ ->
     // copy binaries
-    !! (srcDir @@ "Kent.Boogaart.KBCsv/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.*")
+    !! (srcDir @@ "KBCsv/bin" @@ configuration @@ "KBCsv.*")
         |> CopyFiles (nugetDir @@ "KBCsv/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
 
-    !! (srcDir @@ "Kent.Boogaart.KBCsv.Extensions/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.*")
+    !! (srcDir @@ "KBCsv.Extensions/bin" @@ configuration @@ "KBCsv.Extensions.*")
         |> CopyFiles (nugetDir @@ "KBCsv.Extensions/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
 
-    !! (srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.*")
+    !! (srcDir @@ "KBCsv.Extensions.Data/bin" @@ configuration @@ "KBCsv.Extensions.Data.*")
         |> CopyFiles (nugetDir @@ "KBCsv.Extensions.Data/lib/net45")
 
     // copy source
@@ -148,7 +147,7 @@ Target "CreateNuGetPackages" (fun _ ->
     // create the NuGets
     NuGet (fun p ->
         {p with
-            Project = "Kent.Boogaart.KBCsv"
+            Project = "KBCsv"
             Version = semanticVersion
             OutputPath = nugetDir
             WorkingDir = nugetDir @@ "KBCsv"
@@ -159,7 +158,7 @@ Target "CreateNuGetPackages" (fun _ ->
 
     NuGet (fun p ->
         {p with
-            Project = "Kent.Boogaart.KBCsv.Extensions"
+            Project = "KBCsv.Extensions"
             Version = semanticVersion
             OutputPath = nugetDir
             WorkingDir = nugetDir @@ "KBCsv.Extensions"
@@ -170,7 +169,7 @@ Target "CreateNuGetPackages" (fun _ ->
 
     NuGet (fun p ->
         {p with
-            Project = "Kent.Boogaart.KBCsv.Extensions.Data"
+            Project = "KBCsv.Extensions.Data"
             Version = semanticVersion
             OutputPath = nugetDir
             WorkingDir = nugetDir @@ "KBCsv.Extensions.Data"

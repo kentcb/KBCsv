@@ -1,0 +1,10 @@
+﻿Name,RelativeMeanDistanceFromSun,RelativePeriodOfOrbit,MeanOrbitalVelocity,OrbitalEccentricity,InclinationToEcliptic,EquatorialRadius,PolarRadius,RelativeMass,MeanDensity,BodyRotationPeriod,Tilt,ObservedSatelliteCount,Nickname
+Mercury,0.3871,0.24,47.89,0.206,7,2439,same,0.06,5.43,1408,2,0,The Swift Planet
+Venus,0.7233,0.62,35.04,0.007,3.4,6052,same,0.82,5.25,5832,177.3,0,"The Morning Star, The Evening Star"
+Earth,1,1,29.79,0.017,0,6378,6357,1,5.52,23.93,23.45,1,The Blue Planet
+Mars,1.524,1.88,24.14,0.093,1.85,3397,3380,0.11,3.95,24.62,25.19,2,The Red Planet
+Jupiter,5.203,11.86,13.06,0.048,1.3,71490,66854,317.89,1.33,9.92,3.12,>28,The Giant Planet
+Saturn,9.539,29.46,9.64,0.056,2.49,60268,54360,95.18,0.69,10.66,26.73,30,The Ringed Planet
+Uranus,19.19,84.01,6.81,0.046,0.77,25559,24973,14.53,1.29,17.24,97.86,24,The Bull's Eye Planet
+Neptune,30.06,164.79,5.43,0.01,1.77,25269,24340,17.14,1.64,16.11,29.6,8,"The Blue Planet, The Last Of The Gas Giants, Oceanus, LeVerrier's Planet, Janus, The Watery Planet"
+Pluto,39.48,248.54,4.74,0.248,17.15,1160,same,0.002,2.03,153.3,122.46,1,Disney's Planet

@@ -1,3 +1,4 @@
 @echo off
-
-"Src\packages\FAKE.3.30.1\tools\Fake.exe" build.fsx %*
+cls
+".nuget\NuGet.exe" "Install" "FAKE" "-OutputDirectory" "Src\packages" "-ExcludeVersion"
+"Src\packages\FAKE\tools\Fake.exe" build.fsx

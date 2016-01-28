@@ -3,8 +3,8 @@ using System;
 using System.Reflection;
 using System.Resources;
 
-[assembly: AssemblyVersionAttribute("3.0.0.0")]
-[assembly: AssemblyFileVersionAttribute("3.0.0.0")]
+[assembly: AssemblyVersionAttribute("3.0.2.0")]
+[assembly: AssemblyFileVersionAttribute("3.0.2.0")]
 [assembly: AssemblyConfigurationAttribute("Release")]
 [assembly: AssemblyCompanyAttribute("Kent Boogaart")]
 [assembly: AssemblyProductAttribute("KBCsv")]
@@ -13,4 +13,4 @@ using System.Resources;
 [assembly: AssemblyCultureAttribute("")]
 [assembly: CLSCompliantAttribute(true)]
 [assembly: NeutralResourcesLanguageAttribute("en-US")]
-[assembly: AssemblyInformationalVersionAttribute("3.0.0")]
+[assembly: AssemblyInformationalVersionAttribute("3.0.2")]
