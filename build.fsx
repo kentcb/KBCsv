@@ -20,6 +20,8 @@ let testDir = genDir @@ "Test"
 let nugetDir = genDir @@ "NuGet"
 let tempDir = genDir @@ "Temp"
 
+RestorePackages()
+
 Target "Clean" (fun _ ->
     CleanDirs[genDir; testDir; nugetDir; tempDir]
 
