@@ -55,10 +55,6 @@
     <Compile Include="..\AssemblyInfoCommonSecurity.cs">
       <Link>Properties\AssemblyInfoCommonSecurity.cs</Link>
     </Compile>
-    <Compile Include="CsvReaderExtensions.cs" />
-    <Compile Include="CsvReaderExtensions_Async.cs" />
-    <Compile Include="EnumerableExtensions.cs" />
-    <Compile Include="EnumerableExtensions_Async.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

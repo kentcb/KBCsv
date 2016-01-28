@@ -1,22 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Examples", "Examples", "{C2DF445D-88C9-4390-907A-CB00823266C4}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Examples.CSharp", "Kent.Boogaart.KBCsv.Examples.CSharp\Kent.Boogaart.KBCsv.Examples.CSharp.csproj", "{1C43651C-155C-48BA-A5FF-5C625FDD6878}"
-EndProject
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "Kent.Boogaart.KBCsv.Examples.VB", "Kent.Boogaart.KBCsv.Examples.VB\Kent.Boogaart.KBCsv.Examples.VB.vbproj", "{2373873E-6F12-425F-886F-F07978BE11CB}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.UnitTests", "Kent.Boogaart.KBCsv.UnitTests\Kent.Boogaart.KBCsv.UnitTests.csproj", "{49A50581-272E-40A8-92E4-89D4BA8F0A0E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.PerformanceTests", "Kent.Boogaart.KBCsv.PerformanceTests\Kent.Boogaart.KBCsv.PerformanceTests.csproj", "{49A50581-272E-50A8-92E4-89D4BA8F0A0E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Extensions.UnitTests", "Kent.Boogaart.KBCsv.Extensions.UnitTests\Kent.Boogaart.KBCsv.Extensions.UnitTests.csproj", "{59A50581-272E-40A8-92E4-89D4BA8F0A0E}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2D4BB470-0865-464C-B31E-1EBB0FD54F22}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
@@ -27,8 +13,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Extensions", "Kent.Boogaart.KBCsv.Extensions\Kent.Boogaart.KBCsv.Extensions.csproj", "{D2EBB055-F466-41E0-AF39-9A1E97EFF11F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Extensions.Data", "Kent.Boogaart.KBCsv.Extensions.Data\Kent.Boogaart.KBCsv.Extensions.Data.csproj", "{2A101A18-D972-4C37-A092-2E82515FAF7F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests", "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests\Kent.Boogaart.KBCsv.Extensions.Data.UnitTests.csproj", "{A3A23365-6582-47E6-86D5-0D105C13EB24}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".build", ".build", "{B09DAF5D-5AEA-4CE3-A307-8005355BF41B}"
 	ProjectSection(SolutionItems) = preProject
@@ -45,26 +29,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1C43651C-155C-48BA-A5FF-5C625FDD6878}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2373873E-6F12-425F-886F-F07978BE11CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2373873E-6F12-425F-886F-F07978BE11CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2373873E-6F12-425F-886F-F07978BE11CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2373873E-6F12-425F-886F-F07978BE11CB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49A50581-272E-40A8-92E4-89D4BA8F0A0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49A50581-272E-50A8-92E4-89D4BA8F0A0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{59A50581-272E-40A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{59A50581-272E-40A8-92E4-89D4BA8F0A0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{59A50581-272E-40A8-92E4-89D4BA8F0A0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{59A50581-272E-40A8-92E4-89D4BA8F0A0E}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4E89DCB7-60EC-4C53-A8DD-1CBAA1A1A8BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4E89DCB7-60EC-4C53-A8DD-1CBAA1A1A8BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E89DCB7-60EC-4C53-A8DD-1CBAA1A1A8BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -77,20 +41,8 @@ Global
 		{2A101A18-D972-4C37-A092-2E82515FAF7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A101A18-D972-4C37-A092-2E82515FAF7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A101A18-D972-4C37-A092-2E82515FAF7F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A3A23365-6582-47E6-86D5-0D105C13EB24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A3A23365-6582-47E6-86D5-0D105C13EB24}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A3A23365-6582-47E6-86D5-0D105C13EB24}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A3A23365-6582-47E6-86D5-0D105C13EB24}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{1C43651C-155C-48BA-A5FF-5C625FDD6878} = {C2DF445D-88C9-4390-907A-CB00823266C4}
-		{2373873E-6F12-425F-886F-F07978BE11CB} = {C2DF445D-88C9-4390-907A-CB00823266C4}
-		{49A50581-272E-40A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
-		{49A50581-272E-50A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
-		{59A50581-272E-40A8-92E4-89D4BA8F0A0E} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
-		{A3A23365-6582-47E6-86D5-0D105C13EB24} = {C34D6144-E3E1-49C9-B553-7BE46BBAA6FA}
 	EndGlobalSection
 EndGlobal

@@ -6,7 +6,6 @@ open Fake.AssemblyInfoFile
 open Fake.EnvironmentHelper
 open Fake.MSBuildHelper
 open Fake.NuGetHelper
-open Fake.XUnit2Helper
 
 // properties
 let semanticVersion = "3.0.3"
@@ -43,7 +42,7 @@ Target "Build" (fun _ ->
             Attribute.Configuration configuration
             Attribute.Company "Kent Boogaart"
             Attribute.Product "KBCsv"
-            Attribute.Copyright "© Copyright. Kent Boogaart."
+            Attribute.Copyright "c Copyright. Kent Boogaart."
             Attribute.Trademark ""
             Attribute.Culture ""
             Attribute.CLSCompliant true
@@ -66,86 +65,24 @@ Target "Build" (fun _ ->
         (srcDir @@ "KBCsv.sln")
 )
 
-Target "ExecuteUnitTests" (fun _ ->
-    xUnit2 (fun p ->
-        { p with
-            ShadowCopy = false;
-            HtmlOutput = true;
-            XmlOutput = true;
-            OutputDir = testDir;
-        })
-        [
-            srcDir @@ "Kent.Boogaart.KBCsv.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.UnitTests.dll"
-            srcDir @@ "Kent.Boogaart.KBCsv.Extensions.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.UnitTests.dll"
-            srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.UnitTests.dll"
-        ]
-)
-
-Target "ExecutePerformanceTests" (fun _ ->
-    xUnit2 (fun p ->
-        { p with
-            ShadowCopy = false;
-            HtmlOutput = true;
-            XmlOutput = true;
-            OutputDir = testDir;
-            Parallel = ParallelOption.None;
-        })
-        [
-            srcDir @@ "Kent.Boogaart.KBCsv.PerformanceTests/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.PerformanceTests.exe"
-        ]
-)
-
-Target "CreateArchives" (fun _ ->
-    // source archive
-    !! "**/*.*"
-        -- ".git/**"
-        -- (genDir @@ "**")
-        -- (srcDir @@ "packages/**/*")
-        -- (srcDir @@ "**/*.suo")
-        -- (srcDir @@ "**/*.csproj.user")
-        -- (srcDir @@ "**/*.gpState")
-        -- (srcDir @@ "**/bin/**")
-        -- (srcDir @@ "**/obj/**")
-        |> Zip "." (genDir @@ "KBCsv-" + semanticVersion + "-src.zip")
-
-    // binary archive
-    !! (srcDir @@ "Kent.Boogaart.KBCsv/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.*")
-        ++ (srcDir @@ "Kent.Boogaart.KBCsv.Extensions/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.*")
-        ++ (srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.*")
-        |> CopyFiles tempDir
-
-    !! (tempDir @@ "**")
-        |> Zip tempDir (genDir @@ "KBCsv-" + semanticVersion + "-bin.zip")
-)
-
 Target "CreateNuGetPackages" (fun _ ->
     // copy binaries
     !! (srcDir @@ "Kent.Boogaart.KBCsv/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.*")
         |> CopyFiles (nugetDir @@ "KBCsv/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
-
     !! (srcDir @@ "Kent.Boogaart.KBCsv.Extensions/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.*")
         |> CopyFiles (nugetDir @@ "KBCsv.Extensions/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
-
     !! (srcDir @@ "Kent.Boogaart.KBCsv.Extensions.Data/bin" @@ configuration @@ "Kent.Boogaart.KBCsv.Extensions.Data.*")
         |> CopyFiles (nugetDir @@ "KBCsv.Extensions.Data/lib/net45")
 
-    // copy source
-    let sourceFiles = [!! (srcDir @@ "**/*.*")
-                    -- (srcDir @@ "packages/**/*")
-                    -- (srcDir @@ "**/*.suo")
-                    -- (srcDir @@ "**/*.csproj.user")
-                    -- (srcDir @@ "**/*.gpState")
-                    -- (srcDir @@ "**/bin/**")
-                    -- (srcDir @@ "**/obj/**")]
+    // copy readme
+    CreateDir "./Gen/NuGet/KBCsv/"
+    CopyFile "./Gen/NuGet/KBCsv/readme.txt" "./Src/readme.txt"
 
-    sourceFiles
-        |> CopyWithSubfoldersTo (nugetDir @@ "KBCsv")
+    CreateDir "./Gen/NuGet/KBCsv.Extensions/"
+    CopyFile "./Gen/NuGet/KBCsv.Extensions/readme.txt" "./Src/readme.txt"
 
-    sourceFiles
-        |> CopyWithSubfoldersTo (nugetDir @@ "KBCsv.Extensions")
-
-    sourceFiles
-        |> CopyWithSubfoldersTo (nugetDir @@ "KBCsv.Extensions.Data")
+    CreateDir "./Gen/NuGet/KBCsv.Extensions.Data/"
+    CopyFile "./Gen/NuGet/KBCsv.Extensions.Data/readme.txt" "./Src/readme.txt"
 
     // create the NuGets
     NuGet (fun p ->
@@ -182,15 +119,8 @@ Target "CreateNuGetPackages" (fun _ ->
         (srcDir @@ "KBCsv.Extensions.Data.nuspec")
 )
 
-// build order
 "Clean"
     ==> "Build"
-    ==> "ExecuteUnitTests"
-    ==> "CreateArchives"
     ==> "CreateNuGetPackages"
-
-"Clean"
-    ==> "Build"
-    ==> "ExecutePerformanceTests"
 
 RunTargetOrDefault "CreateNuGetPackages"

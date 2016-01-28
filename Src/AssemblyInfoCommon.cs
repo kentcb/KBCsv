@@ -8,7 +8,7 @@ using System.Resources;
 [assembly: AssemblyConfigurationAttribute("Release")]
 [assembly: AssemblyCompanyAttribute("Kent Boogaart")]
 [assembly: AssemblyProductAttribute("KBCsv")]
-[assembly: AssemblyCopyrightAttribute("© Copyright. Kent Boogaart.")]
+[assembly: AssemblyCopyrightAttribute("c Copyright. Kent Boogaart.")]
 [assembly: AssemblyTrademarkAttribute("")]
 [assembly: AssemblyCultureAttribute("")]
 [assembly: CLSCompliantAttribute(true)]
