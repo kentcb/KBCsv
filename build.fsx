@@ -1,5 +1,4 @@
-﻿#I "Src/packages/FAKE.3.30.1/tools"
-#r "FakeLib.dll"
+﻿#r "FakeLib.dll"
 
 open Fake
 open Fake.AssemblyInfoFile
@@ -9,7 +8,7 @@ open Fake.NuGetHelper
 open Fake.Testing
 
 // properties
-let semanticVersion = "3.0.2"
+let semanticVersion = "4.0.0"
 let version = (>=>) @"(?<major>\d*)\.(?<minor>\d*)\.(?<build>\d*).*?" "${major}.${minor}.${build}.0" semanticVersion
 let configuration = getBuildParamOrDefault "configuration" "Release"
 let deployToNuGet = getBuildParamOrDefault "deployToNuGet" "false"
@@ -97,6 +96,7 @@ Target "CreateArchives" (fun _ ->
     !! "**/*.*"
         -- ".git/**"
         -- (genDir @@ "**")
+        -- ("packages/**")
         -- (srcDir @@ "packages/**/*")
         -- (srcDir @@ "**/*.suo")
         -- (srcDir @@ "**/*.csproj.user")
