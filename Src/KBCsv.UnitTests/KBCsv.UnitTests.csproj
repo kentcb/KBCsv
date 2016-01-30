@@ -50,6 +50,7 @@
     </Compile>
     <Compile Include="DataRecordFixture.cs" />
     <Compile Include="HeaderRecordFixture.cs" />
+    <Compile Include="Internal\CsvParserRfc4180ComplianceFixture.cs" />
     <Compile Include="Issues\Issue12271.cs" />
     <Compile Include="Issues\Issue12693.cs" />
     <Compile Include="Issues\Issue3.cs" />
