@@ -63,7 +63,7 @@
         /// </summary>
         /// <remarks>
         /// <para>
-        /// All public properties of <typeparamref name="T"/> will be written to <paramref name="csvWriter"/>.
+        /// All public properties of <typeparamref name="T"/> will be written to <paramref name="csvWriter"/> unless they are marked with <see cref="CsvIgnoreAttribute"/>.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">
@@ -83,7 +83,7 @@
         /// </returns>
         public static int WriteCsv<T>(this IEnumerable<T> @this, CsvWriter csvWriter, bool writeHeaderRecord)
         {
-            return @this.WriteCsv(csvWriter, writeHeaderRecord, typeof(T).GetRuntimeProperties().Where(x => x.CanRead && x.GetMethod.IsPublic).Select(x => x.Name).ToArray());
+            return @this.WriteCsv(csvWriter, writeHeaderRecord, typeof(T).GetRuntimeProperties().Where(x => x.CanRead && x.GetMethod.IsPublic && x.GetCustomAttribute<CsvIgnoreAttribute>() == null).Select(x => x.Name).ToArray());
         }
 
         /// <summary>

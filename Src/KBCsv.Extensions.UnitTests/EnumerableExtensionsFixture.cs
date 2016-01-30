@@ -176,6 +176,35 @@
         }
 
         [Fact]
+        public void write_csv_ignores_properties_marked_with_csv_ignore_attribute()
+        {
+            using (var stringWriter = new StringWriter())
+            using (var writer = new CsvWriter(stringWriter))
+            {
+                writer.NewLine = "<EOL>";
+
+                var items = new TestType3[]
+                {
+                    new TestType3
+                    {
+                        Property1 = "1",
+                        Property2 = "2",
+                        Property3 = 3,
+                    },
+                    new TestType3
+                    {
+                        Property1 = "4",
+                        Property2 = "5",
+                        Property3 = 6,
+                    }
+                };
+
+                items.WriteCsv(writer);
+                Assert.Equal("Property1<EOL>1<EOL>4<EOL>", stringWriter.ToString());
+            }
+        }
+
+        [Fact]
         public void write_csv_writes_converts_null_property_values_to_empty_strings()
         {
             using (var stringWriter = new StringWriter())
@@ -632,6 +661,29 @@
             }
 
             public decimal? Property4
+            {
+                get;
+                set;
+            }
+        }
+
+        public sealed class TestType3
+        {
+            public string Property1
+            {
+                get;
+                set;
+            }
+
+            [CsvIgnore]
+            public string Property2
+            {
+                get;
+                set;
+            }
+
+            [CsvIgnore]
+            public int Property3
             {
                 get;
                 set;
