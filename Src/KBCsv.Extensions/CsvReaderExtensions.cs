@@ -1,4 +1,4 @@
-﻿namespace KBCsv.Extensions
+﻿namespace KBCsv
 {
     using System.Collections.Generic;
     using KBCsv.Internal;

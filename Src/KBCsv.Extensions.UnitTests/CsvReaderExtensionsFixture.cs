@@ -4,7 +4,6 @@
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using KBCsv.Extensions;
     using Xunit;
 
     public sealed class CsvReaderExtensionsFixture

@@ -1,4 +1,4 @@
-﻿namespace KBCsv.Extensions
+﻿namespace KBCsv
 {
     using System.Threading.Tasks;
     using KBCsv.Internal;

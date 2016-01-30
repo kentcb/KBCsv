@@ -1,7 +1,5 @@
 ﻿namespace KBCsv.Examples.CSharp
 {
-    using KBCsv.Extensions;
-    using KBCsv.Extensions.Data;
     using System;
     using System.Data;
     using System.Diagnostics;
@@ -12,6 +10,7 @@
     using System.Text;
     using System.Threading.Tasks;
     using System.Windows.Forms;
+    using KBCsv;
 
     class Program
     {

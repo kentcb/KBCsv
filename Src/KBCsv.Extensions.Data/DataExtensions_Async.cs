@@ -1,4 +1,4 @@
-﻿namespace KBCsv.Extensions.Data
+﻿namespace KBCsv
 {
     using System;
     using System.Data;

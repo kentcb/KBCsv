@@ -1,12 +1,11 @@
 ﻿namespace KBCsv.Extensions.UnitTests
 {
-    using KBCsv;
-    using KBCsv.Extensions.Data;
     using System;
     using System.Data;
     using System.IO;
-    using Xunit;
     using System.Threading.Tasks;
+    using KBCsv;
+    using Xunit;
 
     public sealed class DataExtensionsFixture
     {

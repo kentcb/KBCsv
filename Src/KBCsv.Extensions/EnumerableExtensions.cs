@@ -1,4 +1,4 @@
-﻿namespace KBCsv.Extensions
+﻿namespace KBCsv
 {
     using System;
     using System.Collections.Generic;
@@ -31,7 +31,7 @@
     /// </example>
     public static partial class EnumerableExtensions
     {
-        private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(EnumerableExtensions));
+        private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(EnumerableExtensions), "KBCsv.Properties.ExceptionHelper.xml");
 
         /// <summary>
         /// Writes the items in <paramref name="this"/> to <paramref name="csvWriter"/>.

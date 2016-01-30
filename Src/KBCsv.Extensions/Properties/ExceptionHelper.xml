@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <exceptionHelper>
-    <exceptionGroup type="KBCsv.Extensions.EnumerableExtensions">
+    <exceptionGroup type="KBCsv.EnumerableExtensions">
         <exception key="nullPropertyName" type="System.ArgumentException">
             A property name is null.
         </exception>

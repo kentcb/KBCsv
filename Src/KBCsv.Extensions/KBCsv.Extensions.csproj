@@ -8,7 +8,7 @@
     <ProjectGuid>{D2EBB055-F466-41E0-AF39-9A1E97EFF11F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>KBCsv.Extensions</RootNamespace>
+    <RootNamespace>KBCsv</RootNamespace>
     <AssemblyName>KBCsv.Extensions</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\KBCsv.snk</AssemblyOriginatorKeyFile>

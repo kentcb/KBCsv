@@ -1,4 +1,4 @@
-﻿namespace KBCsv.Extensions.Data
+﻿namespace KBCsv
 {
     using System;
     using System.Data;
@@ -39,7 +39,7 @@
     /// </example>
     public static partial class DataExtensions
     {
-        private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(DataExtensions));
+        private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(DataExtensions), "KBCsv.Properties.ExceptionHelper.xml");
 
         /// <summary>
         /// The name of the table that is created and populated when calling <see cref="Fill(DataSet, CsvReader)"/>. Other <see cref="Fill"/> overloads allow a specific table name to be used,
