@@ -244,6 +244,26 @@ Tempany, 8";
             #endregion
         }
 
+        private static async Task WriteCSVToFileAsynchronously()
+        {
+            #region WriteCSVToFileAsynchronously
+
+            using (var streamWriter = new StreamWriter("Output.csv"))
+            using (var writer = new CsvWriter(streamWriter))
+            {
+                writer.ForceDelimit = true;
+
+                await writer.WriteRecordAsync("Name", "Age");
+                await writer.WriteRecordAsync("Kent", "33");
+                await writer.WriteRecordAsync("Belinda", "34");
+                await writer.WriteRecordAsync("Tempany", "8");
+
+                Console.WriteLine("{0} records written", writer.RecordNumber);
+            }
+
+            #endregion
+        }
+
         private static void WriteCSVToStreamWithForcedDelimiting()
         {
             #region WriteCSVToStreamWithForcedDelimiting
@@ -302,6 +322,24 @@ Tempany, 8";
             {
                 reader.ReadHeaderRecord();
                 table.Fill(reader);
+            }
+
+            Console.WriteLine("Table contains {0} rows.", table.Rows.Count);
+
+            #endregion
+        }
+
+        private static async Task FillDataTableFromCSVFileAsynchronously()
+        {
+            #region FillDataTableFromCSVFileAsynchronously
+
+            var table = new DataTable();
+
+            using (var streamReader = new StreamReader("PlanetaryData.csv"))
+            using (var reader = new CsvReader(streamReader))
+            {
+                await reader.ReadHeaderRecordAsync();
+                await table.FillAsync(reader);
             }
 
             Console.WriteLine("Table contains {0} rows.", table.Rows.Count);
@@ -406,6 +444,28 @@ Tempany, 8";
                     writer.ValueDelimiter = '\'';
 
                     reader.CopyTo(writer);
+                }
+
+                Console.WriteLine(stringWriter);
+            }
+
+            #endregion
+        }
+
+        private static async Task CopyCSVFileToStringWriterAsynchronously()
+        {
+            #region CopyCSVFileToStringWriterAsynchronously
+
+            using (var stringWriter = new StringWriter())
+            {
+                using (var streamReader = new StreamReader("PlanetaryData.csv"))
+                using (var reader = new CsvReader(streamReader))
+                using (var writer = new CsvWriter(stringWriter))
+                {
+                    writer.ValueSeparator = '\t';
+                    writer.ValueDelimiter = '\'';
+
+                    await reader.CopyToAsync(writer);
                 }
 
                 Console.WriteLine(stringWriter);

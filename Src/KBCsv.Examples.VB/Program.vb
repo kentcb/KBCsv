@@ -209,6 +209,25 @@ Module Program
 
 #End Region
 
+#Region "WriteCSVToFileAsynchronously"
+
+    Private Async Function WriteCSVToFileAsynchronously() As Task
+        Using streamWriter = New StreamWriter("Output.csv")
+            Using writer = New CsvWriter(streamWriter)
+                writer.ForceDelimit = True
+
+                Await writer.WriteRecordAsync("Name", "Age")
+                Await writer.WriteRecordAsync("Kent", "33")
+                Await writer.WriteRecordAsync("Belinda", "34")
+                Await writer.WriteRecordAsync("Tempany", "8")
+
+                Console.WriteLine("{0} records written", writer.RecordNumber)
+            End Using
+        End Using
+    End Function
+
+#End Region
+
 #Region "WriteCSVToStreamWithForcedDelimiting"
 
     Private Sub WriteCSVToStreamWithForcedDelimiting()
@@ -267,6 +286,23 @@ Module Program
 
         Console.WriteLine("Table contains {0} rows.", table.Rows.Count)
     End Sub
+
+#End Region
+
+#Region "FillDataTableFromCSVFileAsynchronously"
+
+    Private Async Function FillDataTableFromCSVFileAsynchronously() As Task
+        Dim table As New DataTable()
+
+        Using textReader = New StreamReader("PlanetaryData.csv")
+            Using reader = New CsvReader(textReader, True)
+                Await reader.ReadHeaderRecordAsync()
+                Await table.FillAsync(reader)
+            End Using
+        End Using
+
+        Console.WriteLine("Table contains {0} rows.", table.Rows.Count)
+    End Function
 
 #End Region
 
@@ -363,6 +399,27 @@ Module Program
             Console.WriteLine(stringWriter)
         End Using
     End Sub
+
+#End Region
+
+#Region "CopyCSVFileToStringWriterAsynchronously"
+
+    Private Async Function CopyCSVFileToStringWriterAsynchronously() As Task
+        Using stringWriter = New StringWriter()
+            Using textReader = New StreamReader("PlanetaryData.csv")
+                Using reader = New CsvReader(textReader, True)
+                    Using writer = New CsvWriter(stringWriter)
+                        writer.ValueSeparator = Constants.vbTab
+                        writer.ValueDelimiter = "'"
+
+                        Await reader.CopyToAsync(writer)
+                    End Using
+                End Using
+            End Using
+
+            Console.WriteLine(stringWriter)
+        End Using
+    End Function
 
 #End Region
 
