@@ -1,6 +1,5 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System.Security;
 
 [assembly: AssemblyTitle("KBCsv")]
 [assembly: AssemblyDescription("Contains the implementation of KBCsv.")]
