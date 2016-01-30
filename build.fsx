@@ -11,6 +11,7 @@ open Fake.Testing
 let semanticVersion = "4.0.0"
 let version = (>=>) @"(?<major>\d*)\.(?<minor>\d*)\.(?<build>\d*).*?" "${major}.${minor}.${build}.0" semanticVersion
 let configuration = getBuildParamOrDefault "configuration" "Release"
+// can be set by passing: -ev deployToNuGet true
 let deployToNuGet = getBuildParamOrDefault "deployToNuGet" "false"
 let genDir = "Gen/"
 let docDir = "Doc/"
@@ -133,7 +134,11 @@ Target "CreateNuGetPackages" (fun _ ->
                     -- (srcDir @@ "**/*.csproj.user")
                     -- (srcDir @@ "**/*.gpState")
                     -- (srcDir @@ "**/bin/**")
-                    -- (srcDir @@ "**/obj/**")]
+                    -- (srcDir @@ "**/obj/**")
+                    -- (srcDir @@ "KBCsv.Examples*/**")
+                    -- (srcDir @@ "KBCsv.*UnitTests/**")
+                    -- (srcDir @@ "KBCsv.PerformanceTests/**")
+                    -- (srcDir @@ "TestResults/**")]
 
     sourceFiles
         |> CopyWithSubfoldersTo (nugetDir @@ "KBCsv")
