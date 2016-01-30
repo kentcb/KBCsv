@@ -2,9 +2,10 @@
 {
     using System;
     using System.IO;
-    using Xunit;
-    using KBCsv.Extensions;
+    using System.Linq;
     using System.Threading.Tasks;
+    using KBCsv.Extensions;
+    using Xunit;
 
     public sealed class CsvReaderExtensionsFixture
     {
@@ -159,6 +160,47 @@
                 writer.NewLine = "<EOL>";
 
                 Assert.Equal(1000, await reader.CopyToAsync(writer));
+            }
+        }
+
+        [Fact]
+        public void to_enumerable_throws_if_csv_reader_is_null()
+        {
+            Assert.Throws<ArgumentNullException>(() => ((CsvReader)null).ToEnumerable().ToList());
+        }
+
+        [Fact]
+        public void to_enumerable_does_not_read_header_if_instructed()
+        {
+            var csv = @"value1,value2
+value3,value4";
+
+            using (var reader = CsvReader.FromCsvString(csv))
+            {
+                var results = reader
+                    .ToEnumerable(readHeader: false)
+                    .Select(record => record[0] + " " + record[1])
+                    .Aggregate((current, next) => current + "-" + next);
+
+                Assert.Equal("value1 value2-value3 value4", results);
+            }
+        }
+
+        [Fact]
+        public void to_enumerable_reads_header_if_instructed_to()
+        {
+            var csv = @"field1,field2
+value1,value2
+value3,value4";
+
+            using (var reader = CsvReader.FromCsvString(csv))
+            {
+                var results = reader
+                    .ToEnumerable(readHeader: true)
+                    .Select(record => record["field1"] + " " + record["field2"])
+                    .Aggregate((current, next) => current + "-" + next);
+
+                Assert.Equal("value1 value2-value3 value4", results);
             }
         }
     }

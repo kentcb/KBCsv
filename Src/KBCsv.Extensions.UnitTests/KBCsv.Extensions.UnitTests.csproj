@@ -77,6 +77,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\KBCsv.Extensions\KBCsv.Extensions.csproj">
       <Project>{d2ebb055-f466-41e0-af39-9a1e97eff11f}</Project>
       <Name>KBCsv.Extensions</Name>
@@ -85,9 +88,6 @@
       <Project>{4e89dcb7-60ec-4c53-a8dd-1cbaa1a1a8bb}</Project>
       <Name>KBCsv</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -57,11 +57,32 @@ Module Program
 
 #End Region
 
+#Region "ReadCSVUsingLINQ"
+
+    Private Sub ReadCSVUsingLINQ()
+        Dim csv As String = "Name,Age" & vbCrLf &
+            "Kent, 33" & vbCrLf &
+            "Belinda, 34" & vbCrLf &
+            "Tempany, 8"
+
+        Using reader = CsvReader.FromCsvString(csv)
+            Dim results =
+                From record In reader.ToEnumerable(readHeader:=True)
+                Select record.Item("Name") & " is " & record.Item("Age") & " years old."
+
+            For Each result In results
+                Console.WriteLine(result)
+            Next
+        End Using
+    End Sub
+
+#End Region
+
 #Region "ReadCSVFromStringPreservingWhiteSpace"
 
     Private Sub ReadCSVFromStringPreservingWhiteSpace()
-        Dim csv As String = "Kent   ,33" & vbCrLf &
-            "Belinda,34" & vbCrLf &
+        Dim csv As String = "Kent   , 33" & vbCrLf &
+            "Belinda, 34" & vbCrLf &
             "Tempany, 8"
 
         Using reader = CsvReader.FromCsvString(csv)
@@ -70,7 +91,7 @@ Module Program
 
             While reader.HasMoreRecords
                 Dim dataRecord As DataRecord = reader.ReadDataRecord()
-                Console.WriteLine("{0} is {1} years old.", dataRecord.Item(0), dataRecord.Item(1))
+                Console.WriteLine("{0} Is {1} years old.", dataRecord.Item(0), dataRecord.Item(1))
             End While
         End Using
     End Sub
@@ -85,7 +106,7 @@ Module Program
                 reader.ValueSeparator = Constants.vbTab
                 reader.ValueDelimiter = "'"
 
-                While reader.HasMoreRecords
+        While reader.HasMoreRecords
                     Dim dataRecord As DataRecord = reader.ReadDataRecord()
                     Console.WriteLine("{0} is nicknamed {1}.", dataRecord.Item(0), dataRecord.Item(dataRecord.Count - 1))
                 End While

@@ -74,6 +74,30 @@ Tempany,8";
             #endregion
         }
 
+        private static void ReadCSVUsingLINQ()
+        {
+            #region ReadCSVUsingLINQ
+
+            var csv = @"Name,Age
+Kent,33
+Belinda,34
+Tempany,8";
+
+            using (var reader = CsvReader.FromCsvString(csv))
+            {
+                var results =
+                    from record in reader.ToEnumerable(readHeader: true)
+                    select record["Name"] + " is " + record["Age"] + " years olds.";
+
+                foreach (var result in results)
+                {
+                    Console.WriteLine(result);
+                }
+            }
+
+            #endregion
+        }
+
         private static void ReadCSVFromStringPreservingWhiteSpace()
         {
             #region ReadCSVFromStringPreservingWhiteSpace
