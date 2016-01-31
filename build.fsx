@@ -20,8 +20,6 @@ let testDir = genDir @@ "Test"
 let nugetDir = genDir @@ "NuGet"
 let tempDir = genDir @@ "Temp"
 
-RestorePackages()
-
 Target "Clean" (fun _ ->
     CleanDirs[genDir; testDir; nugetDir; tempDir]
 
@@ -32,6 +30,17 @@ Target "Clean" (fun _ ->
             Properties = ["Configuration", configuration]
         })
         (srcDir @@ "KBCsv.sln")
+)
+
+// would prefer to use the built-in RestorePackages function, but it restores packages in the root dir (not in Src), which causes build problems
+Target "RestorePackages" (fun _ -> 
+    !! "./**/packages.config"
+    |> Seq.iter (
+        RestorePackage (fun p ->
+            { p with
+                OutputPath = (srcDir @@ "packages")
+            })
+        )
 )
 
 Target "Build" (fun _ ->
@@ -97,7 +106,6 @@ Target "CreateArchives" (fun _ ->
     !! "**/*.*"
         -- ".git/**"
         -- (genDir @@ "**")
-        -- ("packages/**")
         -- (srcDir @@ "packages/**/*")
         -- (srcDir @@ "**/*.suo")
         -- (srcDir @@ "**/*.csproj.user")
@@ -186,6 +194,7 @@ Target "CreateNuGetPackages" (fun _ ->
 
 // build order
 "Clean"
+    ==> "RestorePackages"
     ==> "Build"
     ==> "ExecuteUnitTests"
     ==> "CreateArchives"
