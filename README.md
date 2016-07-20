@@ -33,13 +33,14 @@ Install-Package KBCsv.Extensions.Data
 ## How?
 
 ```C#
-using (var reader = new CsvReader("data.csv"))
+using (var streamReader = new StreamReader("data.csv"))
+using (var csvReader = new CsvReader(streamReader))
 {
-    reader.ReadHeaderRecord();
+    csvReader.ReadHeaderRecord();
 
-    while (reader.HasMoreRecords)
+    while (csvReader.HasMoreRecords)
     {
-        var record = reader.ReadDataRecord();
+        var record = csvReader.ReadDataRecord();
         var name = record["Name"];
         var age = record["Age"];
     }
