@@ -8,7 +8,7 @@ open Fake.NuGetHelper
 open Fake.Testing
 
 // properties
-let semanticVersion = "4.0.0"
+let semanticVersion = "5.0.0"
 let version = (>=>) @"(?<major>\d*)\.(?<minor>\d*)\.(?<build>\d*).*?" "${major}.${minor}.${build}.0" semanticVersion
 let configuration = getBuildParamOrDefault "configuration" "Release"
 // can be set by passing: -ev deployToNuGet true
@@ -33,7 +33,7 @@ Target "Clean" (fun _ ->
 )
 
 // would prefer to use the built-in RestorePackages function, but it restores packages in the root dir (not in Src), which causes build problems
-Target "RestorePackages" (fun _ -> 
+Target "RestorePackages" (fun _ ->
     !! "./**/packages.config"
     |> Seq.iter (
         RestorePackage (fun p ->
@@ -127,10 +127,10 @@ Target "CreateArchives" (fun _ ->
 Target "CreateNuGetPackages" (fun _ ->
     // copy binaries
     !! (srcDir @@ "KBCsv/bin" @@ configuration @@ "KBCsv.*")
-        |> CopyFiles (nugetDir @@ "KBCsv/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
+        |> CopyFiles (nugetDir @@ "KBCsv/lib/netstandard1.0")
 
     !! (srcDir @@ "KBCsv.Extensions/bin" @@ configuration @@ "KBCsv.Extensions.*")
-        |> CopyFiles (nugetDir @@ "KBCsv.Extensions/lib/portable-win+net45+wp8+MonoAndroid10+Xamarin.iOS10+MonoTouch10")
+        |> CopyFiles (nugetDir @@ "KBCsv.Extensions/lib/netstandard1.0")
 
     !! (srcDir @@ "KBCsv.Extensions.Data/bin" @@ configuration @@ "KBCsv.Extensions.Data.*")
         |> CopyFiles (nugetDir @@ "KBCsv.Extensions.Data/lib/net45")

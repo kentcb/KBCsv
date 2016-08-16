@@ -5,14 +5,14 @@
     <version>@build.number@</version>
     <authors>Kent Boogaart</authors>
     <owners>Kent Boogaart</owners>
-    <licenseUrl>http://kbcsv.codeplex.com/license</licenseUrl>
-    <projectUrl>http://kbcsv.codeplex.com/</projectUrl>
+    <licenseUrl>https://github.com/kentcb/KBCsv/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/kentcb/KBCsv/</projectUrl>
     <iconUrl>https://raw.githubusercontent.com/kentcb/KBCsv/master/Art/Logo64x64.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
         KBCsv is an efficient, easy to use .NET parsing and writing library for the CSV (comma-separated values) format, delivered as a Portable Class Library. Online at https://github.com/kentcb/KBCsv.
     </description>
-    <tags>.NET CSV comma separated value library mono portable pcl KBCsv</tags>
+    <tags>.NET CSV comma separated value library netstandard pcl KBCsv</tags>
     <dependencies>
     </dependencies>
   </metadata>
