@@ -58,7 +58,7 @@ Please see [the documentation](Doc/overview.md) for more details.
 * Very easy to use
 * Very efficient
 * Separate extension libraries to provide additional (but optional) features such as working with `System.Data` types
-* Portable Class Library that targets a wide range of platforms, including Xamarin
+* Portable Class Library targetting netstandard 1.0
 * Full `async` support
 * Includes extensive documentation and examples in both C# and VB.NET
 * Conforms to the official CSV standard, [RFC4180](http://www.ietf.org/rfc/rfc4180.txt)
