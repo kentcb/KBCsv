@@ -2,6 +2,8 @@
 
 # KBCsv
 
+[![Build status](https://ci.appveyor.com/api/projects/status/0osrhn2736992t52?svg=true)](https://ci.appveyor.com/project/kentcb/kbcsv)
+
 ## What?
 
 **KBCsv** is an efficient, easy to use .NET parsing and writing library for the [CSV](http://en.wikipedia.org/wiki/Comma-separated_values) (comma-separated values) format.
