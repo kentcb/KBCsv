@@ -1,11 +1,11 @@
 namespace KBCsv.UnitTests.Internal
 {
-    using KBCsv.Internal;
     using System;
     using System.IO;
     using System.Text;
-    using Xunit;
     using System.Threading.Tasks;
+    using KBCsv.Internal;
+    using Xunit;
 
 
     // NOTE: you may want View White Space turned on, so you can differentiate spaces and tabs in the CSV
@@ -52,8 +52,9 @@ value4,   value5,	value6";
         [Fact]
         public void trailing_whitespace_is_discarded_when_preserve_trailing_whitespace_is_false()
         {
-            var csv = @"value1 ,value2  	,value3   	     		 
-value4,value5   ,value6	";
+            var csv =
+                "value1 ,value2  	,value3   	     		 " + Environment.NewLine +
+                "value4,value5   ,value6	";
             var parser = this.CreateParserFromString(csv);
             parser.PreserveTrailingWhiteSpace = false;
             var records = new DataRecord[2];
@@ -71,8 +72,9 @@ value4,value5   ,value6	";
         [Fact]
         public void trailing_whitespace_is_retained_when_preserve_trailing_whitespace_is_true()
         {
-            var csv = @"value1 ,value2  	,value3   	     		 
-value4,value5   ,value6	";
+            var csv =
+                "value1 ,value2  	,value3   	     		 " + Environment.NewLine +
+                "value4,value5   ,value6	";
             var parser = this.CreateParserFromString(csv);
             parser.PreserveTrailingWhiteSpace = true;
             var records = new DataRecord[2];
@@ -90,8 +92,9 @@ value4,value5   ,value6	";
         [Fact]
         public void leading_and_trailing_whitespace_are_discarded_when_preserve_leading_and_trailing_whitespace_are_both_false()
         {
-            var csv = @" value1 ,  	value2  	,   	     		 value3   	     		 
-value4,   value5   ,	value6	";
+            var csv =
+                " value1 ,  	value2  	,   	     		 value3   	     		 " + Environment.NewLine +
+                "value4,   value5   ,	value6	";
             var parser = this.CreateParserFromString(csv);
             parser.PreserveLeadingWhiteSpace = false;
             parser.PreserveTrailingWhiteSpace = false;
@@ -110,8 +113,9 @@ value4,   value5   ,	value6	";
         [Fact]
         public void leading_and_trailing_whitespace_are_retained_when_preserve_leading_and_trailing_whitespace_are_both_true()
         {
-            var csv = @" value1 ,  	value2  	,   	     		 value3   	     		 
-value4,   value5   ,	value6	";
+            var csv =
+                " value1 ,  	value2  	,   	     		 value3   	     		 " + Environment.NewLine +
+                "value4,   value5   ,	value6	";
             var parser = this.CreateParserFromString(csv);
             parser.PreserveLeadingWhiteSpace = true;
             parser.PreserveTrailingWhiteSpace = true;
@@ -139,10 +143,11 @@ value4,   value5   ,	value6	";
         [Fact]
         public void empty_values_parse_correctly()
         {
-            var csv = @" , 
-         
-           
-        ""  """;
+            var csv =
+                " , " + Environment.NewLine +
+                "         " + Environment.NewLine +
+                "           " + Environment.NewLine +
+                @"        ""  """;
             var parser = this.CreateParserFromString(csv);
             var records = new DataRecord[4];
             Assert.Equal(4, parser.ParseRecords(null, records, 0, records.Length));
