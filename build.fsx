@@ -41,6 +41,13 @@ Target "RestorePackages" (fun _ ->
                 OutputPath = (srcDir @@ "packages")
             })
         )
+
+    // restore project.json-based packages (UWP)
+    // note that failures are expected on non-Windows machines
+    try
+        ignore(Shell.Exec("dotnet", "restore"))
+    with
+    | ex -> ()
 )
 
 Target "Build" (fun _ ->
