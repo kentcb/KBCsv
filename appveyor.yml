@@ -1,6 +1,3 @@
 -version: 1.0.{build}
 -init:
 -- cmd: git config --global core.autocrlf true
--build_script:
--- cmd: build.bat
--test: off
