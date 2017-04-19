@@ -130,15 +130,15 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\KBCsv.Extensions.Data\KBCsv.Extensions.Data.csproj">
-      <Project>{2a101a18-d972-4c37-a092-2e82515faf7f}</Project>
+      <Project>{3de89a80-921e-4c66-a6bf-48730e224351}</Project>
       <Name>KBCsv.Extensions.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\KBCsv.Extensions\KBCsv.Extensions.csproj">
-      <Project>{d2ebb055-f466-41e0-af39-9a1e97eff11f}</Project>
+      <Project>{b804ab01-b664-4bfb-ad0a-b62e23f590d5}</Project>
       <Name>KBCsv.Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\KBCsv\KBCsv.csproj">
-      <Project>{4e89dcb7-60ec-4c53-a8dd-1cbaa1a1a8bb}</Project>
+      <Project>{8cdb16b6-2ae4-4715-958a-94b0746fc138}</Project>
       <Name>KBCsv</Name>
     </ProjectReference>
   </ItemGroup>

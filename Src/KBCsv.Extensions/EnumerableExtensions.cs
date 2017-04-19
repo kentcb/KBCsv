@@ -31,7 +31,7 @@
     /// </example>
     public static partial class EnumerableExtensions
     {
-        private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(EnumerableExtensions), "KBCsv.Properties.ExceptionHelper.xml");
+        private static readonly ExceptionHelper exceptionHelper = new ExceptionHelper(typeof(EnumerableExtensions));
 
         /// <summary>
         /// Writes the items in <paramref name="this"/> to <paramref name="csvWriter"/>.
