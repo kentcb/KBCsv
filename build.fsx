@@ -66,7 +66,7 @@ Target "Push" (fun _ ->
         srcDir @@ projectName + ".Extensions.Data" @@ "bin" @@ configuration @@ projectName + ".Extensions.Data." + semanticVersion + ".nupkg"
     ]
     packagePaths
-        |> Seq.map (fun packagePath -> srcDir @@ projectName @@ "bin" @@ configuration @@ projectName + "." + semanticVersion + ".nupkg")
+        |> Seq.map (fun packagePath -> Shell.Exec("dotnet", "nuget push " + packagePath + " --source " + nugetSource))
         |> Seq.iter (fun result -> if result <> 0 then failwithf "Push failed with exit code %d" result)
 )
 
