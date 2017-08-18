@@ -22,6 +22,7 @@
         private bool preserveTrailingWhiteSpace;
         private char valueSeparator;
         private char? valueDelimiter;
+        private char? lineTerminatorOverride;
 
         public CsvParser(TextReader reader)
         {
@@ -74,6 +75,16 @@
                 exceptionHelper.ResolveAndThrowIf(value == this.valueSeparator, "valueSeparatorAndDelimiterCannotMatch");
 
                 this.valueDelimiter = value;
+                this.UpdateSpecialCharacterMask();
+            }
+        }
+
+        public char? LineTerminatorOverride
+        {
+            get { return this.lineTerminatorOverride; }
+            set
+            {
+                this.lineTerminatorOverride = value;
                 this.UpdateSpecialCharacterMask();
             }
         }
@@ -132,7 +143,7 @@
                                     // since we're in a delimited area, the only special character is the value delimiter
                                     this.activeSpecialCharacterMask = this.valueDelimiter.Value;
                                 }
-                                else if (ch == Constants.CR)
+                                else if (this.lineTerminatorOverride == null && ch == Constants.CR)
                                 {
                                     // we need to look at the next character, so make sure it is available
                                     if (this.IsBufferEmpty && !this.FillBufferWithoutNotify())
@@ -149,7 +160,11 @@
 
                                     break;
                                 }
-                                else if (ch == Constants.LF)
+                                else if (this.lineTerminatorOverride == null && ch == Constants.LF)
+                                {
+                                    break;
+                                }
+                                else if (ch == this.lineTerminatorOverride)
                                 {
                                     break;
                                 }
@@ -230,7 +245,7 @@
                                 // since we're in a delimited area, the only special character is the value delimiter
                                 this.activeSpecialCharacterMask = this.valueDelimiter.Value;
                             }
-                            else if (ch == Constants.CR)
+                            else if (this.lineTerminatorOverride == null && ch == Constants.CR)
                             {
                                 // we need to look at the next character, so make sure it is available
                                 if (this.IsBufferEmpty && !this.FillBuffer())
@@ -250,7 +265,13 @@
                                 buffer[i] = this.values.GetDataRecordAndClear(headerRecord, this.valueBuilder.GetValueAndClear());
                                 break;
                             }
-                            else if (ch == Constants.LF)
+                            else if (this.lineTerminatorOverride == null && ch == Constants.LF)
+                            {
+                                // undelimited LF indicates the end of a record, so add the existing value and then exit
+                                buffer[i] = this.values.GetDataRecordAndClear(headerRecord, this.valueBuilder.GetValueAndClear());
+                                break;
+                            }
+                            else if (ch == this.lineTerminatorOverride)
                             {
                                 // undelimited LF indicates the end of a record, so add the existing value and then exit
                                 buffer[i] = this.values.GetDataRecordAndClear(headerRecord, this.valueBuilder.GetValueAndClear());
