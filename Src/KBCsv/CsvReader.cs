@@ -268,6 +268,30 @@
         }
 
         /// <summary>
+        /// Gets or sets the character used to override the default line terminators (CR/LF).
+        /// <remarks>
+        /// <para>
+        /// If set to NULL, then the default line terminator (CR/LF) is used.
+        /// </para>
+        /// </remarks>
+        /// </summary>
+        public char? LineTerminatorOverride
+        {
+            get
+            {
+                this.EnsureNotDisposed();
+                return this.parser.LineTerminatorOverride;
+            }
+
+            set
+            {
+                this.EnsureNotDisposed();
+                this.parser.LineTerminatorOverride = value;
+            }
+        }
+
+
+        /// <summary>
         /// Gets or sets the header record.
         /// </summary>
         /// <remarks>
