@@ -151,7 +151,7 @@ namespace KBCsv.UnitTests
             var record = new ConcreteRecordBase(new string[] { "one", "two" }.ToList());
             Assert.Equal(2, record.Count);
             record.Clear();
-            Assert.Equal(0, record.Count);
+            Assert.Empty(record);
         }
 
         [Fact]
@@ -165,17 +165,17 @@ namespace KBCsv.UnitTests
         public void contains_returns_false_if_value_is_not_in_record()
         {
             var record = new ConcreteRecordBase("one", "two");
-            Assert.False(record.Contains("three"));
-            Assert.False(record.Contains("ONE"));
-            Assert.False(record.Contains("Two"));
+            Assert.DoesNotContain("three", record);
+            Assert.DoesNotContain("ONE", record);
+            Assert.DoesNotContain("Two", record);
         }
 
         [Fact]
         public void contains_returns_true_if_value_is_in_record()
         {
             var record = new ConcreteRecordBase("one", "two");
-            Assert.True(record.Contains("one"));
-            Assert.True(record.Contains("two"));
+            Assert.Contains("one", record);
+            Assert.Contains("two", record);
         }
 
         [Fact]
@@ -216,12 +216,12 @@ namespace KBCsv.UnitTests
             var record = new ConcreteRecordBase();
 
             record.Add("one");
-            Assert.Equal(1, record.Count);
-            Assert.True(record.Contains("one"));
+            Assert.Single(record);
+            Assert.Contains("one", record);
 
             record.Add("two");
             Assert.Equal(2, record.Count);
-            Assert.True(record.Contains("two"));
+            Assert.Contains("two", record);
         }
 
         [Fact]
@@ -295,9 +295,9 @@ namespace KBCsv.UnitTests
         {
             var record = new ConcreteRecordBase("one", "two", "three");
 
-            Assert.True(record.Contains("one"));
+            Assert.Contains("one", record);
             record.Remove("one");
-            Assert.False(record.Contains("one"));
+            Assert.DoesNotContain("one", record);
             Assert.Equal(2, record.Count);
         }
 
@@ -412,9 +412,9 @@ namespace KBCsv.UnitTests
             }
 
             Assert.Equal(3, values.Count);
-            Assert.True(values.Contains("first"));
-            Assert.True(values.Contains("second"));
-            Assert.True(values.Contains("third"));
+            Assert.Contains("first", values);
+            Assert.Contains("second", values);
+            Assert.Contains("third", values);
         }
 
         #region Supporting Members

@@ -475,7 +475,7 @@
             {
                 writer.ValueDelimiter = null;
                 var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new DataRecord(null, new string[] { " a value with leading and trailing whitespace " })).Wait());
-                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.Single(ex.InnerExceptions);
                 Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
                 Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is:  a value with leading and trailing whitespace ", ex.InnerExceptions[0].Message);
             }
@@ -488,7 +488,7 @@
             {
                 writer.ValueDelimiter = null;
                 var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new DataRecord(null, new string[] { "a value, with a comma" })).Wait());
-                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.Single(ex.InnerExceptions);
                 Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
                 Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value, with a comma", ex.InnerExceptions[0].Message);
             }
@@ -501,7 +501,7 @@
             {
                 writer.ValueDelimiter = null;
                 var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new DataRecord(null, new string[] { "a value\r\nwith a carriage return" })).Wait());
-                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.Single(ex.InnerExceptions);
                 Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
                 Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value\r\nwith a carriage return", ex.InnerExceptions[0].Message);
             }
@@ -555,7 +555,7 @@
             {
                 writer.ValueDelimiter = null;
                 var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new string[] { " a value with leading and trailing whitespace " }).Wait());
-                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.Single(ex.InnerExceptions);
                 Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
                 Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is:  a value with leading and trailing whitespace ", ex.InnerExceptions[0].Message);
             }
@@ -568,7 +568,7 @@
             {
                 writer.ValueDelimiter = null;
                 var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new string[] { "a value, with a comma" }).Wait());
-                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.Single(ex.InnerExceptions);
                 Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
                 Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value, with a comma", ex.InnerExceptions[0].Message);
             }
@@ -581,7 +581,7 @@
             {
                 writer.ValueDelimiter = null;
                 var ex = Assert.Throws<AggregateException>(() => writer.WriteRecordAsync(new string[] { "a value\r\nwith a carriage return" }).Wait());
-                Assert.Equal(1, ex.InnerExceptions.Count);
+                Assert.Single(ex.InnerExceptions);
                 Assert.IsType<InvalidOperationException>(ex.InnerExceptions[0]);
                 Assert.Equal("A value requires delimiting in order to be valid CSV, but no value delimiter has been set. The value is: a value\r\nwith a carriage return", ex.InnerExceptions[0].Message);
             }

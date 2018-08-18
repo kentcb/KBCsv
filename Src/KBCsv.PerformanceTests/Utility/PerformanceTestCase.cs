@@ -7,7 +7,6 @@
     using Xunit.Abstractions;
     using Xunit.Sdk;
 
-    [CLSCompliant(false)]
     public sealed class PerformanceTestCase : XunitTestCase
     {
         [EditorBrowsable(EditorBrowsableState.Never)]

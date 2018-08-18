@@ -46,7 +46,7 @@
                 dataSet.Fill(reader);
             }
 
-            Assert.Equal(1, dataSet.Tables.Count);
+            Assert.Single(dataSet.Tables);
             Assert.Equal(DataExtensions.DefaultTableName, dataSet.Tables[0].TableName);
         }
 
@@ -261,7 +261,7 @@
                 await dataSet.FillAsync(reader);
             }
 
-            Assert.Equal(1, dataSet.Tables.Count);
+            Assert.Single(dataSet.Tables);
             Assert.Equal(DataExtensions.DefaultTableName, dataSet.Tables[0].TableName);
         }
 

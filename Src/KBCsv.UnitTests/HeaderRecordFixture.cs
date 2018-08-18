@@ -30,7 +30,7 @@ namespace KBCsv.UnitTests
         public void public_constructor_assigns_empty_values_if_columns_array_is_empty()
         {
             var header = new HeaderRecord();
-            Assert.Equal(0, header.Count);
+            Assert.Empty(header);
         }
 
         [Fact]

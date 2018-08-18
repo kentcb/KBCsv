@@ -7,7 +7,6 @@
     using Xunit.Abstractions;
     using Xunit.Sdk;
 
-    [CLSCompliant(false)]
     public sealed class ReadPerformanceTestCase : XunitTestCase
     {
         private WhiteSpacePreservation whiteSpacePreservation;

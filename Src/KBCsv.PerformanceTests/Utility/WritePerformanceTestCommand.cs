@@ -7,7 +7,6 @@
 //    /// <summary>
 //    /// A command used to execute a write performance test.
 //    /// </summary>
-//    [CLSCompliant(false)]
 //    public sealed class WritePerformanceTestCommand : TestCommand
 //    {
 //        private readonly bool forceDelimit;
