@@ -1,5 +1,8 @@
 version: 1.0.{build}
 init:
 - cmd: git config --global core.autocrlf true
+image: Visual Studio 2017
 build_script:
-- cmd: build.bat
+- pwsh: ./build.ps1
+test: off
+deploy: off
