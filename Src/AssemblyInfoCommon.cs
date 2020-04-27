@@ -8,9 +8,9 @@ using System.Resources;
 
 [assembly: AssemblyCompany("Kent Boogaart")]
 [assembly: AssemblyProduct("KBCsv")]
-[assembly: AssemblyVersion("5.0.0.0")]
-[assembly: AssemblyFileVersion("5.0.0.0")]
-[assembly: AssemblyInformationalVersion("5.0.0")]
+[assembly: AssemblyVersion("6.0.0.0")]
+[assembly: AssemblyFileVersion("6.0.0.0")]
+[assembly: AssemblyInformationalVersion("6.0.0")]
 [assembly: AssemblyCopyright("© Copyright. Kent Boogaart.")]
 [assembly: AssemblyConfiguration("Release")]
 

@@ -2,7 +2,7 @@ using System;
 
 // Parameters.
 var projectName = "KBCsv";
-var semanticVersion = "5.0.0";
+var semanticVersion = "6.0.0";
 var version = semanticVersion + ".0";
 var configuration = EnvironmentVariable("CONFIGURATION") ?? "Release";
 var nugetSource = "https://www.nuget.org/api/v2/package";
