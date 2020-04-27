@@ -423,9 +423,16 @@
         /// </param>
         protected virtual void Dispose(bool disposing)
         {
-            if (disposing && !this.leaveOpen)
+            if (disposing)
             {
-                this.textWriter.Dispose();
+                if (this.leaveOpen)
+                {
+                    this.textWriter.Flush();
+                }
+                else
+                {
+                    this.textWriter.Dispose();
+                }
             }
         }
 
