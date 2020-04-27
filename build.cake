@@ -7,8 +7,8 @@ var version = semanticVersion + ".0";
 var configuration = EnvironmentVariable("CONFIGURATION") ?? "Release";
 var nugetSource = "https://www.nuget.org/api/v2/package";
 
-// To push to NuGet, run with: & {$env:PUSH="true"; ./build.ps1}
-var push = bool.Parse(EnvironmentVariable("PUSH") ?? "false");
+// To push to NuGet, run with: & {$env:NUGET_API_KEY="$KEY"; ./build.ps1}
+var nugetApiKey = EnvironmentVariable("NUGET_API_KEY");
 
 // Paths.
 var srcDir = Directory("Src");
@@ -80,12 +80,13 @@ Task("Test")
 
 Task("Push")
     .IsDependentOn("Test")
-    .WithCriteria(push)
+    .WithCriteria(nugetApiKey != null)
     .Does(
         () =>
         {
             var settings = new DotNetCoreNuGetPushSettings
             {
+                ApiKey = nugetApiKey,
                 Source = nugetSource,
             };
 
