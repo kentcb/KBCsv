@@ -268,6 +268,30 @@
         }
 
         /// <summary>
+        /// Gets or sets the character used to escape values (normally to escape the ValueDelimiter)
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This property specifies what character is used to escape values within the CSV. This is normally only required when the CSV is not following RFC 4180,
+        /// e.g. the delimiter is escaped as \" rather than ""
+        /// </para>
+        /// </remarks>
+        public char? EscapeCharacter
+        {
+            get
+            {
+                this.EnsureNotDisposed();
+                return this.parser.EscapeCharacter;
+            }
+
+            set
+            {
+                this.EnsureNotDisposed();
+                this.parser.EscapeCharacter = value;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the header record.
         /// </summary>
         /// <remarks>

@@ -22,6 +22,7 @@
         private bool preserveTrailingWhiteSpace;
         private char valueSeparator;
         private char? valueDelimiter;
+        private char? escapeCharacter;
 
         public CsvParser(TextReader reader)
         {
@@ -33,6 +34,7 @@
             this.valueBuilder = new ValueBuilder(this);
             this.valueSeparator = Constants.DefaultValueSeparator;
             this.valueDelimiter = Constants.DefaultValueDelimiter;
+            this.escapeCharacter = null;
 
             this.UpdateSpecialCharacterMask();
         }
@@ -78,6 +80,18 @@
             }
         }
 
+        public char? EscapeCharacter
+        {
+            get { return this.escapeCharacter; }
+            set
+            {
+                exceptionHelper.ResolveAndThrowIf(value == this.valueSeparator, "valueSeparatorAndEscapeCannotMatch");
+
+                this.escapeCharacter = value;
+                this.UpdateSpecialCharacterMask();
+            }
+        }
+
         public bool HasMoreRecords
         {
             get
@@ -106,6 +120,7 @@
 
             var skipped = 0;
             var delimited = false;
+            var escaped = false;
 
             while (skipped < skip)
             {
@@ -117,13 +132,24 @@
                         {
                             var ch = this.buffer[this.bufferIndex++];
 
-                            if (!this.IsPossiblySpecialCharacter(ch))
+                            if (escaped)
+                            {
+                                // we had an escape character previous, just insert this as whatever character it is
+                                this.valueBuilder.NotifyPreviousCharIncluded(true);
+                                escaped = false;
+                            }
+                            else if (ch == this.escapeCharacter)
+                            {
+                                // User specified escape character, do not insert into value, next read character is not special
+                                this.valueBuilder.NotifyPreviousCharExcluded();
+                                escaped = true;
+                            }
+                            else if (!this.IsPossiblySpecialCharacter(ch))
                             {
                                 // if it's definitely not a special character, then we can just continue on with the loop
                                 continue;
                             }
-
-                            if (!delimited)
+                            else if (!delimited)
                             {
                                 if (ch == this.valueDelimiter)
                                 {
@@ -200,6 +226,7 @@
             var ch = char.MinValue;
             var recordsParsed = 0;
             var delimited = false;
+            var escaped = false;
 
             for (var i = offset; i < offset + count; ++i)
             {
@@ -209,14 +236,25 @@
                     {
                         ch = this.buffer[this.bufferIndex++];
 
-                        if (!this.IsPossiblySpecialCharacter(ch))
+                        if (escaped)
+                        {
+                            // we had an escape character previous, just insert this as whatever character it is
+                            this.valueBuilder.NotifyPreviousCharIncluded(true);
+                            escaped = false;
+                        }
+                        else if (ch == this.escapeCharacter)
+                        {
+                            // User specified escape character, do not insert into value, next read character is not special
+                            this.valueBuilder.NotifyPreviousCharExcluded();
+                            escaped = true;
+                        }
+                        else if (!this.IsPossiblySpecialCharacter(ch))
                         {
                             // if it's definitely not a special character, then we can just append it and continue on with the loop
                             this.valueBuilder.NotifyPreviousCharIncluded(delimited);
                             continue;
-                        }
-
-                        if (!delimited)
+                        }                        
+                        else if (!delimited)
                         {
                             if (ch == this.valueSeparator)
                             {
@@ -227,7 +265,7 @@
                                 this.valueBuilder.NotifyPreviousCharExcluded();
                                 delimited = true;
 
-                                // since we're in a delimited area, the only special character is the value delimiter
+                                // since we're in a delimited area, the only special character is the value delimiter, or escape character
                                 this.activeSpecialCharacterMask = this.valueDelimiter.Value;
                             }
                             else if (ch == Constants.CR)
