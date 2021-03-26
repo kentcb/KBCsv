@@ -268,7 +268,7 @@
         }
 
         /// <summary>
-        /// Gets or sets the character used to escape values (normally the ValueDelimiter.
+        /// Gets or sets the character used to escape values (normally to escape the ValueDelimiter)
         /// </summary>
         /// <remarks>
         /// <para>
