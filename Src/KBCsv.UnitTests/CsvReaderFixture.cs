@@ -182,6 +182,53 @@
         }
 
         [Fact]
+        public void escape_character_defaults_to_null()
+        {
+            using (var reader = CsvReader.FromCsvString(string.Empty))
+            {
+                Assert.Null(reader.EscapeCharacter);
+            }
+        }
+
+        [Fact]
+        public void escape_character_cannot_be_gotten_if_disposed()
+        {
+            var ignore = ' ';
+            var reader = CsvReader.FromCsvString(string.Empty);
+            reader.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => ignore = reader.EscapeCharacter.Value);
+        }
+
+        [Fact]
+        public void escape_character_can_be_set()
+        {
+            using (var reader = CsvReader.FromCsvString(string.Empty))
+            {
+                reader.EscapeCharacter = '\\';
+                Assert.Equal('\\', reader.EscapeCharacter);
+            }
+        }
+
+        [Fact]
+        public void escape_character_can_be_set_to_null()
+        {
+            using (var reader = CsvReader.FromCsvString(string.Empty))
+            {
+                reader.EscapeCharacter = null;
+                Assert.Null(reader.EscapeCharacter);
+            }
+        }
+
+        [Fact]
+        public void escape_character_cannot_be_set_if_disposed()
+        {
+            var reader = CsvReader.FromCsvString(string.Empty);
+            reader.Dispose();
+            Assert.Throws<ObjectDisposedException>(() => reader.EscapeCharacter = '\\');
+        }
+
+
+        [Fact]
         public void header_record_defaults_to_null()
         {
             using (var reader = CsvReader.FromCsvString(string.Empty))
@@ -1312,6 +1359,44 @@ third";
                 Assert.True(buffer[1].IsReadOnly);
                 Assert.NotNull(buffer[2]);
                 Assert.True(buffer[2].IsReadOnly);
+            }
+        }
+
+        [Fact]
+        public async Task read_data_records_async_with_escape_character()
+        {
+            var csv = @"first,""\""second\"""",third";
+
+            using (var reader = CsvReader.FromCsvString(csv))
+            {
+                reader.EscapeCharacter = '\\';
+
+                var buffer = new DataRecord[1];
+                Assert.Equal(1, await reader.ReadDataRecordsAsync(buffer, 0, buffer.Length));
+
+                var dataRecord = buffer[0];
+                Assert.Equal(3, dataRecord.Count);
+                Assert.Equal("first", dataRecord[0]);
+                Assert.Equal("\"second\"", dataRecord[1]);
+                Assert.Equal("third", dataRecord[2]);
+            }
+        }
+
+        [Fact]
+        public async Task read_data_records_async_with_no_escape_character()
+        {
+            var csv = @"first,\""second\"",third";
+
+            using (var reader = CsvReader.FromCsvString(csv))
+            {
+                var buffer = new DataRecord[1];
+                Assert.Equal(1, await reader.ReadDataRecordsAsync(buffer, 0, buffer.Length));
+
+                var dataRecord = buffer[0];
+                Assert.Equal(3, dataRecord.Count);
+                Assert.Equal("first", dataRecord[0]);
+                Assert.Equal("\\second\\", dataRecord[1]);
+                Assert.Equal("third", dataRecord[2]);
             }
         }
 
